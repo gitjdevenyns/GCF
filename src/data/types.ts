@@ -9,9 +9,19 @@
 
 export type AccessType = 'shore' | 'kayak' | 'boat' | 'pier' | 'wade' | 'bridge';
 
+/**
+ * Simple place names, ordered north to south in `REGIONS` (locations.ts).
+ * The Tampa Bay / Pinellas names were added when the guide was extended north
+ * and west of the original Manatee-to-Boca-Grande footprint.
+ */
 export type Region =
+  | 'St. Petersburg'
+  | 'St. Pete Beach'
+  | 'Skyway'
+  | 'Fort De Soto'
   | 'Bradenton'
   | 'Anna Maria'
+  | 'Sarasota'
   | 'Englewood'
   | 'Placida'
   | 'Boca Grande';

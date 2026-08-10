@@ -65,7 +65,7 @@ export default function Layout() {
           <span>
             <span className="name">Gulf Coast Fishing</span>
             <span className="lab" style={{ fontSize: 10, display: 'block' }}>
-              Bradenton → Boca Grande
+              Tampa Bay → Boca Grande
             </span>
           </span>
         </Link>
