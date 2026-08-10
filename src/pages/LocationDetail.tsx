@@ -219,7 +219,10 @@ export default function LocationDetail() {
           // you can read pins off is the one in the access panel.
           locations={[]}
           center={[loc.lat, loc.lng]}
-          zoom={16}
+          // Tighter than this and several spots — a pass, a channel — fill the
+          // band with featureless green water. 15 keeps a shoreline in shot at
+          // every one of the fifteen while the structure is still readable.
+          zoom={15}
           mini
           satellite
           interactive={false}
