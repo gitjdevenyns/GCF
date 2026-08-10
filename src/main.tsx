@@ -9,9 +9,16 @@ import './styles/location.css';
 import './styles/pages.css';
 import './styles/app.css';
 import App from './App';
+import { installUpdateRecovery } from './lib/appUpdate';
 
 // BASE_URL is '/GCF/' in production (GitHub Pages project site).
 const basename = import.meta.env.BASE_URL.replace(/\/$/, '');
+
+// Before rendering: a tab left open across a deploy is serving the previous
+// build out of the service worker's precache, and its lazy chunks no longer
+// exist. See lib/appUpdate.ts — without this the app silently stays on the old
+// release and dies on the first route that needs a chunk.
+installUpdateRecovery();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -92,6 +92,12 @@
 .map{height:240px;width:100%;border-radius:var(--ra-md);overflow:hidden;border:1px solid var(--l);
   background:var(--c2);z-index:0}
 .map--tall{height:360px}
+/* Shown when the map chunk never arrives (offline, or a deploy replaced it).
+   It fills the same box so the page does not reflow around the failure. */
+.map-fallback{display:flex;align-items:center;justify-content:center;height:100%;margin:0;
+  padding:var(--s4);text-align:center;font-size:var(--fs-sm);color:var(--m)}
+.linkish{background:none;border:0;padding:0;font:inherit;color:var(--link);cursor:pointer;
+  text-decoration:underline}
 .leaflet-container{background:var(--c2);font-family:var(--ff-body)}
 .leaflet-control-attribution{background:var(--c) !important;color:var(--m) !important;font-size:10px}
 .leaflet-control-attribution a{color:var(--link) !important}

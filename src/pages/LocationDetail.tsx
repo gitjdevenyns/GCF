@@ -214,6 +214,9 @@ export default function LocationDetail() {
       <div className="lochero">
         <LazyMap
           className="lochero-map"
+          // Backdrop: if the chunk never arrives the band keeps its gradient
+          // rather than explaining itself over the title.
+          quiet
           // No pin: the band is this one place, its coordinates are printed on
           // it, and a centred marker would land on top of the chips. The map
           // you can read pins off is the one in the access panel.

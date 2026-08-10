@@ -112,6 +112,16 @@ export default defineConfig({
         navigateFallback: '/GCF/index.html',
         navigationPreload: false,
         cleanupOutdatedCaches: true,
+        // `registerType: 'autoUpdate'` only sets skipWaiting, so a new worker
+        // activated but did not take over tabs that were already open — they
+        // kept being served the previous shell out of the old precache until
+        // the user happened to navigate. Someone sitting on the home page saw
+        // the last release indefinitely and reported the fix as not working.
+        // Claiming them hands over immediately; `installUpdateRecovery` in
+        // src/lib/appUpdate.ts listens for that handover and reloads once, so
+        // the swap lands on a shell that matches the assets now being served
+        // instead of a half-updated one.
+        clientsClaim: true,
         runtimeCaching: [
           {
             // Dynamic content (future cached weather/tide snapshots) —
