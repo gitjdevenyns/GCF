@@ -27,7 +27,7 @@ import NotFound from './NotFound';
  * The flagship screen (design board 02): what you are looking at, when to fish
  * it, what to tie on, where to cast, how to put the fish back.
  *
- * One template renders all fifteen locations from the migrated data. Where the
+ * One template renders all 25 locations from the migrated data. Where the
  * data is genuinely empty — seasons, access notes, per-location safety and
  * sources are empty for every spot today — the page says so plainly instead of
  * filling the slot with something plausible. See CLAUDE.md: a local tactic must
@@ -204,7 +204,7 @@ export default function LocationDetail() {
       </p>
 
       {/* The hero band is a photo slot with no photo: there is no licensed
-          picture of any of these fifteen spots, and the band used to announce
+          picture of any of these spots, and the band used to announce
           that in a caption, which reads as a broken image. A still satellite
           view of the spot's own coordinates is real imagery of the real place,
           so the band now carries one behind the existing scrim. It is
@@ -221,7 +221,7 @@ export default function LocationDetail() {
           center={[loc.lat, loc.lng]}
           // Tighter than this and several spots — a pass, a channel — fill the
           // band with featureless green water. 15 keeps a shoreline in shot at
-          // every one of the fifteen while the structure is still readable.
+          // every one of the locations while the structure is still readable.
           zoom={15}
           mini
           satellite

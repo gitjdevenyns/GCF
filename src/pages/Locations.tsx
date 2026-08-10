@@ -8,7 +8,7 @@ import { Chevron } from '../components/location/art';
 import { EmptyState, SectionTitle } from '../components/ui';
 
 /**
- * The index of all fifteen spots: a map with every pin, and the same list
+ * The index of all 25 spots: a map with every pin, and the same list
  * grouped by area. Filters are chip buttons with `aria-pressed`, and the
  * current filter lives in the URL so Home can link straight to an area.
  */
@@ -53,7 +53,7 @@ export default function Locations() {
       <div className="sect">
         <h1>Where to fish</h1>
         <p className="mut" style={{ marginTop: 'var(--s2)' }}>
-          Fifteen spots from the Manatee River to Boca Grande Pass. Every one has its own page:
+          Every spot from Weedon Island and the Skyway down to Boca Grande Pass has its own page:
           structure, the four tide stages, and a tackle plan per species.
         </p>
       </div>

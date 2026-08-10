@@ -87,7 +87,7 @@ describe('every route renders', () => {
   });
 });
 
-describe('all 15 location pages', () => {
+describe('every location page', () => {
   it.each(LOCATIONS.map((l) => [l.slug, l.name] as const))(
     'renders /locations/%s',
     (slug, name) => {

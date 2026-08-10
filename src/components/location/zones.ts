@@ -4,7 +4,7 @@
  * The design boards use one numbering convention across three places: the
  * structure diagram, the four tide stages and the cast line of every species
  * card. This module derives that numbering from a location's real
- * `structures` array, so it works for all fifteen spots without anyone
+ * `structures` array, so it works for all 25 spots without anyone
  * inventing location-specific facts.
  *
  * HONESTY CONTRACT

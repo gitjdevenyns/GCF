@@ -7,7 +7,7 @@ import type { Zone } from './location/zones';
 /**
  * Species playbook card (design board 02): header (probability + where the
  * fish positions) → cast instruction keyed to a numbered zone → recipe grid →
- * landing and release. One component for all fifteen locations; only the data
+ * landing and release. One component for all 25 locations; only the data
  * changes.
  *
  * Every value is real: the rig/hook/leader/weight/bait come from the

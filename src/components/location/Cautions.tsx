@@ -6,11 +6,13 @@ import type { Zone, ZoneKind } from './zones';
 /**
  * "Before you go" for a location.
  *
- * Every one of the fifteen locations currently ships with an empty `safety`
- * array — no location-specific caveat has been researched yet. Rather than
- * inventing "the bars here are live oyster", this section says that plainly
- * and then offers the cautions that follow from the structure and access types
- * the data does record, clearly labelled as general water-safety rules.
+ * The original 15 locations ship with an empty `safety` array — no
+ * location-specific caveat has been researched for them yet; the 10 newer
+ * Tampa Bay / Sarasota spots do carry researched entries. Rather than
+ * inventing "the bars here are live oyster" for the ones that don't, this
+ * section says so plainly and then offers the cautions that follow from the
+ * structure and access types the data does record, clearly labelled as
+ * general water-safety rules.
  */
 
 interface Caution {

@@ -45,10 +45,12 @@ export const TIDE_GUIDE: TideGuide = {
     },
   ],
   /**
-   * The nine NOAA CO-OPS stations that back the fifteen locations, each verified
-   * against the CO-OPS metadata API. The v6 data listed four entries, two of
-   * which were "station search" placeholders; those are gone — every area now
-   * resolves to a real station id (KNOWN_ISSUES.md #4).
+   * The fifteen NOAA CO-OPS stations that back the 25 locations, each verified
+   * against the CO-OPS metadata API. The original nine cover Bradenton through
+   * Boca Grande; six more were added with the Tampa Bay / Sarasota expansion.
+   * The v6 data listed four entries, two of which were "station search"
+   * placeholders; those are gone — every area now resolves to a real station id
+   * (KNOWN_ISSUES.md #4).
    *
    * `locations.ts` is the source of truth for which spot uses which station; the
    * Tides page groups the spots underneath these entries by id.
@@ -98,6 +100,36 @@ export const TIDE_GUIDE: TideGuide = {
       area: 'Boca Grande / Charlotte Harbor',
       name: 'NOAA Port Boca Grande 8725577',
       url: 'https://tidesandcurrents.noaa.gov/noaatidepredictions.html?id=8725577',
+    },
+    {
+      area: 'Sarasota Bay (South Lido / New Pass)',
+      name: 'NOAA Siesta Key, Big Sarasota Pass 8726034',
+      url: 'https://tidesandcurrents.noaa.gov/noaatidepredictions.html?id=8726034',
+    },
+    {
+      area: 'South Longboat Key / New Pass',
+      name: 'NOAA Longboat Key, Sarasota Bay 8726089',
+      url: 'https://tidesandcurrents.noaa.gov/noaatidepredictions.html?id=8726089',
+    },
+    {
+      area: 'Egmont Key / lower Tampa Bay entrance',
+      name: 'NOAA Egmont Key, Tampa Bay 8726347',
+      url: 'https://tidesandcurrents.noaa.gov/noaatidepredictions.html?id=8726347',
+    },
+    {
+      area: 'Skyway / Mullet Key Channel',
+      name: 'NOAA Mullet Key, Tampa Bay 8726364',
+      url: 'https://tidesandcurrents.noaa.gov/noaatidepredictions.html?id=8726364',
+    },
+    {
+      area: 'Fort De Soto / Pass-a-Grille',
+      name: 'NOAA Tierra Verde 8726428',
+      url: 'https://tidesandcurrents.noaa.gov/noaatidepredictions.html?id=8726428',
+    },
+    {
+      area: 'St. Petersburg / Weedon Island',
+      name: 'NOAA St. Petersburg, Tampa Bay 8726520',
+      url: 'https://tidesandcurrents.noaa.gov/noaatidepredictions.html?id=8726520',
     },
   ],
 };

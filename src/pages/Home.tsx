@@ -222,8 +222,8 @@ export default function Home() {
             <em>before</em> you cast.
           </h1>
           <p>
-            Fifteen shore, kayak and boat spots from the Manatee River to Boca Grande Pass — with
-            the structure, the tide and the rig spelled out.
+            {locations.length} shore, pier, kayak and boat spots from Tampa Bay down to Boca
+            Grande Pass — with the structure, the tide and the rig spelled out.
           </p>
           <div className="hero-cta">
             <Link className="btn btn-lime" to="/locations">

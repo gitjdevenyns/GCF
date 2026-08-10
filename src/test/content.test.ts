@@ -4,6 +4,7 @@ import {
   HABITATS,
   HAZARDS,
   LOCATIONS,
+  REGIONS,
   SOURCES,
   TIDE_GUIDE,
   VIDEOS,
@@ -186,9 +187,33 @@ describe('location completeness', () => {
   });
 
   it('covers every region named in the data model', () => {
+    // Home and Locations both iterate REGIONS, so an area with no spots in it
+    // would render an empty heading (or silently disappear).
     const regions = new Set(LOCATIONS.map((l) => l.region));
-    for (const r of ['Bradenton', 'Anna Maria', 'Englewood', 'Placida', 'Boca Grande']) {
-      expect(regions.has(r as never), `no locations in ${r}`).toBe(true);
+    for (const r of REGIONS) {
+      expect(regions.has(r), `no locations in ${r}`).toBe(true);
+    }
+    for (const l of LOCATIONS) {
+      expect(REGIONS, `${l.slug} is in an unlisted region`).toContain(l.region);
+    }
+  });
+
+  it('cites a real source for every spot that claims researched detail', () => {
+    // access_notes / safety / seasons are researched fields: if a spot states
+    // them, it has to say where they came from. Empty is honest; unsourced
+    // detail is not.
+    for (const l of LOCATIONS) {
+      const claims = l.access_notes.length + l.safety.length + l.seasons.length;
+      if (claims === 0) continue;
+      expect(l.sources.length, `${l.slug} states researched detail with no source`).toBeGreaterThan(
+        0,
+      );
+      for (const s of l.sources) {
+        expect(s.url, `${l.slug}/${s.id}`).toMatch(/^https?:\/\//);
+        expect(s.label.trim(), `${l.slug}/${s.id}`).toBeTruthy();
+      }
+      const ids = l.sources.map((s) => s.id);
+      expect(new Set(ids).size, `${l.slug} has duplicate source ids`).toBe(ids.length);
     }
   });
 });

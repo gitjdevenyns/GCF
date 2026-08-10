@@ -15,7 +15,8 @@ import {
 
 describe('data integrity', () => {
   it('preserves all migrated v6 content counts', () => {
-    expect(LOCATIONS).toHaveLength(15);
+    // 15 migrated v6 spots + 10 researched Tampa Bay / Sarasota spots.
+    expect(LOCATIONS).toHaveLength(25);
     expect(FISH).toHaveLength(5);
     expect(HAZARDS).toHaveLength(6);
     expect(HABITATS).toHaveLength(5);
@@ -78,6 +79,12 @@ describe('data integrity', () => {
       '8725747', // Englewood, Lemon Bay
       '8725667', // Placida, Gasparilla Sound
       '8725577', // Port Boca Grande, Charlotte Harbor
+      '8726034', // Siesta Key, Big Sarasota Pass
+      '8726089', // Longboat Key, Sarasota Bay
+      '8726347', // Egmont Key, Tampa Bay
+      '8726364', // Mullet Key, Tampa Bay (Skyway)
+      '8726428', // Tierra Verde
+      '8726520', // St. Petersburg, Tampa Bay
     ]);
 
     for (const l of LOCATIONS) {
