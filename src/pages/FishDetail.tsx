@@ -84,6 +84,15 @@ export default function FishDetail() {
         </div>
       </div>
 
+      {/* The hero is a second, wider photograph where one exists. When it is a
+          licensed image it needs its credit on screen just like the ID plate
+          does — src/test/media.test.tsx enforces exactly this. */}
+      {hero && hero !== fish.images[0] && (
+        <div className="pad" style={{ paddingTop: 'var(--s2)' }}>
+          <MediaCredit media={hero} />
+        </div>
+      )}
+
       {content && (
         <div className="sect">
           <p style={{ fontSize: 16, lineHeight: 1.5 }}>{content.lede}</p>

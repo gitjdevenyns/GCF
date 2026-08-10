@@ -25,6 +25,16 @@ interface Props {
   mini?: boolean;
   /** Start on the Esri imagery layer — the satellite context a spot needs. */
   satellite?: boolean;
+  /**
+   * `false` turns the map into a still image: no dragging, zooming, layer
+   * switch or popups. Used where the map is a backdrop rather than a tool (the
+   * location hero band), so it cannot swallow a scroll gesture on a phone.
+   *
+   * A still map also drops Leaflet's attribution control, because a scrim and
+   * the page's own type sit on top of it. Anything passing `interactive={false}`
+   * must therefore credit the tile source in its own visible caption.
+   */
+  interactive?: boolean;
   className?: string;
   /** Client-side navigation for a pin. Falls back to a plain link. */
   onSelect?: (slug: string) => void;
@@ -43,6 +53,7 @@ export default function MapView({
   zoom,
   mini,
   satellite,
+  interactive = true,
   className,
   onSelect,
   label,
@@ -60,7 +71,18 @@ export default function MapView({
       const map = L.map(el.current, {
         center: center ?? [27.18, -82.49],
         zoom: zoom ?? 9,
-        scrollWheelZoom: !mini,
+        scrollWheelZoom: !mini && interactive,
+        ...(interactive
+          ? {}
+          : {
+              dragging: false,
+              touchZoom: false,
+              doubleClickZoom: false,
+              boxZoom: false,
+              keyboard: false,
+              zoomControl: false,
+              attributionControl: false,
+            }),
       });
       const street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors',
@@ -71,7 +93,7 @@ export default function MapView({
         { attribution: 'Esri World Imagery', maxZoom: 19 },
       );
       (satellite ? sat : street).addTo(map);
-      L.control.layers({ Street: street, Satellite: sat }).addTo(map);
+      if (interactive) L.control.layers({ Street: street, Satellite: sat }).addTo(map);
       markersRef.current = L.layerGroup().addTo(map);
       mapRef.current = map;
     } catch {
@@ -97,8 +119,16 @@ export default function MapView({
         icon: DefaultIcon,
         title: loc.name,
         alt: `${loc.name}, ${loc.region}`,
-        keyboard: true,
+        keyboard: interactive,
+        interactive,
       });
+
+      // A still map's pin is decoration: there is nothing to open, and a popup
+      // the reader cannot dismiss by dragging would be a trap.
+      if (!interactive) {
+        marker.addTo(group);
+        continue;
+      }
 
       const popup = document.createElement('div');
       const title = document.createElement('b');
@@ -129,7 +159,7 @@ export default function MapView({
     // Sizing inside newly-laid-out containers.
     const t = setTimeout(() => map.invalidateSize(), 50);
     return () => clearTimeout(t);
-  }, [locations, center, mini]);
+  }, [locations, center, mini, interactive]);
 
   return (
     <div

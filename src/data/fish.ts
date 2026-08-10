@@ -62,8 +62,14 @@ export const FISH: Fish[] = [
         alt: 'Redfish identification photo',
       },
       {
-        url: 'https://fishingweather.app/_next/image?url=%2Fblog%2Fgulf-coast-redfish-guide%2Fredfish-flats.jpg&w=1200&q=75',
-        alt: 'Redfish on the flats',
+        // The v6 hotlink (fishingweather.app) now answers 403 to every request,
+        // browser user-agent and referer included, so this hero rendered blank.
+        // Replaced with a verified public-domain USFWS photograph.
+        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Red_Drum_Fish.jpg/1280px-Red_Drum_Fish.jpg',
+        alt: 'Red drum held horizontally over marsh water: coppery bronze back, white belly and the black spot at the base of the tail',
+        source_url: 'https://commons.wikimedia.org/wiki/File:Red_Drum_Fish.jpg',
+        license:
+          'Public domain (Steve Hillebrand, U.S. Fish and Wildlife Service, via Wikimedia Commons)',
       },
     ],
     habitat: 'Oyster edges, grass, potholes, drains',

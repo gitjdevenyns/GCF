@@ -66,6 +66,18 @@
 .rec-plate{min-height:132px;border-radius:0;border:0;border-bottom:1px solid var(--l)}
 @media (min-width:900px){.rec-plate{min-height:190px}}
 
+/* The recommendation card leads with a live satellite map of the spot rather
+   than a photo plate (see Home.tsx). It occupies the plate's slot exactly:
+   full-bleed across the top of the card, square corners, one hairline below.
+   The caption keeps the plate's mono chip so the card still reads as designed;
+   it sits above Leaflet's panes and never eats a drag. */
+.rec-map{position:relative}
+.rec-map .map{height:132px;border-radius:0;border:0;border-bottom:1px solid var(--l)}
+@media (min-width:900px){.rec-map .map{height:190px}}
+.rec-map-cap{position:absolute;left:8px;bottom:8px;z-index:500;pointer-events:none;
+  font-family:var(--ff-mono);font-size:10.5px;letter-spacing:.02em;color:#dceaff;
+  background:rgba(3,21,48,.62);border:1px solid rgba(255,255,255,.24);border-radius:6px;padding:3px 7px}
+
 /* The conditions grid is drawn with four live slots; we only ever render the
    slots we actually have data for, so the column count follows the content. */
 .cond-grid[data-cells="1"]{grid-template-columns:1fr}

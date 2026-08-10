@@ -5,6 +5,12 @@ import type { Hazard } from './types';
  * identification images), window.DANGER (data.js — short risk labels) and
  * window.INJURY_MEDIA (data.js — documented injury cases).
  * All six creatures and both injury-media entries are preserved.
+ *
+ * Every identification photo is now a verified, correctly-identified image from
+ * a public-domain or CC source (Wikimedia Commons), carrying `source_url` and
+ * `license` so `MediaCredit` can show the attribution the licence requires. The
+ * v6 hotlinks it replaced were uncredited third-party images — several already
+ * dead, and one a stock photo embedded from a magazine's CDN.
  */
 export const HAZARDS: Hazard[] = [
   {
@@ -26,8 +32,10 @@ export const HAZARDS: Hazard[] = [
     id: 'stingray',
     name: 'Southern / Atlantic Stingray',
     image: {
-      url: 'https://lirp.cdn-website.com/b44e0cd2/dms3rep/multi/opt/stingrays-1920w.jpg',
-      alt: 'Southern stingray identification photo',
+      url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Dasyatis_americana_NOAA.jpg/1280px-Dasyatis_americana_NOAA.jpg',
+      alt: 'Southern stingray seen from above: flat diamond-shaped disc, eyes on top of the body, and the long whip-like tail that carries the barb',
+      source_url: 'https://commons.wikimedia.org/wiki/File:Dasyatis_americana_NOAA.jpg',
+      license: 'Public domain (NOAA/NMFS Southeast Fisheries Science Center, via Wikimedia Commons)',
     },
     risk: 'Defensive venomous spine near the base of the whip-like tail.',
     risk_short: 'Venomous tail spine',
@@ -45,8 +53,10 @@ export const HAZARDS: Hazard[] = [
     id: 'lionfish',
     name: 'Lionfish',
     image: {
-      url: 'https://www.tallahasseemagazine.com/content/uploads/data-import/sh/shutterstock37472188ccsz.jpg',
-      alt: 'Lionfish identification photo',
+      url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Gfp-red-lionfish.jpg/1280px-Gfp-red-lionfish.jpg',
+      alt: 'Red lionfish: red-brown and white banded body with long fanned pectoral fins and a row of tall separated venomous dorsal spines',
+      source_url: 'https://commons.wikimedia.org/wiki/File:Gfp-red-lionfish.jpg',
+      license: 'Public domain (CC0 dedication — Yinan Chen, via Wikimedia Commons)',
     },
     risk: 'Venomous dorsal, pelvic and anal fin spines.',
     risk_short: 'Venomous fin spines',
@@ -97,8 +107,11 @@ export const HAZARDS: Hazard[] = [
     id: 'pufferfish',
     name: 'Southern Puffer / Pufferfish',
     image: {
-      url: 'https://inaturalist-open-data.s3.amazonaws.com/photos/45647957/large.jpg',
-      alt: 'Southern puffer identification photo',
+      url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Sphoeroides_nephelus_%28southern_pufferfish%29_%28Tampa_Bay%2C_Florida%2C_USA%29_1.jpg/1280px-Sphoeroides_nephelus_%28southern_pufferfish%29_%28Tampa_Bay%2C_Florida%2C_USA%29_1.jpg',
+      alt: 'Southern puffer in a landing net: blunt rounded head, small beak-like mouth, mottled olive back speckled with pale spots',
+      source_url:
+        'https://commons.wikimedia.org/wiki/File:Sphoeroides_nephelus_(southern_pufferfish)_(Tampa_Bay,_Florida,_USA)_1.jpg',
+      license: 'CC BY 2.0 — James St. John, via Wikimedia Commons',
     },
     risk: 'Primary danger is toxin if eaten; puffer toxins can cause severe neurologic poisoning and cooking/cleaning does not reliably destroy the toxin.',
     handle:

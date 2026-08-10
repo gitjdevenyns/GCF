@@ -21,6 +21,14 @@ import type {
  * - seasons, access_notes, per-location images/sources and detailed recipe
  *   fields (rod/reel/presentation/cast_zone...) did not exist in v6 and are
  *   left empty — do not treat empty as "no fish here".
+ *
+ * `images` is empty for all fifteen spots and is expected to stay that way:
+ * there is no licensed photograph of a minor local fishing spot that we can
+ * verify actually shows that spot, and a mislabelled one would be worse than
+ * none. Screens that need to show a place render a live Esri satellite map of
+ * its coordinates instead (Home's "Go here now" card, LocationDetail's access
+ * panel) — real, correct imagery of the actual water, with no provenance
+ * problem. Do not re-point these slots at a stock photo.
  */
 
 /**

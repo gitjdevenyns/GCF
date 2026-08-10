@@ -6,6 +6,7 @@ import { useConditions } from '../lib/useConditions';
 import { compactSky, timeAgo } from '../lib/conditions';
 import type { ConditionsResult } from '../lib/conditions';
 import { Callout, ErrorState, FreshnessNote, Plate, SectionTitle, Skeleton } from '../components/ui';
+import LazyMap from '../components/LazyMap';
 import { Chevron, HabitatGlyph, HeroWave, TideCurve } from '../components/location/art';
 import { zonesFor } from '../components/location/zones';
 
@@ -245,11 +246,28 @@ export default function Home() {
       <section className="sect" aria-labelledby="gohere">
         <SectionTitle id="gohere">Go here now</SectionTitle>
         <div className="rec">
-          <Plate
-            media={pick.images[0] ?? null}
-            caption={`satellite · ${pick.name.toLowerCase()}`}
-            className="rec-plate"
-          />
+          {/* The recommendation used to open with a photo plate, but no location
+              has a licensed photograph, so it always rendered as an empty
+              dashed slot. A live satellite map of the spot is the honest — and
+              more useful — answer to "where am I being sent", and it is the
+              same treatment the location page already uses. `key` remounts the
+              map when the live tide changes which spot is recommended: Leaflet
+              fixes its centre at init and would otherwise keep showing the
+              previous spot. */}
+          <div className="rec-map">
+            <LazyMap
+              key={pick.slug}
+              locations={[pick]}
+              center={[pick.lat, pick.lng]}
+              zoom={14}
+              mini
+              satellite
+              label={`Satellite map of ${pick.name}`}
+            />
+            <span className="rec-map-cap" aria-hidden="true">
+              satellite · {pick.name.toLowerCase()}
+            </span>
+          </div>
           <div className="rec-top">
             <div className="row g2 wrap" style={{ marginBottom: 5 }}>
               <span className="chip chip-lime">

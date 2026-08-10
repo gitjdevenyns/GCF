@@ -203,8 +203,29 @@ export default function LocationDetail() {
         </Link>
       </p>
 
+      {/* The hero band is a photo slot with no photo: there is no licensed
+          picture of any of these fifteen spots, and the band used to announce
+          that in a caption, which reads as a broken image. A still satellite
+          view of the spot's own coordinates is real imagery of the real place,
+          so the band now carries one behind the existing scrim. It is
+          deliberately non-interactive — the map you can actually drive is in
+          the access panel below — and the Esri credit the tile layer needs is
+          the caption chip, since the scrim covers Leaflet's own control. */}
       <div className="lochero">
-        <span className="cap">no licensed photo yet · satellite map below</span>
+        <LazyMap
+          className="lochero-map"
+          // No pin: the band is this one place, its coordinates are printed on
+          // it, and a centred marker would land on top of the chips. The map
+          // you can read pins off is the one in the access panel.
+          locations={[]}
+          center={[loc.lat, loc.lng]}
+          zoom={16}
+          mini
+          satellite
+          interactive={false}
+          label={`Satellite view of ${loc.name}`}
+        />
+        <span className="cap">esri world imagery · satellite</span>
         <div className="inner">
           <div className="row g2 wrap" style={{ marginBottom: 8 }}>
             <span className="chip chip-lime">{primeChip}</span>

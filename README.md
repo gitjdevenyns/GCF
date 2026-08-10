@@ -69,6 +69,22 @@ Run it before a release: it re-probes every outbound image, video, source and
 station URL and retries with a browser User-Agent before calling one broken,
 so bot filtering is not mistaken for rot.
 
+Embedded images are checked harder than page links. They are fetched with an
+image `Accept` header and a real referer, and only pass if the response is
+actually an image — a 403 from hotlink protection, or an HTML error page served
+with a 200, renders as a blank slot for a reader and so counts as broken.
+
+### Imagery for places
+
+None of the fifteen locations has a licensed photograph, and none is expected
+to: a verifiable, correctly-attributed photo of a minor local fishing spot is
+not sourceable, and a mislabelled one is worse than none. Screens that need to
+show a place render a **live Esri satellite map of its own coordinates**
+instead — Home's "Go here now" card and the location hero band and access
+panel. `MapView` takes `interactive={false}` for the backdrop case, which also
+drops Leaflet's attribution control, so any caller using it must credit the
+tile source in its own visible caption.
+
 ### Service worker
 
 `workbox.globIgnores` hands the webmanifest and the three icons to
