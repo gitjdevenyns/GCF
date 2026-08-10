@@ -1,0 +1,223 @@
+/* Species, Tides and Care pages. Ported from the design system (gcf-pages.css).
+   No new hues: every value is a step of the blue ramp, the lime ramp, the neutral
+   ramp, or the two documented status colours. */
+
+/* ---------- ANNOTATED PHOTO PLATE ----------
+   A licensed-photo slot with numbered marks laid over it. We annotate the slot
+   rather than drawing the animal: the marks land on the real photo. Marks live
+   in the top ~62% of the plate; the caption bar owns the bottom. */
+.idplate{position:relative;border-radius:var(--ra-md);overflow:hidden;min-height:240px;
+  background-color:var(--c2)}
+.idplate--empty{background-image:repeating-linear-gradient(135deg,transparent 0 9px,rgba(93,152,240,.16) 9px 10px);
+  border:1px dashed var(--l2)}
+.idplate>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.idplate .cap{position:absolute;left:8px;bottom:8px;font-family:var(--ff-mono);font-size:10px;
+  line-height:1.4;color:var(--m);padding:5px 7px;border-radius:6px;background:var(--c);border:1px solid var(--l);
+  max-width:calc(100% - 16px)}
+/* Scoped to .idplate deliberately. The design system names `.mark` twice — the
+   34px appbar brand in gcf.css §16 and this 26px ID pin in gcf-pages.css — and
+   because pages.css loads second, an unscoped rule here pulled the appbar brand
+   out of flow on every screen that shows both. The ID pin only ever exists
+   inside an annotated plate, so scoping it is the fix that keeps both intact. */
+.idplate .mark{position:absolute;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+  background:var(--lime);color:var(--lime-ink);font-family:var(--ff-display);font-weight:800;font-size:13px;
+  box-shadow:0 0 0 3px rgba(3,21,48,.45)}
+.idplate .mark::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:1.5px dashed var(--lime);opacity:.5}
+
+/* ---------- BAIT / LURE CHOICES ---------- */
+.baits{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}
+.bait{border:1px solid var(--l);border-radius:var(--ra-md);background:var(--c);padding:var(--s3);
+  display:flex;flex-direction:column;gap:6px}
+.bait .swatch{width:100%;height:42px;border-radius:var(--ra-sm);border:1px dashed var(--l2);
+  background-image:repeating-linear-gradient(135deg,transparent 0 7px,rgba(93,152,240,.18) 7px 8px)}
+.bait b{font-family:var(--ff-display);font-size:14px;line-height:1.2}
+.bait .when{font-size:var(--fs-xs);color:var(--m);line-height:1.45}
+
+/* ---------- BIG TIDE CURVE ----------
+   Note the child combinators: each key row is a flex row of exactly two items
+   (swatch + one text block). Without the >, a nested <b> becomes its own flex
+   item and the sentence splits into columns. */
+.wave{border:1px solid var(--l);border-radius:var(--ra-lg);background:var(--c);overflow:hidden}
+.wave svg{display:block;width:100%}
+.wave-key{display:flex;flex-direction:column;gap:7px;padding:var(--s3) var(--s4);
+  border-top:1px solid var(--l);font-size:var(--fs-xs);color:var(--m)}
+.wave-key>span{display:flex;align-items:flex-start;gap:8px;line-height:1.45}
+.wave-key>span>i{width:18px;height:4px;border-radius:2px;flex:none;margin-top:6px}
+
+/* ---------- FULL-WIDTH TIDE STAGE ---------- */
+.stageblock{border:1px solid var(--l);border-radius:var(--ra-lg);background:var(--c);overflow:hidden}
+.stageblock+.stageblock{margin-top:var(--s3)}
+.stageblock.is-prime{border-color:var(--lime)}
+.sb-hd{display:flex;align-items:center;gap:var(--s3);padding:var(--s3) var(--s4);background:var(--c2)}
+.stageblock.is-prime .sb-hd{background:linear-gradient(100deg,rgba(141,255,0,.14),transparent 72%)}
+.sb-hd .n{flex:none;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;
+  background:var(--c);border:1px solid var(--l);font-family:var(--ff-mono);font-size:12px;color:var(--m)}
+.sb-hd h3{font-size:17px}
+.sb-b{padding:var(--s4)}
+.sb-x{width:100%;display:block;border-radius:var(--ra-sm);overflow:hidden;margin-bottom:var(--s3)}
+.sb-do{display:flex;gap:10px;align-items:stretch;padding:10px var(--s3);border-radius:var(--ra-sm);
+  background:var(--c3);font-size:var(--fs-sm);margin-top:var(--s3);line-height:1.45}
+.sb-do>i{flex:none;width:4px;border-radius:2px;background:var(--accent)}
+.stageblock.is-prime .sb-do>i{background:var(--lime)}
+
+/* ---------- MODIFIERS ---------- */
+.mods{display:grid;grid-template-columns:1fr;gap:var(--s2)}
+.mod{display:flex;gap:var(--s3);align-items:flex-start;padding:var(--s3);border:1px solid var(--l);
+  border-radius:var(--ra-md);background:var(--c)}
+.mod .ic2{flex:none;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;
+  background:var(--c2);color:var(--link)}
+.mod b{display:block;font-family:var(--ff-display);font-size:15px;margin-bottom:2px}
+.mod .t{font-size:var(--fs-sm);color:var(--m);line-height:1.45}
+
+/* ---------- HAZARD CARDS ---------- */
+.haz{border:1px solid var(--l);border-radius:var(--ra-lg);background:var(--c);overflow:hidden}
+.haz+.haz{margin-top:var(--s3)}
+.haz-hd{display:flex;gap:var(--s3);padding:var(--s3) var(--s4);border-bottom:1px solid var(--l);background:var(--c2)}
+.haz-hd .av{flex:none;width:64px;height:64px;border-radius:var(--ra-sm);overflow:hidden;position:relative;
+  background-color:var(--c);border:1px dashed var(--l2);
+  background-image:repeating-linear-gradient(135deg,transparent 0 7px,rgba(91,152,240,.18) 7px 8px)}
+.haz-hd .av>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.haz-hd h3{font-size:16px;margin:3px 0 5px}
+.haz-b{padding:var(--s4)}
+.haz-b .blk+.blk{margin-top:var(--s3);padding-top:var(--s3);border-top:1px solid var(--l)}
+.haz-b .rl{font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--m);margin-bottom:4px}
+.haz-b .bd{font-size:var(--fs-sm);line-height:1.45}
+.hazkind{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:var(--ra-pill);
+  font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.hazkind.spine{background:var(--warn-bg);color:var(--warn-text);border:1px solid var(--warn)}
+.hazkind.bite{background:var(--danger-bg);color:var(--danger-text);border:1px solid var(--danger)}
+.hazkind.toxin{background:var(--c3);color:var(--link);border:1px solid var(--link)}
+
+/* ---------- THE HABITS ---------- */
+.rule3{display:grid;grid-template-columns:1fr;gap:var(--s2)}
+.rule3>div{display:flex;gap:var(--s3);align-items:flex-start;padding:var(--s3);border-radius:var(--ra-md);
+  background:var(--c2);border:1px solid var(--l);font-size:var(--fs-sm);line-height:1.45}
+.rule3 .n{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+  background:var(--lime);color:var(--lime-ink);font-family:var(--ff-display);font-weight:800;font-size:13px}
+.rule3 b{font-family:var(--ff-display);font-size:15px;display:block;margin-bottom:1px}
+
+/* ---------- COMPARE ROW ---------- */
+.tell{display:flex;gap:var(--s3);align-items:flex-start;padding:11px 0;border-top:1px solid var(--l);
+  font-size:var(--fs-sm);line-height:1.45}
+.tell:first-child{border-top:0}
+.tell .q{flex:none;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;
+  background:var(--c2);color:var(--m);font-family:var(--ff-mono);font-size:11px;font-weight:700}
+
+@media (min-width:900px){
+  .mods{grid-template-columns:1fr 1fr}
+}
+
+/* ==========================================================================
+   TRACK B ADDITIONS — species, care, water, rigs and 404.
+   Appended, not edited: everything above is the faithful port of the design
+   system. Every value below is an existing token.
+   ========================================================================== */
+
+/* The `.mark` collision Track B found is fixed at its source above: the ID pin
+   is now scoped to `.idplate .mark`, so the appbar brand needs no counter-rule. */
+
+/* ---------- SPACING UTILITIES ---------- */
+.mt2{margin-top:var(--s2)}
+.mt3{margin-top:var(--s3)}
+.mt4{margin-top:var(--s4)}
+.mb3{margin-bottom:var(--s3)}
+
+/* ---------- CHIP ON A DARK HERO ----------
+   The hero gradient is fixed in both themes, so this chip cannot use the
+   theme-dependent surface tokens the way a normal .chip does. */
+.chip-on-dark{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.28);color:#e8f1fe}
+
+/* ---------- IMAGE CREDIT ----------
+   CC BY / CC BY-SA images legally require a visible credit. Small, quiet, and
+   readable in both themes — --m is AA on every surface it sits on. */
+.credit{font-family:var(--ff-mono);font-size:10.5px;line-height:1.5;color:var(--m);
+  margin-top:6px;overflow-wrap:anywhere}
+.credit a{font-weight:600}
+
+/* ---------- INTERACTIVE CHIP ----------
+   A static .chip is 28px, which is fine for a label but under the 44px tap
+   target once the chip is a link. Same treatment Track A gives filter chips. */
+.chip-tap{min-height:var(--tap);height:auto;padding:0 var(--s4);font-size:var(--fs-sm)}
+
+/* ---------- ID MARK RANKING ----------
+   Each mark says in words whether it settles the identification or only
+   supports it, so a variable feature is never read as decisive. */
+.markweight{height:20px;padding:0 8px;font-size:10px;letter-spacing:.04em;
+  text-transform:uppercase;vertical-align:1px}
+
+/* ---------- SPECIES INDEX CARD ---------- */
+.speciescard{display:flex;flex-direction:column}
+.speciescard-link{display:block;color:inherit;font-weight:inherit}
+.speciescard-link:hover{text-decoration:none;color:inherit}
+.speciescard-link:hover h3{color:var(--link)}
+/* Flush to the card edge — .card already clips the corner radius. The dashed
+   placeholder border is left intact so an empty slot still reads as empty. */
+.speciescard .plate{border-radius:0}
+
+/* ---------- HAZARD GRID ----------
+   .haz+.haz owns the stacked rhythm; inside a gap-based grid that margin
+   double-counts, so neutralise it here. */
+.hazgrid .haz+.haz{margin-top:0}
+.hazgrid{align-items:start}
+.haz-hd{align-items:flex-start}
+
+/* ---------- DISCLOSURE ----------
+   Documented injury cases sit behind a deliberate action with a stated content
+   warning. `summary` keeps its default `display:list-item` so the browser's own
+   open/close marker survives — giving it `display:flex` removes the affordance
+   in every engine. The 44px target comes from padding instead. */
+.disclose{border:1px solid var(--l);border-radius:var(--ra-md);background:var(--c);overflow:hidden}
+.disclose>summary{min-height:var(--tap);padding:var(--s3) var(--s4);cursor:pointer;
+  font-family:var(--ff-display);font-weight:700;font-size:var(--fs-h3);color:var(--t);
+  background:var(--c2)}
+.disclose>summary:hover{background:var(--c3)}
+.disclose>summary::marker{color:var(--m)}
+.disclose>summary .mut{display:block;font-family:var(--ff-body);font-weight:400;margin-top:2px}
+.disclose[open]>summary{border-bottom:1px solid var(--l)}
+.disclose-b{padding:var(--s4)}
+
+/* ---------- HABITAT DIAGRAM ----------
+   The habitat diagrams are local SVG files loaded as <img>, so the ported
+   `.diagram svg` rule does not reach them. */
+/* These SVGs are 800x440 with type baked in at a size drawn for a phone-width
+   card. Left to fill a desktop column they render ~580px tall with 36px
+   headings — a billboard, not a diagram, and it pushes the real photographs
+   and the actual advice below the fold. Cap the width so the artwork keeps the
+   scale it was drawn at, and centre it in the wider column. */
+.diagram-fig{margin:0;max-width:560px}
+.diagram>img{display:block;width:100%}
+.diagram-fig>figcaption{margin-top:6px}
+@media (min-width:900px){
+  .diagram-fig{margin-inline:auto}
+}
+.mod .ic2 svg{width:18px;height:18px}
+
+/* ---------- RIG SCHEMATIC ----------
+   The schematic reads left-to-right as one run; wrapping it would read as two
+   rigs. It scrolls inside its own box so the page body never scrolls. */
+.rigcard h3{margin-bottom:var(--s2)}
+.schematic{overflow-x:auto;-webkit-overflow-scrolling:touch;
+  background:var(--c2);border:1px solid var(--l);border-radius:var(--ra-sm);
+  padding:10px var(--s3);margin-bottom:var(--s3)}
+.schematic>.mono{display:block;white-space:nowrap;color:var(--t);font-size:12px;letter-spacing:.04em}
+
+/* ---------- DO / DON'T HEADINGS ----------
+   The ported rules style `h4`; these columns sit under an `h2`, so they use
+   `h3` to keep the outline from skipping a level. */
+.dd h3{font-family:var(--ff-display);font-size:var(--fs-h3);margin-bottom:var(--s2)}
+.dd-do h3{color:var(--lime-text)}
+.dd-dont h3{color:var(--danger-text)}
+
+/* ---------- SECTION TITLE INSIDE A HERO-LESS PAGE ---------- */
+.sect>.lab+h1{margin-top:4px}
+
+@media (min-width:900px){
+  .mods--3{grid-template-columns:repeat(3,1fr)}
+  /* The ID plate and its mark list read side by side once there is room
+     (design board 03, desktop note). */
+  .idsplit{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+    gap:var(--s5);align-items:start}
+  .idsplit .zonelist{margin-top:0}
+  .idplate{min-height:320px}
+}

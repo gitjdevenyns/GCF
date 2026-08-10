@@ -1,0 +1,89 @@
+# Build and deploy GCF to GitHub Pages (Actions mode).
+#
+# IMPORTANT: This workflow only takes effect once the repository's Pages
+# setting is flipped from "Deploy from a branch" to "GitHub Actions".
+# Until then the live site is served from the main branch root (legacy mode).
+#
+# Optional Supabase configuration (needed later for cached weather/tide
+# snapshots): set these in the repo before/when that feature ships —
+#   - Actions secret  VITE_SUPABASE_ANON_KEY  (publishable anon key ONLY —
+#     never the service role key; it must not exist anywhere in this repo)
+#   - Actions variable (or secret) VITE_SUPABASE_URL
+# The build works fine without them; the app treats Supabase as optional.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Fail fast on a broken suite before spending time on a bundle we'd throw away.
+      - name: Run tests
+        run: npm test
+
+      - name: Check Supabase build configuration
+        env:
+          URL: ${{ vars.VITE_SUPABASE_URL || secrets.VITE_SUPABASE_URL }}
+          KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$URL" ] || [ -z "$KEY" ]; then
+            echo "::warning title=Supabase not configured::Building without \
+          VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY. The guide still works \
+          offline-first, but every live tide and weather slot will render in \
+          its 'unavailable' state."
+          fi
+
+      - name: Build (typecheck + vite build)
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL || secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      # The anon key is publishable and expected in the bundle; the service role
+      # key must never be. Fail the deploy rather than publish a leak.
+      - name: Assert no service-role key in the bundle
+        run: |
+          if grep -rlE 'service_role|SUPABASE_SERVICE_ROLE_KEY' dist/ ; then
+            echo "::error title=Secret leak::A service-role reference reached dist/."
+            exit 1
+          fi
+          echo "No service-role references in dist/."
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

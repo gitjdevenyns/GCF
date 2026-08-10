@@ -1,0 +1,99 @@
+/* ==========================================================================
+   Gulf Coast Fishing — design tokens
+   Ported verbatim from the finished design system
+   ("Gulf Coast Fishing — Track B Screens" / gcf.css §1–5).
+
+   Every colour below is either a locked brand value or a documented step of
+   one of the two brand hues (--b royal blue #075bd8, --g key lime #8dff00)
+   or of the neutral ramp. No unrelated hues. Status red/amber are the two
+   allowed semantic exceptions.
+
+   The muted-text values are WCAG-AA-corrected — see the inline notes. Do not
+   "simplify" --m back to --n60 on light or --b600 to a link colour on dark.
+   ========================================================================== */
+
+/* ---------- 1. RAW RAMPS (theme independent) ---------- */
+:root {
+  /* Blue — every step is a tint/shade of --b600 #075bd8 (the locked --b) */
+  --b900:#031530; --b800:#052a63; --b700:#0746a3; --b600:#075bd8;
+  --b500:#2d78e8; --b400:#5b98f0; --b300:#8fbaf7; --b200:#c2dbfb; --b100:#e8f1fe;
+
+  /* Lime — every step is a tint/shade of --g400 #8dff00 (the locked --g) */
+  --g900:#16290a; --g800:#2a4d00; --g700:#3d6f00; --g600:#5ca300; --g500:#74cc00;
+  --g400:#8dff00; --g300:#b1ff5c; --g200:#d3ffa3; --g100:#edffd6;
+
+  /* Neutral — cool, blue-leaning greys. n00/n10/n30/n60/n90/n95/n99 are locked. */
+  --n00:#ffffff; --n05:#f7fbff; --n10:#f3f7fb; --n20:#e9f0f7; --n30:#dce6ef;
+  --n40:#c4d2e0; --n50:#9eb0c3; --n60:#65758a; --n70:#55677d; --n80:#33465c;
+  --n85:#223140; --n88:#16202c; --n90:#0e151e; --n95:#07111d; --n99:#05080d;
+
+  /* Status */
+  --r500:#ef4444; --r700:#c62b2b; --r050:#fdecec; --r950:#2a0f0f;
+  --a500:#f59e0b; --a700:#b45309; --a050:#fdf3e0; --a950:#2b1d05;
+
+  /* ---------- 2. TYPE ---------- */
+  --ff-display:"Bricolage Grotesque Variable","Bricolage Grotesque","Bricolage Grotesque 48pt","Helvetica Neue",system-ui,sans-serif;
+  --ff-body:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,sans-serif;
+  --ff-mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  --fs-d1:40px; --fs-d2:30px; --fs-h1:24px; --fs-h2:19px; --fs-h3:16px;
+  --fs-body:15.5px; --fs-sm:13.5px; --fs-xs:12px; --fs-lab:11px;
+  --lh-tight:0.96; --lh-head:1.15; --lh-body:1.5;
+
+  /* ---------- 3. SPACE / RADII / ELEVATION ---------- */
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:20px; --s6:24px; --s7:32px; --s8:40px; --s9:56px;
+  --ra-sm:10px; --ra-md:14px; --ra-lg:20px; --ra-xl:28px; --ra-pill:999px;
+  --sh-1:0 1px 2px rgba(3,21,48,.08), 0 4px 14px rgba(3,21,48,.06);
+  --sh-2:0 8px 30px rgba(3,21,48,.16);
+  --tap:44px;
+
+  /* ---------- 4. SEMANTIC — LIGHT ---------- */
+  --bg:var(--n10);         /* page */
+  --c:var(--n00);          /* card surface */
+  --c2:var(--n10);         /* recessed / inset surface */
+  --c3:var(--b100);        /* tinted informational surface */
+  --t:var(--n95);          /* body text */
+  --m:var(--n70);          /* muted text — n70, NOT n60: n60 is 4.37:1 on --bg (fails AA) */
+  --m-soft:var(--n60);     /* muted for 19px+ / non-essential only */
+  --l:var(--n30);          /* hairline */
+  --l2:var(--n40);         /* emphasised divider */
+  --accent:var(--b600);
+  --accent-ink:var(--n00); /* text on --accent */
+  --link:var(--b600);      /* 5.58:1 on --bg */
+  --link-hover:var(--b700);
+  --lime:var(--g400);      /* fills / strokes only */
+  --lime-ink:var(--n95);   /* text on a lime fill — 14.85:1 */
+  --lime-text:var(--g700); /* lime as TEXT on light — 6.05:1 */
+  --danger:var(--r500); --danger-text:var(--r700); --danger-bg:var(--r050);
+  --warn:var(--a500); --warn-text:var(--a700); --warn-bg:var(--a050);
+  --scrim:rgba(3,21,48,.55);
+
+  color-scheme: light;
+}
+
+/* ---------- 5. SEMANTIC — DARK (app default) ---------- */
+html[data-theme="dark"], .gcf-dark {
+  --bg:var(--n99);
+  --c:var(--n90);
+  --c2:var(--n88);
+  --c3:#0b1f3d;            /* --b900 lifted toward --b800 for informational surfaces */
+  --t:var(--n05);
+  --m:var(--n50);          /* 8.26:1 on --c */
+  --m-soft:#7f92a6;        /* n50→n60 midpoint, 5.0:1 on --c */
+  --l:var(--n85);
+  --l2:var(--n80);
+  --accent:var(--b600);
+  --accent-ink:var(--n00);
+  --link:var(--b400);      /* --b600 is only 3.06:1 on --c; --b400 is 6.29:1 */
+  --link-hover:var(--b300);
+  --lime:var(--g400);
+  --lime-ink:var(--n95);
+  --lime-text:var(--g400); /* 14.36:1 on --c */
+  --danger:var(--r500); --danger-text:var(--r500); --danger-bg:var(--r950);
+  --warn:var(--a500); --warn-text:var(--a500); --warn-bg:var(--a950);
+  --sh-1:0 1px 2px rgba(0,0,0,.5), 0 6px 20px rgba(0,0,0,.35);
+  --sh-2:0 10px 34px rgba(0,0,0,.55);
+  --scrim:rgba(3,8,13,.6);
+
+  color-scheme: dark;
+}

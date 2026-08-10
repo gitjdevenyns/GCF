@@ -1,0 +1,120 @@
+/* ==========================================================================
+   App shell + application states.
+   Everything here is app plumbing the design boards do not cover: the desktop
+   expansion of the mobile shell, focus rings, skip link, loading skeletons,
+   empty/error states, Leaflet theming. All values come from the design tokens.
+   ========================================================================== */
+
+/* ---------- SHELL ---------- */
+.app{min-height:100dvh;display:flex;flex-direction:column;background:var(--bg)}
+.app-main{flex:1 0 auto;width:100%}
+.app-shell{max-width:1120px;margin:0 auto;width:100%}
+
+.skip-link{position:absolute;left:-9999px;top:0;z-index:60;padding:10px var(--s4);
+  background:var(--accent);color:var(--accent-ink);border-radius:0 0 var(--ra-sm) 0;font-weight:800}
+.skip-link:focus{left:0;text-decoration:none}
+
+.appbar-brand{display:flex;align-items:center;gap:var(--s3);color:inherit;font-weight:inherit;min-width:0}
+.appbar-brand:hover{text-decoration:none;color:inherit}
+.appbar-brand .name{font-family:var(--ff-display);font-weight:800;font-size:15px;line-height:1.1}
+.appbar-actions{display:flex;align-items:center;gap:var(--s2);flex:none}
+
+/* Icon-only / compact control that still meets the 44px tap target. */
+.iconbtn{display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  min-height:34px;min-width:var(--tap);padding:0 11px;border-radius:var(--ra-pill);
+  background:var(--c2);border:1px solid var(--l);color:var(--m);
+  font-family:var(--ff-body);font-size:var(--fs-xs);font-weight:700;cursor:pointer;white-space:nowrap}
+.iconbtn:hover{color:var(--t);border-color:var(--l2)}
+
+/* Desktop nav lives in the appbar; the tabbar is the mobile affordance. */
+.appnav{display:none}
+@media (min-width:900px){
+  .appnav{display:flex;align-items:center;gap:var(--s1);flex-wrap:wrap}
+  .appnav a{display:inline-flex;align-items:center;min-height:36px;padding:0 var(--s3);
+    border-radius:var(--ra-pill);color:var(--m);font-size:var(--fs-sm);font-weight:700}
+  .appnav a:hover{text-decoration:none;color:var(--t);background:var(--c2)}
+  .appnav a.on{color:var(--accent-ink);background:var(--accent)}
+  .tabbar{display:none}
+}
+
+/* ---------- FOCUS ---------- */
+:where(a,button,[tabindex],input,select,textarea):focus-visible{
+  outline:3px solid var(--lime);outline-offset:2px;border-radius:6px}
+.hero :where(a,button):focus-visible,.lochero :where(a,button):focus-visible{outline-color:#fff}
+
+/* ---------- BREADCRUMB / BACK ---------- */
+.backlink{display:inline-flex;align-items:center;gap:6px;min-height:var(--tap);
+  font-size:var(--fs-sm);font-weight:700}
+
+/* ---------- LOADING SKELETONS ---------- */
+.sk{display:block;border-radius:6px;background:var(--c2);
+  background-image:linear-gradient(90deg,transparent,rgba(141,255,0,.10),transparent);
+  background-size:200% 100%;background-repeat:no-repeat;color:transparent;user-select:none}
+@media (prefers-reduced-motion:no-preference){
+  .sk{animation:sk 1.3s ease-in-out infinite}
+  @keyframes sk{from{background-position:180% 0}to{background-position:-80% 0}}
+}
+.sk-line{height:1em;width:100%}
+.sk-w4{width:4ch}.sk-w6{width:6ch}.sk-w8{width:8ch}.sk-w12{width:12ch}
+.sk-block{height:62px;width:100%;border-radius:var(--ra-sm)}
+
+/* ---------- EMPTY / ERROR / STALE ---------- */
+.state{display:flex;flex-direction:column;align-items:flex-start;gap:var(--s3);
+  padding:var(--s6) var(--s4);border:1px dashed var(--l2);border-radius:var(--ra-lg);
+  background:var(--c2);font-size:var(--fs-sm);color:var(--m)}
+.state h2,.state h3{color:var(--t)}
+.state--pad{margin:var(--s4)}
+
+.errpage{max-width:640px;margin:0 auto;padding:var(--s9) var(--s4)}
+.errpage pre{overflow-x:auto;background:var(--c2);border:1px solid var(--l);border-radius:var(--ra-sm);
+  padding:var(--s3);font-family:var(--ff-mono);font-size:var(--fs-xs);color:var(--m);white-space:pre-wrap}
+
+/* Staleness / offline banner inside a data card. */
+.freshness{display:flex;align-items:center;gap:6px;font-family:var(--ff-mono);font-size:10.5px;color:var(--m)}
+.freshness .dot{width:7px;height:7px;border-radius:50%;flex:none;background:var(--lime)}
+.freshness.is-stale .dot{background:var(--warn)}
+.freshness.is-off .dot{background:var(--m)}
+
+/* A callout that follows a block it comments on, rather than opening a section. */
+.callout-spaced{margin-top:var(--s3)}
+
+/* ---------- OFFLINE BAR ---------- */
+.offline-bar{display:flex;align-items:center;gap:8px;margin:0;
+  padding:8px var(--s4);background:var(--warn-bg);color:var(--warn-text);
+  border-bottom:1px solid var(--warn);font-size:var(--fs-xs);font-weight:700}
+.offline-bar .dot{width:7px;height:7px;border-radius:50%;flex:none;background:var(--warn)}
+
+/* ---------- VISUALLY HIDDEN ---------- */
+.vh{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+  clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+
+/* ---------- MAP (Leaflet) ---------- */
+.map{height:240px;width:100%;border-radius:var(--ra-md);overflow:hidden;border:1px solid var(--l);
+  background:var(--c2);z-index:0}
+.map--tall{height:360px}
+.leaflet-container{background:var(--c2);font-family:var(--ff-body)}
+.leaflet-control-attribution{background:var(--c) !important;color:var(--m) !important;font-size:10px}
+.leaflet-control-attribution a{color:var(--link) !important}
+html[data-theme="dark"] .leaflet-tile{filter:brightness(.78) saturate(.86) contrast(1.05)}
+.leaflet-bar a{background:var(--c) !important;color:var(--t) !important;border-color:var(--l) !important}
+
+/* ---------- LISTS ---------- */
+.plainlist{list-style:none;margin:0;padding:0}
+.bullets{margin:0;padding-left:1.15em;font-size:var(--fs-sm);line-height:1.5}
+.bullets li+li{margin-top:5px}
+
+/* ---------- FILTER BAR ---------- */
+.filters{display:flex;gap:var(--s2);flex-wrap:wrap}
+.filters button{cursor:pointer;font-family:var(--ff-body)}
+.filters .chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+
+/* ---------- DESKTOP CONTENT RHYTHM ---------- */
+@media (min-width:900px){
+  .hero{padding:var(--s8) var(--s7) var(--s9)}
+  .hero h1{font-size:52px}
+  .lochero{min-height:300px}
+  .lochero .inner{padding:var(--s7)}
+  .hscroll{grid-auto-columns:220px;padding-left:var(--s7);padding-right:var(--s7)}
+  .baits{grid-template-columns:repeat(4,1fr)}
+  .legend{grid-template-columns:repeat(4,1fr)}
+}

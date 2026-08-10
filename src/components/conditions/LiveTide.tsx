@@ -1,0 +1,291 @@
+import { useMemo } from 'react';
+import type { Location } from '../../data';
+import { useConditions } from '../../lib/useConditions';
+import { compactSky, timeAgo } from '../../lib/conditions';
+import type { TideEvent } from '../../lib/conditions';
+import { ErrorState, FreshnessNote, Skeleton } from '../ui';
+
+/**
+ * Live tide + forecast card for one location, read from the Supabase snapshot
+ * cache (NOAA CO-OPS predictions and the NWS forecast, refreshed every 3 hours
+ * by the refresh-conditions Edge Function).
+ *
+ * Everything here is a PREDICTION or a FORECAST, never an observation, and the
+ * copy says so. The card renders in all four `useConditions` states and never
+ * blanks: with no live data at all it still tells the angler which station to
+ * open and what this spot's tide plan is.
+ */
+
+const STAGE_COPY: Record<string, { label: string; note: string }> = {
+  low: { label: 'Low / slack', note: 'Water is off the flat. Fish the remaining depth.' },
+  incoming: { label: 'Incoming', note: 'Water is filling. Follow it shoreward.' },
+  high: { label: 'High / slack', note: 'Flooded and spread out. Read structure, not depth.' },
+  outgoing: { label: 'Outgoing', note: 'The flat is draining. Sit down-current of an exit.' },
+};
+
+/** Station-local clock from the offset-qualified ISO the parser emits. */
+function clock(iso: string): string {
+  const m = /T(\d{2}):(\d{2})/.exec(iso);
+  if (!m) return '—';
+  const h = Number(m[1]);
+  const suffix = h < 12 ? 'am' : 'pm';
+  return `${h % 12 === 0 ? 12 : h % 12}:${m[2]} ${suffix}`;
+}
+
+/**
+ * Tide curve driven by the real predicted heights.
+ *
+ * A smooth curve through hi/lo points is the honest shape: the tide is
+ * sinusoidal between turns, so a straight-line join would understate mid-tide
+ * current — which is the single thing this whole screen is trying to teach.
+ */
+function Curve({ events, nowMs }: { events: TideEvent[]; nowMs: number }) {
+  const geometry = useMemo(() => {
+    const pts = events
+      .map((e) => ({ ...e, ms: Date.parse(e.time) }))
+      .filter((e) => Number.isFinite(e.ms))
+      .sort((a, b) => a.ms - b.ms);
+    if (pts.length < 2) return null;
+
+    // Window: the event before now through ~24h ahead, so the curve is about
+    // "the rest of today" rather than an unreadable multi-day squiggle.
+    const startIdx = Math.max(0, pts.findIndex((p) => p.ms > nowMs) - 1);
+    const window = pts.slice(startIdx, startIdx + 6);
+    if (window.length < 2) return null;
+
+    const t0 = window[0].ms;
+    const t1 = window[window.length - 1].ms;
+    const span = t1 - t0 || 1;
+    const heights = window.map((p) => p.height_ft);
+    const lo = Math.min(...heights);
+    const hi = Math.max(...heights);
+    const range = hi - lo || 1;
+
+    const X = (ms: number) => 20 + ((ms - t0) / span) * 318;
+    const Y = (ft: number) => 138 - ((ft - lo) / range) * 96;
+
+    // Horizontal-tangent cubics: flat at each turn, steepest between them.
+    let d = `M ${X(window[0].ms).toFixed(1)} ${Y(window[0].height_ft).toFixed(1)}`;
+    for (let i = 1; i < window.length; i++) {
+      const a = window[i - 1];
+      const b = window[i];
+      const ax = X(a.ms);
+      const bx = X(b.ms);
+      const cx = ax + (bx - ax) / 2;
+      d += ` C ${cx.toFixed(1)} ${Y(a.height_ft).toFixed(1)}, ${cx.toFixed(1)} ${Y(b.height_ft).toFixed(1)}, ${bx.toFixed(1)} ${Y(b.height_ft).toFixed(1)}`;
+    }
+
+    const nowX = nowMs >= t0 && nowMs <= t1 ? X(nowMs) : null;
+    return { d, window, X, Y, nowX };
+  }, [events, nowMs]);
+
+  if (!geometry) return null;
+  const { d, window, Y, X, nowX } = geometry;
+
+  return (
+    <svg
+      viewBox="0 0 358 176"
+      role="img"
+      aria-label={`Predicted tide curve: ${window
+        .map((p) => `${p.type === 'H' ? 'high' : 'low'} ${p.height_ft.toFixed(1)} feet at ${clock(p.time)}`)
+        .join(', ')}`}
+    >
+      <path d={`${d} L 338 152 L 20 152 Z`} style={{ fill: 'var(--accent)', opacity: 0.24 }} />
+      <path
+        d={d}
+        fill="none"
+        strokeWidth="2.6"
+        strokeLinecap="round"
+        style={{ stroke: 'var(--link)' }}
+      />
+      <path d="M12 152 H346" strokeWidth="1.5" style={{ stroke: 'var(--l2)' }} />
+      {window.map((p) => (
+        <g key={p.time}>
+          <circle cx={X(p.ms)} cy={Y(p.height_ft)} r="4" style={{ fill: 'var(--link)' }} />
+          <text
+            x={X(p.ms)}
+            y={p.type === 'H' ? Y(p.height_ft) - 10 : Y(p.height_ft) + 18}
+            textAnchor="middle"
+            fontFamily="Helvetica,Arial,sans-serif"
+            fontSize="9"
+            fontWeight="800"
+            style={{ fill: 'var(--m)' }}
+          >
+            {clock(p.time)}
+          </text>
+        </g>
+      ))}
+      {nowX !== null && (
+        <>
+          <line
+            x1={nowX}
+            y1="14"
+            x2={nowX}
+            y2="152"
+            strokeWidth="1.5"
+            strokeDasharray="3 3"
+            style={{ stroke: 'var(--lime)' }}
+          />
+          <text
+            x={nowX}
+            y="10"
+            textAnchor="middle"
+            fontFamily="Helvetica,Arial,sans-serif"
+            fontSize="9"
+            fontWeight="800"
+            letterSpacing=".1em"
+            style={{ fill: 'var(--lime-text)' }}
+          >
+            NOW
+          </text>
+        </>
+      )}
+    </svg>
+  );
+}
+
+export default function LiveTide({ location }: { location: Location }) {
+  const { status, data, freshness, error, refetch } = useConditions(location.slug);
+  const nowMs = Date.now();
+  const phase = data?.phase ?? null;
+  const stage = phase?.stage ?? null;
+  const weather = data?.weather ?? null;
+
+  return (
+    <div className="cond">
+      <div className="cond-hd">
+        <span className="lab">Conditions now</span>
+        <span className="mono" style={{ color: 'var(--m)' }}>
+          {location.tide_station.name?.replace(/^NOAA /, '') ?? 'NOAA'}
+        </span>
+      </div>
+
+      <div className="cond-body">
+        {status === 'loading' && (
+          <div aria-busy="true" aria-live="polite">
+            <span className="vh">Loading current conditions</span>
+            <div className="cond-now">
+              <Skeleton width={8} />
+              <Skeleton width={6} />
+            </div>
+            <div style={{ marginTop: 10 }}>
+              <Skeleton block />
+            </div>
+          </div>
+        )}
+
+        {status === 'error' && !data && (
+          <ErrorState onRetry={refetch}>
+            <span>
+              The cached tide and forecast could not be loaded
+              {error ? ` (${error})` : ''}. Everything else on this page works without
+              it — open the station chart below for the official prediction.
+            </span>
+          </ErrorState>
+        )}
+
+        {status === 'unavailable' && (
+          <p className="mut">
+            Live conditions are not enabled in this build. The tide stages and the
+            per-spot plans below do not need them.
+          </p>
+        )}
+
+        {(status === 'ready' || (status === 'error' && data)) && data && (
+          <>
+            <div className="cond-now">
+              {stage ? (
+                <span className="chip chip-lime">{STAGE_COPY[stage]?.label ?? stage}</span>
+              ) : (
+                <span className="chip">Tide stage unknown</span>
+              )}
+              {phase?.height_ft !== null && phase?.height_ft !== undefined && (
+                <span className="big">{phase.height_ft.toFixed(1)} ft</span>
+              )}
+              {phase?.next && (
+                <span className="mut">
+                  {phase.next.type === 'H' ? 'high' : 'low'} at {clock(phase.next.time)}
+                </span>
+              )}
+            </div>
+
+            {stage && <p className="mut">{STAGE_COPY[stage]?.note}</p>}
+
+            {data.tides.length > 1 && (
+              <div style={{ marginTop: 10 }}>
+                <Curve events={data.tides} nowMs={nowMs} />
+              </div>
+            )}
+
+            <div className="cond-grid">
+              <div>
+                <span className="lab" style={{ fontSize: 9.5 }}>
+                  Wind
+                </span>
+                <b>
+                  {weather?.wind_mph !== null && weather?.wind_mph !== undefined
+                    ? `${weather.wind_dir ?? ''} ${weather.wind_mph}`.trim()
+                    : '—'}
+                </b>
+              </div>
+              <div>
+                <span className="lab" style={{ fontSize: 9.5 }}>
+                  Air
+                </span>
+                <b>
+                  {weather?.air_temp_f !== null && weather?.air_temp_f !== undefined
+                    ? `${weather.air_temp_f}°`
+                    : '—'}
+                </b>
+              </div>
+              <div>
+                <span className="lab" style={{ fontSize: 9.5 }}>
+                  Sky
+                </span>
+                <b title={weather?.summary ?? undefined}>
+                  {compactSky(weather?.summary) ?? '—'}
+                </b>
+                {weather?.summary && <span className="vh">{weather.summary}</span>}
+              </div>
+              <div>
+                <span className="lab" style={{ fontSize: 9.5 }}>
+                  Range
+                </span>
+                <b>
+                  {data.tides.length > 1
+                    ? `${(
+                        Math.max(...data.tides.map((t) => t.height_ft)) -
+                        Math.min(...data.tides.map((t) => t.height_ft))
+                      ).toFixed(1)} ft`
+                    : '—'}
+                </b>
+              </div>
+            </div>
+
+            <FreshnessNote state={freshness}>
+              {freshness === 'stale'
+                ? `Cached ${timeAgo(data.refreshed_at)} — may be out of date.`
+                : `Predicted values, cached ${timeAgo(data.refreshed_at)}.`}{' '}
+              Wind and sky are an NWS forecast; tide heights are NOAA astronomical
+              predictions, not measurements.
+            </FreshnessNote>
+
+            {status === 'error' && (
+              <p className="mut xs" style={{ marginTop: 6 }}>
+                Showing the last good copy — refresh failed.{' '}
+                <button
+                  type="button"
+                  className="iconbtn"
+                  onClick={refetch}
+                  style={{ minHeight: 28 }}
+                >
+                  Retry
+                </button>
+              </p>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}

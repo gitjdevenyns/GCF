@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+    <meta name="theme-color" content="#05080d" />
+    <title>Offline — Gulf Coast Fishing Guide</title>
+    <link rel="icon" href="/GCF/assets/icon-maskable.svg" type="image/svg+xml" />
+    <!--
+      Last-resort recovery page. In normal operation this is never shown: the
+      whole app shell and all guide content are precached, so the service worker
+      serves the real SPA offline and the guide works with no network at all.
+      This page exists for the one case the SPA cannot cover — the app shell
+      itself failing to load (e.g. a partially-updated cache after a bad deploy).
+      It is deliberately self-contained: no JS, no external assets, no fonts.
+    -->
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #05080d;
+        --c: #0e151e;
+        --t: #f7fbff;
+        --m: #9eb0c3;
+        --l: #223140;
+        --lime: #8dff00;
+        --ink: #07111d;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: var(--bg);
+        color: var(--t);
+        font: 15.5px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, sans-serif;
+      }
+      main {
+        max-width: 34rem;
+        background: var(--c);
+        border: 1px solid var(--l);
+        border-radius: 20px;
+        padding: 32px 24px;
+      }
+      .lab {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--m);
+        margin: 0 0 6px;
+      }
+      h1 {
+        margin: 0 0 12px;
+        font-size: 30px;
+        line-height: 1.05;
+        letter-spacing: -0.025em;
+      }
+      p { margin: 0 0 16px; color: var(--m); font-size: 13.5px; }
+      a.btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 0 20px;
+        border-radius: 14px;
+        background: var(--lime);
+        color: var(--ink);
+        font-weight: 800;
+        font-size: 13.5px;
+        text-decoration: none;
+      }
+      a.btn:focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="lab">Gulf Coast Fishing</p>
+      <h1>You&rsquo;re offline, and the app didn&rsquo;t load.</h1>
+      <p>
+        The guide normally works with no connection at all &mdash; locations, species,
+        rigs and handling notes are stored on your device. This screen means the app
+        files themselves couldn&rsquo;t be read, usually right after an update.
+      </p>
+      <p>Reconnect once and reload, and the guide will be available offline again.</p>
+      <a class="btn" href="/GCF/">Try the guide again</a>
+    </main>
+  </body>
+</html>

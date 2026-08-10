@@ -1,0 +1,80 @@
+/* Home-screen components. Ported from the design system (gcf-home.css).
+   The design-surface-only .deskframe/.deskbar rules are not shipped. */
+.hero{position:relative;padding:var(--s6) var(--s4) var(--s7);overflow:hidden;
+  background:linear-gradient(165deg,#031530 0%,#052a63 46%,#0746a3 100%);color:var(--n05)}
+.hero-sun{position:absolute;right:-40px;top:-40px;width:190px;height:190px;border-radius:50%;
+  background:radial-gradient(circle,rgba(141,255,0,.28),rgba(141,255,0,0) 68%)}
+.hero-wave{position:absolute;left:0;right:0;bottom:-2px;height:54px;opacity:.5;width:100%}
+.hero h1{font-size:36px;font-weight:800;line-height:var(--lh-tight);letter-spacing:-.03em;position:relative}
+.hero em{font-style:normal;color:var(--g400)}
+.hero p{position:relative;color:#c5dcff;font-size:var(--fs-sm);max-width:32ch}
+.hero-cta{position:relative;display:flex;gap:var(--s2);flex-wrap:wrap}
+.hero .btn-ghost{border-color:rgba(255,255,255,.35);color:#fff}
+.hero .btn-ghost:hover{background:rgba(255,255,255,.12);color:#fff}
+
+.cond{background:var(--c);border:1px solid var(--l);border-radius:var(--ra-lg);overflow:hidden}
+.cond-hd{display:flex;align-items:center;justify-content:space-between;gap:var(--s2);
+  padding:10px var(--s4);border-bottom:1px solid var(--l);background:var(--c2)}
+.cond-body{padding:var(--s4)}
+.cond-now{display:flex;align-items:baseline;gap:var(--s2);flex-wrap:wrap}
+.cond-now .big{font-family:var(--ff-display);font-size:28px;font-weight:800;letter-spacing:-.02em;white-space:nowrap}
+.cond-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s2);margin-top:var(--s3)}
+.cond-grid div{background:var(--c2);border-radius:var(--ra-sm);padding:8px 9px}
+.cond-grid b{display:block;font-family:var(--ff-display);font-size:15px;font-weight:800}
+.slot{outline:1px dashed var(--l2);outline-offset:3px;border-radius:4px}
+
+.rec{position:relative;border-radius:var(--ra-lg);overflow:hidden;border:1.5px solid var(--lime);background:var(--c)}
+.rec-top{padding:var(--s3) var(--s4);background:linear-gradient(100deg,rgba(141,255,0,.16),transparent 70%)}
+.rec-why{display:flex;gap:10px;padding:0 var(--s4) var(--s4)}
+.rec-why .bar{flex:none;width:3px;border-radius:3px;background:var(--lime)}
+
+.hscroll{display:grid;grid-auto-flow:column;grid-auto-columns:172px;gap:var(--s3);overflow-x:auto;
+  padding:2px var(--s4) var(--s2);scroll-snap-type:x mandatory}
+.hscroll>*{scroll-snap-align:start}
+.fishcard{border:1px solid var(--l);border-radius:var(--ra-md);overflow:hidden;background:var(--c);
+  display:block;color:inherit;font-weight:inherit}
+.fishcard:hover{text-decoration:none;color:inherit;border-color:var(--l2)}
+.fishcard .plate{border-radius:0;border:0;border-bottom:1px solid var(--l);min-height:104px}
+.fishcard .fc-b{padding:10px 11px 12px}
+.fishcard h3{font-size:15px}
+
+.habcard{display:flex;gap:var(--s3);align-items:center;padding:var(--s3);border:1px solid var(--l);
+  border-radius:var(--ra-md);background:var(--c);color:inherit;font-weight:inherit}
+.habcard:hover{text-decoration:none;color:inherit;border-color:var(--l2)}
+.habcard .dia{flex:none;width:74px;height:58px;border-radius:var(--ra-sm);overflow:hidden;background:var(--c2)}
+
+.zonerow{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);
+  padding:13px var(--s4);border-top:1px solid var(--l);color:inherit;font-weight:inherit}
+.zonerow:first-child{border-top:0}
+.zonerow:hover{text-decoration:none;color:inherit;background:var(--c2)}
+.zonerow .n{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;flex:none;
+  background:var(--c2);color:var(--m);font-family:var(--ff-mono);font-size:11px;font-weight:700}
+
+.care-teaser{display:flex;gap:var(--s3);align-items:center;justify-content:space-between;padding:var(--s4);
+  border-radius:var(--ra-lg);background:var(--c);border:1px solid var(--l);border-left:4px solid var(--warn);
+  color:inherit;font-weight:inherit}
+.care-teaser:hover{text-decoration:none;color:inherit;border-color:var(--l2);border-left-color:var(--warn)}
+
+/* ==========================================================================
+   Track A additions — extensions the boards imply but gcf-home.css did not
+   name. Nothing above this line is modified.
+   ========================================================================== */
+
+/* The rec card's heading is an h3 so the document outline stays correct under
+   the section h2; it still needs the h2 size the board draws. */
+.rec-top h3{font-family:var(--ff-display);font-size:var(--fs-h2);font-weight:800;letter-spacing:-.015em}
+.rec-plate{min-height:132px;border-radius:0;border:0;border-bottom:1px solid var(--l)}
+@media (min-width:900px){.rec-plate{min-height:190px}}
+
+/* The conditions grid is drawn with four live slots; we only ever render the
+   slots we actually have data for, so the column count follows the content. */
+.cond-grid[data-cells="1"]{grid-template-columns:1fr}
+.cond-grid[data-cells="2"]{grid-template-columns:repeat(2,1fr)}
+.cond-grid[data-cells="3"]{grid-template-columns:repeat(3,1fr)}
+.cond-grid b{overflow-wrap:anywhere}
+
+.care-title{font-family:var(--ff-display);font-weight:800;font-size:16px;line-height:1.2}
+.care-teaser>div{min-width:0}
+
+/* Utility used by both Track A screens. */
+.mt3{margin-top:var(--s3)}

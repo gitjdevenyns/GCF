@@ -1,0 +1,160 @@
+/* ==========================================================================
+   Gulf Coast Fishing — base + UI primitives
+   Ported from the finished design system (gcf.css §6–16, §18–19).
+   §17 (device frame: .stage/.phone/.frame-note) is a design-surface-only
+   concern and is intentionally NOT shipped.
+   ========================================================================== */
+
+/* ---------- 6. BASE ---------- */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--t);font-family:var(--ff-body);
+  font-size:var(--fs-body);line-height:var(--lh-body);-webkit-font-smoothing:antialiased;text-wrap:pretty}
+h1,h2,h3,h4,.display{font-family:var(--ff-display);line-height:var(--lh-head);margin:0;letter-spacing:-.015em}
+h1{font-size:var(--fs-h1);font-weight:800}
+h2{font-size:var(--fs-h2);font-weight:800}
+h3{font-size:var(--fs-h3);font-weight:700}
+p{margin:0}
+a{color:var(--link);text-decoration:none;font-weight:600}
+a:hover{color:var(--link-hover);text-decoration:underline}
+small{font-size:var(--fs-sm)}
+img,svg{max-width:100%}
+img{height:auto}
+
+/* ---------- 7. LAYOUT PRIMITIVES ---------- */
+.stack{display:flex;flex-direction:column}
+.row{display:flex;align-items:center}
+.wrap{flex-wrap:wrap}
+.g1{gap:var(--s1)}.g2{gap:var(--s2)}.g3{gap:var(--s3)}.g4{gap:var(--s4)}
+.g5{gap:var(--s5)}.g6{gap:var(--s6)}.g7{gap:var(--s7)}
+.grow{flex:1}
+.screen{width:100%;max-width:100%;background:var(--bg);color:var(--t)}
+.pad{padding:0 var(--s4)}
+.sect{padding:var(--s6) var(--s4)}
+.sect+.sect{padding-top:var(--s2)}
+
+/* ---------- 8. TEXT ATOMS ---------- */
+.lab{font-family:var(--ff-body);font-size:var(--fs-lab);font-weight:800;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--m)}
+.lab-lime{color:var(--lime-text)}
+.lab-blue{color:var(--link)}
+.mut{color:var(--m);font-size:var(--fs-sm)}
+.xs{font-size:var(--fs-xs)}
+.mono{font-family:var(--ff-mono);font-size:var(--fs-xs);letter-spacing:.02em}
+.d1{font-family:var(--ff-display);font-size:var(--fs-d1);font-weight:800;line-height:var(--lh-tight);letter-spacing:-.03em}
+.d2{font-family:var(--ff-display);font-size:var(--fs-d2);font-weight:800;line-height:1.02;letter-spacing:-.025em}
+.sect-title{display:flex;align-items:baseline;gap:var(--s3);margin-bottom:var(--s3)}
+.sect-title h2{flex:none}
+.sect-title .rule{flex:1;height:1px;background:var(--l)}
+
+/* ---------- 9. SURFACES ---------- */
+.card{background:var(--c);border:1px solid var(--l);border-radius:var(--ra-lg);overflow:hidden}
+.card-pad{padding:var(--s4)}
+.card-2{background:var(--c2);border:1px solid var(--l);border-radius:var(--ra-md);padding:var(--s3)}
+.card-lime{border:1.5px solid var(--lime)}
+.raised{box-shadow:var(--sh-1)}
+
+/* ---------- 10. CHIPS + BUTTONS ---------- */
+.chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px;border-radius:var(--ra-pill);
+  background:var(--c2);border:1px solid var(--l);color:var(--m);font-size:var(--fs-xs);font-weight:700;white-space:nowrap}
+.chip-lime{background:var(--lime);border-color:var(--lime);color:var(--lime-ink)}
+.chip-blue{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chip-ghost-blue{background:transparent;border-color:var(--link);color:var(--link)}
+.chip-warn{background:var(--warn-bg);border-color:var(--warn);color:var(--warn-text)}
+.chip-danger{background:var(--danger-bg);border-color:var(--danger);color:var(--danger-text)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:var(--tap);
+  padding:0 var(--s5);border-radius:var(--ra-md);border:1px solid transparent;font-family:var(--ff-body);
+  font-size:var(--fs-sm);font-weight:800;cursor:pointer;letter-spacing:.01em;text-decoration:none}
+.btn:hover{text-decoration:none}
+.btn-lime{background:var(--lime);color:var(--lime-ink)}
+.btn-lime:hover{background:var(--g300);color:var(--lime-ink)}
+.btn-blue{background:var(--accent);color:var(--accent-ink)}
+.btn-blue:hover{background:var(--b700);color:var(--accent-ink)}
+.btn-ghost{background:transparent;border-color:var(--l2);color:var(--t)}
+.btn-ghost:hover{background:var(--c2);color:var(--t)}
+.btn-block{width:100%}
+
+/* ---------- 11. CALLOUTS ---------- */
+.callout{display:flex;gap:var(--s3);padding:var(--s3) var(--s4);border-radius:var(--ra-md);
+  background:var(--c2);border:1px solid var(--l);border-left:4px solid var(--lime);font-size:var(--fs-sm)}
+.callout b{display:block;font-family:var(--ff-display);font-size:var(--fs-h3);margin-bottom:2px}
+.callout--warn{border-left-color:var(--warn);background:var(--warn-bg);border-color:var(--warn-bg)}
+.callout--warn b{color:var(--warn-text)}
+.callout--danger{border-left-color:var(--danger);background:var(--danger-bg);border-color:var(--danger-bg)}
+.callout--danger b{color:var(--danger-text)}
+.callout--info{border-left-color:var(--accent);background:var(--c3);border-color:transparent}
+
+/* ---------- 12. IMAGERY PLATES ----------
+   A .plate is a slot for licensed photography. When a real image is present it
+   fills the plate; the dashed placeholder treatment only shows while the slot
+   is empty (.plate--empty) so unlicensed art is never mistaken for content. */
+.plate{position:relative;display:flex;align-items:flex-end;border-radius:var(--ra-md);overflow:hidden;
+  background-color:var(--c2);min-height:120px}
+.plate--empty{background-image:repeating-linear-gradient(135deg,transparent 0 9px,rgba(93,152,240,.16) 9px 10px);
+  border:1px dashed var(--l2)}
+.plate>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.plate>.plate-cap{position:relative;font-family:var(--ff-mono);font-size:10.5px;letter-spacing:.02em;color:var(--m);
+  padding:6px 8px;margin:8px;border-radius:6px;background:var(--c);border:1px solid var(--l)}
+.plate-tall{min-height:200px}
+.plate-hero{min-height:240px;border-radius:0;border:0;
+  background-image:repeating-linear-gradient(135deg,transparent 0 11px,rgba(255,255,255,.06) 11px 12px),
+    linear-gradient(160deg,var(--b800),var(--b600) 55%,var(--b500))}
+.plate-hero>.plate-cap{background:rgba(3,21,48,.62);border-color:rgba(255,255,255,.24);color:#dceaff}
+
+/* ---------- 13. SPEC / RECIPE TABLE ---------- */
+.spec{display:grid;grid-template-columns:92px 1fr;gap:2px var(--s3);font-size:var(--fs-sm)}
+.spec dt{color:var(--m);font-size:var(--fs-xs);font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding-top:3px}
+.spec dd{margin:0;font-weight:600}
+.spec-row{display:grid;grid-template-columns:92px 1fr;gap:var(--s3);padding:7px 0;border-top:1px solid var(--l)}
+
+/* ---------- 14. DO / DON'T ---------- */
+.dd{display:grid;grid-template-columns:1fr;gap:var(--s3)}
+.dd-col{border:1px solid var(--l);border-radius:var(--ra-md);padding:var(--s3);background:var(--c)}
+.dd-do{border-color:var(--lime)}
+.dd-dont{border-color:var(--danger)}
+.dd h4{font-family:var(--ff-display);font-size:var(--fs-h3);margin-bottom:var(--s2)}
+.dd-do h4{color:var(--lime-text)}
+.dd-dont h4{color:var(--danger-text)}
+.dd ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px;font-size:var(--fs-sm)}
+.dd li{display:flex;gap:8px;align-items:flex-start;line-height:1.4}
+.tick,.cross{flex:none;width:16px;height:16px;border-radius:5px;margin-top:2px;
+  display:grid;place-items:center;font-size:11px;font-weight:900;line-height:1}
+.tick{background:var(--lime);color:var(--lime-ink)}
+.cross{background:var(--danger);color:#fff}
+
+/* ---------- 15. TIDE STRIP ---------- */
+.tide-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s2)}
+.tide-cell{border:1px solid var(--l);border-radius:var(--ra-md);padding:var(--s3) 10px;background:var(--c)}
+.tide-cell.is-prime{border-color:var(--lime);background:linear-gradient(180deg,rgba(141,255,0,.10),transparent)}
+.tide-cell .lab{margin-bottom:6px}
+
+/* ---------- 16. NAV ---------- */
+.appbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
+  gap:var(--s3);padding:10px var(--s4);background:var(--c);border-bottom:1px solid var(--l)}
+.mark{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;
+  background:var(--accent);color:var(--lime);font-family:var(--ff-display);font-weight:800;font-size:16px}
+.tabbar{position:sticky;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);
+  background:var(--c);border-top:1px solid var(--l);padding:6px 4px 10px}
+.tabbar a{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;min-height:var(--tap);
+  color:var(--m);font-size:10px;font-weight:700;text-decoration:none;letter-spacing:.02em}
+.tabbar a:hover{text-decoration:none;color:var(--t)}
+.tabbar a.on{color:var(--t)}
+.tabbar .ic{width:22px;height:22px}
+
+/* ---------- 18. MOTION — warmth without noise ---------- */
+@media (prefers-reduced-motion:no-preference){
+  .rise{animation:rise .5s cubic-bezier(.22,1,.36,1) both}
+  .rise-2{animation-delay:.06s}.rise-3{animation-delay:.12s}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .drift{animation:drift 9s ease-in-out infinite alternate}
+  @keyframes drift{from{transform:translateX(-6px)}to{transform:translateX(6px)}}
+}
+
+/* ---------- 19. DESKTOP ---------- */
+@media (min-width:900px){
+  :root{--fs-d1:56px;--fs-d2:38px;--fs-h1:28px;--fs-h2:22px;--fs-body:16px}
+  .sect{padding:var(--s7) var(--s7)}
+  .dd{grid-template-columns:1fr 1fr}
+  .cols-2{display:grid;grid-template-columns:1fr 1fr;gap:var(--s4)}
+  .cols-3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s4)}
+}

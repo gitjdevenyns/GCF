@@ -1,0 +1,9 @@
+# Supabase project configuration for GCF (project ref: nwpuausjhqtvwmjprphc).
+# Local `supabase start` is not used on this machine (no Docker); schema is
+# managed via remote migrations (`supabase db push --linked`).
+project_id = "gcf-app"
+
+[functions.refresh-conditions]
+# Callers must present a valid JWT (anon or service key). The scheduled caller
+# (see functions/refresh-conditions/README.md) sends a bearer token.
+verify_jwt = true
