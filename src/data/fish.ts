@@ -134,8 +134,16 @@ export const FISH: Fish[] = [
     name: 'Tarpon',
     images: [
       {
-        url: 'https://www.floridamuseum.ufl.edu/wp-content/uploads/sites/66/2017/05/Megalops-atlanticus-01.jpg',
-        alt: 'Tarpon identification photo',
+        // The v6 hotlink (Florida Museum, © Don DeMaria) was a 380x256 murky
+        // blue frame of a school, shot three-quarters-on with the watermark
+        // across the corner: no lateral profile, no dorsal filament, no tail,
+        // and all rights reserved. Replaced with a verified CC BY-SA aquarium
+        // photograph that shows every mark the ID list points at.
+        url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Megalops_atlanticus_by_DaijuAzuma.jpg/1280px-Megalops_atlanticus_by_DaijuAzuma.jpg',
+        alt: 'Adult tarpon in clear water, whole fish in lateral profile facing right: plate-like silver scales, upturned mouth with a jutting lower jaw, single dorsal fin and a deeply forked tail',
+        source_url:
+          'https://commons.wikimedia.org/wiki/File:Megalops_atlanticus_by_DaijuAzuma.jpg',
+        license: 'CC BY-SA 4.0 (Daiju Azuma, via Wikimedia Commons)',
       },
       {
         url: 'https://www.saltyjawcharters.com/uploads/9/2/6/0/92607848/img-4612_orig.jpeg',

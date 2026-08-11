@@ -233,35 +233,39 @@ export const SPECIES_CONTENT: Record<string, SpeciesContent> = {
     lede:
       'Tarpon move — passes, beach edges, bridges and harbour mouths, usually on the tide rather than on the spot. You are looking for a moving fish in moving water, not a fish holding on a piece of structure.',
     idLede: 'Two features settle it before you ever get close.',
+    // Placed against the Wikimedia Commons photograph in `src/data/fish.ts`,
+    // which is the one lateral profile in the guide that faces *right* — head
+    // at the right edge, tail at the left. Mirrored coordinates here are
+    // deliberate, not a mistake.
     marks: [
       mark(
         1,
-        '60%',
-        '16%',
+        '45%',
+        '22%',
         'Long trailing filament off the dorsal fin',
         'The last ray of the dorsal fin extends into a whip that trails back over the body. Nothing else inshore has one.',
         'decisive',
       ),
       mark(
         2,
-        '44%',
-        '44%',
+        '58%',
+        '40%',
         'Very large, plate-like silver scales',
         'Scales you can count from the boat — coin-sized on an adult. This is the "silver king" look, and it is unmistakable.',
         'decisive',
       ),
       mark(
         3,
-        '10%',
-        '36%',
+        '84%',
+        '52%',
         'Upturned mouth, jutting lower jaw',
         'The mouth opens upward, built to feed on things above it. The jaw itself is hard and bony — one reason hooks pull.',
         'supporting',
       ),
       mark(
         4,
-        '86%',
-        '46%',
+        '16%',
+        '27%',
         'Deeply forked tail',
         'A big, deeply forked tail on a deep-bodied silver fish.',
         'supporting',

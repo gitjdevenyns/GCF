@@ -116,8 +116,8 @@ export default function FishDetail() {
               marks={content?.marks ?? []}
             />
             <p className="mono" style={{ color: 'var(--m)', marginTop: 8 }}>
-              marks are placed for a lateral profile facing left · re-check them against the
-              licensed photo
+              marks are placed against the photograph in this plate · re-check them whenever the
+              photo is replaced
             </p>
             <MediaCredit media={fish.images[0]} />
           </div>
