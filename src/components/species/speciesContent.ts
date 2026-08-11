@@ -726,3 +726,87 @@ export function parseBaits(bait: string): BaitChoice[] {
 
   return [...split(natural, 'natural'), ...split(artificial, 'artificial')];
 }
+
+/* ----------------------------------------------------------------- bait art */
+
+/**
+ * The illustration to draw for a bait choice.
+ *
+ * These are *categories*, not products. The `bait` field is free text written
+ * for anglers ("3–4 in paddletail", "paddletail/jerk shad", "weedless
+ * paddletail"), so an icon per literal string is neither possible nor useful —
+ * all three of those are one soft plastic. `natural` and `artificial` are the
+ * last-resort fallbacks: a shape that is honestly generic, never a blank box.
+ */
+export type BaitIcon =
+  | 'shrimp'
+  | 'crustacean'
+  | 'baitfish'
+  | 'cutbait'
+  | 'softplastic'
+  | 'jig'
+  | 'spoon'
+  | 'plug'
+  | 'natural'
+  | 'artificial';
+
+/**
+ * Keyword table, most specific rule first.
+ *
+ * Order only breaks ties: matching is by *position in the string*, so a
+ * compound choice is drawn as whatever leads it — "gold spoon/paddletail" is a
+ * spoon, "paddletail/jerk shad" is a soft plastic, "cut mullet" is cut bait
+ * rather than a live mullet. That mirrors how the line is read out loud: the
+ * first thing named is the thing being recommended.
+ */
+const BAIT_KEYWORDS: ReadonlyArray<readonly [BaitIcon, readonly string[]]> = [
+  // Before `baitfish` and `crustacean`: "cut mullet" and "dead shrimp" are not
+  // live baits, and the word that makes them so comes first in both.
+  ['cutbait', ['cut ', 'cut bait', 'cutbait', 'chunk', 'dead ', 'strip bait', 'fillet', 'ladyfish chunk']],
+  ['shrimp', ['shrimp', 'prawn']],
+  ['crustacean', [
+    'crab', 'sand flea', 'mole crab', 'fiddler', 'shedder', 'crustacean', 'barnacle', 'clam',
+  ]],
+  ['baitfish', [
+    'pilchard', 'pinfish', 'mullet', 'threadfin', 'sardine', 'greenback', 'scaled sardine',
+    'blue runner', 'runner', 'ballyhoo', 'mojarra', 'croaker', 'grunt', 'herring', 'minnow',
+    'finger mullet', 'whitebait', 'baitfish',
+  ]],
+  // Lure hardware before the plastics that hang off it only where the hardware
+  // is what the angler actually buys ("white jig", "plug/jig").
+  ['spoon', ['spoon']],
+  ['softplastic', [
+    'paddletail', 'paddle tail', 'jerk shad', 'shad', 'swimbait', 'soft plastic', 'softbait',
+    'gulp', 'curly tail', 'grub',
+  ]],
+  ['jig', ['jig', 'bucktail']],
+  ['plug', [
+    'plug', 'topwater', 'walk the dog', 'popper', 'crankbait', 'jerkbait', 'twitch bait',
+    'hard bait', 'hardbait', 'lipped',
+  ]],
+];
+
+/**
+ * Pick the illustration for one parsed bait choice.
+ *
+ * Never returns "nothing": an unrecognised name falls back to the generic
+ * natural-bait or artificial-lure shape according to which side of the
+ * semicolon it came from. That is honest here in a way it would not be for an
+ * identification photo — this is a card decoration next to the name in text,
+ * not a claim about which animal you are looking at.
+ */
+export function baitIcon(name: string, kind: BaitChoice['kind']): BaitIcon {
+  const s = name.toLowerCase();
+  let best: { icon: BaitIcon; at: number } | null = null;
+
+  for (const [icon, words] of BAIT_KEYWORDS) {
+    let at = -1;
+    for (const w of words) {
+      const i = s.indexOf(w);
+      if (i >= 0 && (at < 0 || i < at)) at = i;
+    }
+    if (at >= 0 && (best === null || at < best.at)) best = { icon, at };
+  }
+
+  return best?.icon ?? kind;
+}
