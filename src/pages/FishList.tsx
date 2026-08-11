@@ -56,7 +56,7 @@ export default function FishList() {
       </section>
 
       <section className="sect" aria-labelledby="species-h">
-        <SectionTitle id="species-h">All {fish.length} species</SectionTitle>
+        <SectionTitle id="species-h">Most commonly caught</SectionTitle>
         {/* stack+g4 gives the mobile rhythm; .cols-2 takes over as a grid at 900px. */}
         <div className="stack g4 cols-2">
           {fish.map((f) => {
