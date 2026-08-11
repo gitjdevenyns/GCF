@@ -13,7 +13,7 @@
  * call is weaker than all three. It is a prompt to look closer, not an answer.
  */
 
-import { FISH, HAZARDS } from '../data';
+import { FISH, HAZARDS, locationsNaming, namedTargetById } from '../data';
 import { getSupabaseConfig } from './supabase';
 
 /** Wire shape returned by the `identify-fish` Edge Function's `result`. */
@@ -56,13 +56,23 @@ export interface IdentifyFailure {
 
 export type IdentifyOutcome = IdentifyOk | IdentifyFailure;
 
-/** A resolved link into the guide's own pages. */
+/**
+ * A resolved link into the guide's own content.
+ *
+ * Three kinds, because the guide knows three different amounts about a fish:
+ *   fish   — a documented target species with its own page
+ *   hazard — a documented Handle With Care species
+ *   named  — named as a target at real locations, with a researched rig and
+ *            bait at each, but no species page yet
+ */
 export interface GuideMatch {
-  kind: 'fish' | 'hazard';
+  kind: 'fish' | 'hazard' | 'named';
   id: string;
   name: string;
-  /** In-app route. Hazards have no per-species page; /care is where they live. */
+  /** In-app route. */
   to: string;
+  /** For a `named` match, how many guide locations name it as a target. */
+  spotCount?: number;
 }
 
 /**
@@ -70,17 +80,35 @@ export interface GuideMatch {
  *
  * The Edge Function constrains the model to this exact id set via the output
  * schema, so a mismatch here means the guide's data and the function's copy of
- * the list have drifted — which `src/test/identify.test.tsx` fails the build
- * over. Returning null rather than guessing is still the right behaviour if it
- * ever happens: a wrong deep link sends someone to confident handling
+ * the list have drifted — which `src/test/identify.data.test.ts` fails the
+ * build over. Returning null rather than guessing is still the right behaviour
+ * if it ever happens: a wrong deep link sends someone to confident handling
  * instructions for the wrong animal.
  */
 export function resolveGuideMatch(id: string | null | undefined): GuideMatch | null {
   if (!id || id === 'none') return null;
+
   const fish = FISH.find((f) => f.id === id);
   if (fish) return { kind: 'fish', id: fish.id, name: fish.name, to: `/fish/${fish.id}` };
+
   const hazard = HAZARDS.find((h) => h.id === id);
   if (hazard) return { kind: 'hazard', id: hazard.id, name: hazard.name, to: '/care' };
+
+  const named = namedTargetById(id);
+  if (named) {
+    // Point at a spot that actually lists this species, because that page
+    // carries the researched rig, hook, leader, weight and bait for it — the
+    // closest thing the guide has to a species page for these five.
+    const spots = locationsNaming(named);
+    if (spots.length === 0) return null;
+    return {
+      kind: 'named',
+      id: named.id,
+      name: named.name,
+      to: `/locations/${spots[0].slug}`,
+      spotCount: spots.length,
+    };
+  }
   return null;
 }
 

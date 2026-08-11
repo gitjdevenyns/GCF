@@ -205,6 +205,33 @@ describe('a confident identification', () => {
     expect(link).toHaveAttribute('href', '/care');
   });
 
+  it('is honest when it knows the fish but has no page for it', async () => {
+    // Sheepshead is named as a target at six spots and documented at none. The
+    // result must say that, not dress a location link up as a species page.
+    vi.mocked(identifyFish).mockResolvedValue({
+      ok: true,
+      result: {
+        ...RESULT,
+        common_name: 'Sheepshead',
+        scientific_name: 'Archosargus probatocephalus',
+        guide_species_id: 'sheepshead',
+        is_potentially_hazardous: false,
+        hazard_note: '',
+        also_consider: [],
+      },
+    });
+    const { container } = renderPage();
+    pickPhoto(container);
+    await screen.findByText('Sheepshead');
+
+    expect(screen.getByText(/no species page for sheepshead yet/i)).toBeInTheDocument();
+    expect(screen.getByText(/named as a target at 6 spots/i)).toBeInTheDocument();
+    expect(screen.getByText('Named in this guide')).toBeInTheDocument();
+
+    const link = screen.getByRole('link', { name: /a spot that fishes for sheepshead/i });
+    expect(link.getAttribute('href')).toMatch(/^\/locations\//);
+  });
+
   it('carries the hazard warning and the look-alikes with the result', async () => {
     const { container } = renderPage();
     pickPhoto(container);

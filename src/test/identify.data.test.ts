@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { bytesToBase64, fitWithin, MAX_EDGE } from '../lib/image';
 import { CONFIDENCE_LABEL, parseFishIdResult, resolveGuideMatch } from '../lib/identify';
-import { FISH, HAZARDS } from '../data';
+import { FISH, HAZARDS, LOCATIONS, NAMED_TARGETS, locationsNaming } from '../data';
 
 /**
  * Photo ID — the parts with no DOM in them.
@@ -88,9 +88,13 @@ describe('the model can only name species this guide documents', () => {
     expect(listed.length).toBeGreaterThan(0);
   });
 
-  it('lists every target species and every hazard species, and nothing else', () => {
+  it('lists every documented and named species, and nothing else', () => {
     expect(listed.map((s) => s.id).sort()).toEqual(
-      [...FISH.map((f) => f.id), ...HAZARDS.map((h) => h.id)].sort(),
+      [
+        ...FISH.map((f) => f.id),
+        ...HAZARDS.map((h) => h.id),
+        ...NAMED_TARGETS.map((t) => t.id),
+      ].sort(),
     );
   });
 
@@ -98,22 +102,111 @@ describe('the model can only name species this guide documents', () => {
     for (const entry of listed) {
       const fish = FISH.find((f) => f.id === entry.id);
       const hazard = HAZARDS.find((h) => h.id === entry.id);
+      const named = NAMED_TARGETS.find((t) => t.id === entry.id);
       if (fish) {
         expect(entry.kind, `${entry.id} is a target species`).toBe('fish');
         expect(entry.name, `${entry.id} name drifted from src/data/fish.ts`).toBe(fish.name);
       } else if (hazard) {
         expect(entry.kind, `${entry.id} is a hazard species`).toBe('hazard');
         expect(entry.name, `${entry.id} name drifted from src/data/hazards.ts`).toBe(hazard.name);
+      } else if (named) {
+        expect(entry.kind, `${entry.id} is a named target`).toBe('named');
+        expect(entry.name, `${entry.id} name drifted from src/data/namedTargets.ts`).toBe(
+          named.name,
+        );
       } else {
-        throw new Error(`${entry.id} is in the function but in neither data module`);
+        throw new Error(`${entry.id} is in the function but in no data module`);
       }
     }
   });
 
   it('has no id that means two different things', () => {
-    const fishIds = new Set(FISH.map((f) => f.id));
-    for (const h of HAZARDS) {
-      expect(fishIds.has(h.id), `${h.id} is both a target and a hazard`).toBe(false);
+    const seen = new Map<string, string>();
+    for (const [where, ids] of [
+      ['fish', FISH.map((f) => f.id)],
+      ['hazards', HAZARDS.map((h) => h.id)],
+      ['namedTargets', NAMED_TARGETS.map((t) => t.id)],
+    ] as const) {
+      for (const id of ids) {
+        expect(seen.has(id), `${id} is in both ${seen.get(id)} and ${where}`).toBe(false);
+        seen.set(id, where);
+      }
+    }
+  });
+
+  it('describes every named target to the model, so it knows what the label covers', () => {
+    // "Jack" and "Kingfish" are the guide's labels, not species-level claims;
+    // without a scope line the model has to guess which animal they mean.
+    const source = readFileSync(
+      resolve(process.cwd(), 'supabase/functions/identify-fish/index.ts'),
+      'utf8',
+    );
+    const scope = /const NAMED_SCOPE[^=]*=\s*\{([\s\S]*?)\n\};/.exec(source);
+    expect(scope, 'could not find NAMED_SCOPE in the identify-fish function').toBeTruthy();
+    for (const target of NAMED_TARGETS) {
+      // The key is quoted or bare depending on whether the id has a hyphen.
+      expect(scope![1], `no NAMED_SCOPE entry for ${target.id}`).toMatch(
+        new RegExp(`(^|\\s)"?${target.id}"?\\s*:`, 'm'),
+      );
+    }
+  });
+});
+
+/* --------------------------------------------------- named-but-undocumented */
+
+describe('species the guide names but does not document', () => {
+  it('only claims labels the location data actually uses', () => {
+    const used = new Set(LOCATIONS.flatMap((l) => l.targets.map((t) => t.species_label)));
+    for (const target of NAMED_TARGETS) {
+      for (const label of target.labels) {
+        expect(used.has(label), `namedTargets claims "${label}", which no location names`).toBe(
+          true,
+        );
+      }
+    }
+  });
+
+  it('leaves no species named at a location unaccounted for', () => {
+    // The invariant that keeps photo ID honest as the guide grows: add a
+    // location that names a new species and this fails until that species
+    // either gets a page or gets a named-target entry. Without it, the
+    // identifier quietly answers "none" for fish the guide already knows.
+    const documented = new Set(FISH.map((f) => f.id));
+    const covered = new Set(NAMED_TARGETS.flatMap((t) => t.labels));
+    for (const location of LOCATIONS) {
+      for (const target of location.targets) {
+        const hasPage = target.species_id ? documented.has(target.species_id) : false;
+        expect(
+          hasPage || covered.has(target.species_label),
+          `${location.slug} targets "${target.species_label}", which has neither a species page nor a named-target entry`,
+        ).toBe(true);
+      }
+    }
+  });
+
+  it('every named target is reachable at a real location', () => {
+    for (const target of NAMED_TARGETS) {
+      expect(locationsNaming(target).length, `${target.id} resolves to no location`).toBeGreaterThan(
+        0,
+      );
+    }
+  });
+
+  it('resolves a named target to a spot that carries its recipe, not to a species page', () => {
+    for (const target of NAMED_TARGETS) {
+      const match = resolveGuideMatch(target.id);
+      expect(match?.kind, target.id).toBe('named');
+      expect(match?.name, target.id).toBe(target.name);
+      expect(match?.to, target.id).toMatch(/^\/locations\//);
+      expect(match?.spotCount, target.id).toBe(locationsNaming(target).length);
+
+      // The link has to land on a page that really lists this species.
+      const slug = match!.to.replace('/locations/', '');
+      const location = LOCATIONS.find((l) => l.slug === slug);
+      expect(
+        location?.targets.some((t) => target.labels.includes(t.species_label)),
+        `${target.id} links ${slug}, which does not name it`,
+      ).toBe(true);
     }
   });
 });
@@ -142,7 +235,9 @@ describe('resolving a match to a real in-app page', () => {
   it('links nothing rather than guessing', () => {
     // A wrong deep link is worse than none: it sends a reader to confident
     // handling instructions for an animal they are not holding.
-    for (const id of ['none', '', 'sheepshead', 'Snook', 'fish/snook', null, undefined]) {
+    // 'flounder' and 'ladyfish' are real Gulf fish the guide says nothing
+    // about — exactly the case where the honest answer is no link at all.
+    for (const id of ['none', '', 'flounder', 'ladyfish', 'Snook', 'fish/snook', null, undefined]) {
       expect(resolveGuideMatch(id), String(id)).toBeNull();
     }
   });

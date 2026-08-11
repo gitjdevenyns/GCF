@@ -64,12 +64,26 @@ const ALLOWED_ORIGINS = [
 ];
 
 /**
- * The species this guide actually documents, so a match can deep-link to a real
- * page instead of dead-ending. Kept in sync with src/data/fish.ts and
- * src/data/hazards.ts by src/test/identify.test.ts, which parses this very
- * block — add a species to the guide without adding it here and the suite fails.
+ * Every species this guide can say something real about, in three kinds:
+ *
+ *   fish   — a documented target species with its own page
+ *   hazard — a documented Handle With Care species
+ *   named  — named as a target in the researched location data, with a rig and
+ *            bait at each spot, but no species page yet
+ *
+ * The `named` kind is why an angler's sheepshead or pompano gets an answer at
+ * all: those are among the most commonly caught fish in this footprint, and an
+ * identifier that only knows five species is wrong far more often than it needs
+ * to be. The client renders the three kinds differently — a `named` match says
+ * plainly that there is no page for it and links the location that carries the
+ * recipe instead.
+ *
+ * Kept in sync with src/data/fish.ts, src/data/hazards.ts and
+ * src/data/namedTargets.ts by src/test/identify.data.test.ts, which parses this
+ * very block. Add a species to the guide without adding it here — or the other
+ * way round — and the suite fails.
  */
-const GUIDE_SPECIES: Array<{ id: string; kind: "fish" | "hazard"; name: string }> = [
+const GUIDE_SPECIES: Array<{ id: string; kind: "fish" | "hazard" | "named"; name: string }> = [
   { id: "snook", kind: "fish", name: "Common Snook" },
   { id: "redfish", kind: "fish", name: "Redfish / Red Drum" },
   { id: "trout", kind: "fish", name: "Spotted Seatrout" },
@@ -81,7 +95,32 @@ const GUIDE_SPECIES: Array<{ id: string; kind: "fish" | "hazard"; name: string }
   { id: "barracuda", kind: "hazard", name: "Great Barracuda" },
   { id: "sharks", kind: "hazard", name: "Sharks" },
   { id: "pufferfish", kind: "hazard", name: "Southern Puffer / Pufferfish" },
+  { id: "sheepshead", kind: "named", name: "Sheepshead" },
+  { id: "pompano", kind: "named", name: "Pompano" },
+  { id: "jack", kind: "named", name: "Jack" },
+  { id: "spanish-mackerel", kind: "named", name: "Spanish mackerel" },
+  { id: "kingfish", kind: "named", name: "Kingfish" },
 ];
+
+/**
+ * What each `named` id covers. Mirrors src/data/namedTargets.ts `scope`, and
+ * exists because "Jack" and "Kingfish" are the guide's labels, not species-level
+ * claims — the model needs to know which animal to map onto them, and the
+ * Spanish mackerel / king mackerel pair in particular is a confusion worth
+ * pre-empting rather than discovering in a result.
+ */
+const NAMED_SCOPE: Record<string, string> = {
+  sheepshead:
+    "Sheepshead (Archosargus probatocephalus) — deep silver body with bold black vertical bars and human-like incisor teeth.",
+  pompano:
+    "Florida pompano (Trachinotus carolinus) — deep, flat, blunt-headed silver fish with a yellow belly and throat, and a deeply forked tail.",
+  jack:
+    "Jack crevalle and the other inshore jacks — deep blunt head, steep forehead, hard scutes along the tail base, black spot on the gill cover and pectoral fin.",
+  "spanish-mackerel":
+    "Spanish mackerel (Scomberomorus maculatus) — slender silver body with scattered round yellow-bronze spots and no bars; smaller and shorter than a king mackerel.",
+  kingfish:
+    "King mackerel / kingfish (Scomberomorus cavalla) — long silver mackerel with a dipped lateral line and, on adults, no spots. This guide means the mackerel, not the whiting sometimes called a kingfish elsewhere.",
+};
 
 const GUIDE_IDS = GUIDE_SPECIES.map((s) => s.id);
 
@@ -165,9 +204,19 @@ const SYSTEM_PROMPT = `You identify fish and other marine animals from angler ph
 
 Almost every photo you see will be an inshore catch from this coast — a fish held up on a boat, in a net, on a dock or on the sand. Weight your judgement towards species that actually occur in Florida Gulf inshore water, but do not force a local species onto an animal that clearly is not one.
 
-This guide documents these species, and a match lets the app open the reader's real in-app page for it:
-${GUIDE_SPECIES.map((s) => `  ${s.id} — ${s.name}${s.kind === "hazard" ? " (handle-with-care species)" : ""}`).join("\n")}
-Set guide_species_id to one of those ids only when the animal in the photo genuinely is that species. Otherwise use "none" — a wrong deep link is worse than no deep link, because it sends someone to confident handling instructions for the wrong animal.
+This guide knows these species, and a match lets the app send the reader somewhere real:
+${GUIDE_SPECIES.map((s) => {
+  const kind =
+    s.kind === "hazard"
+      ? " (handle-with-care species)"
+      : s.kind === "named"
+        ? ` (named at guide locations, no species page) — ${NAMED_SCOPE[s.id]}`
+        : "";
+  return `  ${s.id} — ${s.name}${kind}`;
+}).join("\n")}
+Set guide_species_id to one of those ids only when the animal in the photo genuinely is that species. Otherwise use "none" — a wrong deep link is worse than no deep link, because it sends someone to confident handling instructions for the wrong animal. "none" is the right answer for a fish this coast has plenty of but this guide does not list, such as a flounder, a whiting, a grunt, a ladyfish or a black drum; identify it in common_name as normal and leave guide_species_id as "none".
+
+Two of those ids are easy to confuse with each other, so be careful and use also_consider when the photo does not settle it: spanish-mackerel is the smaller spotted one, kingfish is the larger one with a dipped lateral line and no spots on adults. Getting that pair the wrong way round matters — they carry different size and bag rules.
 
 Your answer is a starting point for a human to confirm, not a determination, and it is presented to the reader that way. Two things follow from that:
 

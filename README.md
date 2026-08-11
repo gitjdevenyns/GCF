@@ -53,15 +53,29 @@ The estimate is framed as an estimate everywhere it appears, which is a safety
 requirement rather than modesty: two of the six Handle With Care species look,
 to a casual eye, like fish people grab without thinking. So the model is allowed
 to answer "I can't tell", an unidentified animal is always flagged as
-potentially hazardous, a match deep-links to the guide's own researched page
+potentially hazardous, a match deep-links to the guide's own researched content
 rather than to model-authored handling advice, and no number on the screen ever
 implies a calibrated probability.
 
+It recognises sixteen species in three tiers, matching how much the guide
+actually knows about each: the **5 documented target species**, the **6 Handle
+With Care species**, and **5 more the location data names as targets** —
+sheepshead, pompano, jack, Spanish mackerel and kingfish — which have no species
+page but do have a researched rig and bait at each spot that lists them
+(`src/data/namedTargets.ts`). A match in that third tier says plainly that there
+is no page yet and links the location instead. Anything outside all three is
+named honestly with no link at all.
+
+`src/test/identify.data.test.ts` enforces both directions of that catalog: add a
+location naming a new species and the build fails until that species is either
+given a page or added to the named-target list, so the identifier cannot quietly
+fall behind the guide.
+
 `supabase/functions/identify-fish/README.md` documents the model call
-(`claude-opus-5` with structured outputs), the measured cost — about **$0.02 per
-identification** — and the abuse controls, which matter because the site is
+(`claude-opus-5` with structured outputs), the measured cost — about **$0.026
+per identification** — and the abuse controls, which matter because the site is
 public and the API bill is the owner's: a request-size cap plus three rate-limit
-windows (6/hour and 20/day per caller, 250/day globally, i.e. ~$5/day worst
+windows (6/hour and 20/day per caller, 250/day globally, i.e. ~$6.50/day worst
 case) enforced in Postgres *before* the paid call is made. `ANTHROPIC_API_KEY`
 is a Supabase Function secret; CI greps `dist/` for it and fails the deploy on a
 hit.

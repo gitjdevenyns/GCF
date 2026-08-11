@@ -36,7 +36,23 @@ Content-Type: application/json
 a `json_schema`. This is a bounded classification, not an agentic task, so the
 schema does the work that prompt-wrangling would otherwise do: the shape is
 guaranteed, and `guide_species_id` is an `enum` over this guide's own species
-ids, so the model cannot name a species that has no page behind it.
+ids, so the model cannot name a species the guide has nothing to say about.
+
+That enum covers three kinds, because the guide knows three different amounts
+about a fish:
+
+| kind | source | what a match links to |
+| --- | --- | --- |
+| `fish` (5) | `src/data/fish.ts` | its own species page |
+| `hazard` (6) | `src/data/hazards.ts` | Handle With Care |
+| `named` (5) | `src/data/namedTargets.ts` | a location that lists a rig and bait for it |
+
+`named` exists because sheepshead and pompano are among the most commonly caught
+fish in this footprint and neither has a page. Recognising them and saying "no
+page for this yet, here's the spot that fishes for it" beats answering `none`.
+Anything outside all three — flounder, whiting, ladyfish, black drum — is
+identified by name with `guide_species_id: "none"` and no link, which is the
+honest answer.
 
 Two API details worth keeping in mind if you edit the call:
 
@@ -53,17 +69,26 @@ Two API details worth keeping in mind if you edit the call:
 
 ## Cost
 
-Measured end-to-end against public-domain Wikimedia photographs:
+Measured end-to-end against licensed Wikimedia photographs, at Opus 5's
+$5/$25 per MTok:
 
 | Photo | Pixels | Input | Output | Cost |
 | --- | --- | --- | --- | --- |
-| Red drum, 1280×853 | 1.09 MP | 3,451 | 156 | $0.021 |
+| Red drum, 1280×853 | 1.09 MP | 3,451 | 202 | $0.022 |
 | Hardhead catfish, 1280×960 | 1.23 MP | 3,635 | 259 | $0.025 |
+| Sheepshead, 1000×667 | 0.67 MP | 3,545 | 455 | $0.029 |
+| Sheepshead engraving, 2580×1597 | 4.12 MP | 7,433 | 707 | $0.055 |
 
-Those two points fit `input ≈ 1984 + pixels/744`, i.e. a fixed ~1,984 tokens of
-system prompt and schema plus the image itself. The client downscales to 1024px
-on the long edge before uploading, so a real request is around **3,000 input +
-~200 output tokens ≈ $0.02 per identification** at Opus 5's $5/$25 per MTok.
+Input fits `≈ 2650 + pixels/744` — a fixed ~2,650 tokens of system prompt and
+schema, plus the image. Output runs 150–700 tokens including adaptive thinking,
+and is highest when the model is being careful (that last row is a monochrome
+engraving; it correctly declined to call it and spent the tokens explaining
+why).
+
+The client downscales to 1024px on the long edge, so a real request is about
+**3,700 input + ~300 output ≈ $0.026 per identification**. That last row is the
+argument for the downscale: the same fish at full resolution costs twice as
+much and identifies no better.
 
 ## Abuse protection
 
@@ -77,8 +102,9 @@ is not the control — these are:
 | Per IP, per day | 20 | `claim_fish_id_slot()` |
 | Everyone, per day | 250 | `claim_fish_id_slot()` |
 
-The global cap is the one that actually bounds the bill: **250 × $0.02 ≈ $5/day
-worst case**. The per-IP caps only shape who gets to spend it.
+The global cap is the one that actually bounds the bill: **250 × $0.026 ≈
+$6.50/day worst case**, and it is a single number in the migration if that is
+the wrong ceiling. The per-IP caps only shape who gets to spend it.
 
 The slot is claimed *before* the model call, so a refusal costs nothing, and a
 failure of the ledger itself returns 503 rather than falling open — a broken

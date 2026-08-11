@@ -125,7 +125,9 @@ export default function IdentifyFish() {
         <h1 style={{ margin: '4px 0 8px' }}>What did I just catch?</h1>
         <p className="mut">
           Photograph the fish and get a best guess at what it is, which of this guide&rsquo;s
-          species it matches, and whether it is one to keep your hands away from.
+          species it matches, and whether it is one to keep your hands away from. It knows the five
+          target species, the six worth not grabbing, and the five more this guide names at its
+          locations without documenting — sheepshead, pompano, jack, Spanish mackerel and kingfish.
         </p>
       </div>
 
@@ -336,7 +338,11 @@ function Outcome({ outcome, onRetry }: { outcome: IdentifyOutcome; onRetry: () =
               {CONFIDENCE_LABEL[result.confidence]}
             </span>
             <span className="chip">Best guess</span>
-            {match && <span className="chip chip-ghost-blue">In this guide</span>}
+            {match && (
+              <span className="chip chip-ghost-blue">
+                {match.kind === 'named' ? 'Named in this guide' : 'In this guide'}
+              </span>
+            )}
           </div>
 
           <h3>{result.common_name}</h3>
@@ -369,6 +375,20 @@ function Outcome({ outcome, onRetry }: { outcome: IdentifyOutcome; onRetry: () =
           </div>
         )}
 
+        {/* A `named` species has no page of its own — say so, rather than
+            dressing a location link up as one. The location it points at does
+            carry a researched rig and bait for this species, which is the
+            closest thing the guide has. */}
+        {match?.kind === 'named' && (
+          <div className="card-pad" style={{ paddingTop: 0 }}>
+            <p className="mut xs">
+              This guide has no species page for {match.name.toLowerCase()} yet. It is named as a
+              target at {match.spotCount} {match.spotCount === 1 ? 'spot' : 'spots'}, each with its
+              own rig and bait for it.
+            </p>
+          </div>
+        )}
+
         {match && (
           <LinkRow
             to={match.to}
@@ -376,9 +396,15 @@ function Outcome({ outcome, onRetry }: { outcome: IdentifyOutcome; onRetry: () =
             title={
               match.kind === 'hazard'
                 ? `${match.name} — how to handle it`
-                : `${match.name} — identification, tackle and release`
+                : match.kind === 'named'
+                  ? `A spot that fishes for ${match.name.toLowerCase()}`
+                  : `${match.name} — identification, tackle and release`
             }
-            note="The guide's own researched page for this species"
+            note={
+              match.kind === 'named'
+                ? 'Its rig, hook, leader and bait at that location'
+                : "The guide's own researched page for this species"
+            }
           />
         )}
 
