@@ -7,3 +7,10 @@ project_id = "gcf-app"
 # Callers must present a valid JWT (anon or service key). The scheduled caller
 # (see functions/refresh-conditions/README.md) sends a bearer token.
 verify_jwt = true
+
+[functions.identify-fish]
+# Called from the browser with the publishable anon key, so the JWT gate keeps
+# out unauthenticated traffic but is NOT the abuse control — the anon key ships
+# in the bundle by design. The real controls are the request-size cap and the
+# three rate-limit windows in claim_fish_id_slot(). See functions/identify-fish/.
+verify_jwt = true

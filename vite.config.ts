@@ -156,6 +156,12 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['src/test/setup.ts'],
     globals: false,
+    // `.claude/worktrees/` holds full checkouts of this repo for agent work.
+    // They carry their own copy of this suite, so without this the local run
+    // silently tests other branches' code alongside this one — inflating the
+    // count and failing on work that is not in this tree. CI checks out clean,
+    // so this is purely local/CI parity.
+    exclude: ['**/node_modules/**', '**/dist/**', '.claude/**'],
     // Several route tests render all 23 routes in one case (15 location pages
     // plus the species pages, each mounting a Leaflet map into jsdom). That is
     // legitimately slower than the 5s default.

@@ -60,6 +60,7 @@ const STATIC_ROUTES = [
   '/',
   '/locations',
   '/fish',
+  '/id',
   '/water',
   '/tides',
   '/rigs',

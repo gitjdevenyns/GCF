@@ -118,6 +118,9 @@ export default function FishList() {
           and change — check there before you keep anything.
         </Callout>
         <div className="row wrap g2 mt3">
+          <Link className="btn btn-ghost" to="/id">
+            Identify one from a photo
+          </Link>
           <Link className="btn btn-ghost" to="/water">
             Read the water
           </Link>

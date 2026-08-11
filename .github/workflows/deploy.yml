@@ -63,14 +63,18 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
       # The anon key is publishable and expected in the bundle; the service role
-      # key must never be. Fail the deploy rather than publish a leak.
-      - name: Assert no service-role key in the bundle
+      # key and the Anthropic key must never be. Both are server-only: the
+      # service role is injected into the Edge Function runtime, and
+      # ANTHROPIC_API_KEY is a Supabase Function secret read inside
+      # supabase/functions/identify-fish. Neither has any reason to appear in a
+      # client build, so any sighting is a leak — fail rather than publish it.
+      - name: Assert no server-only secrets in the bundle
         run: |
-          if grep -rlE 'service_role|SUPABASE_SERVICE_ROLE_KEY' dist/ ; then
-            echo "::error title=Secret leak::A service-role reference reached dist/."
+          if grep -rlE 'service_role|SUPABASE_SERVICE_ROLE_KEY|ANTHROPIC|sk-ant-' dist/ ; then
+            echo "::error title=Secret leak::A server-only key reference reached dist/."
             exit 1
           fi
-          echo "No service-role references in dist/."
+          echo "No service-role or Anthropic references in dist/."
 
       - uses: actions/configure-pages@v5
 

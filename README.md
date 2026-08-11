@@ -2,7 +2,8 @@
 
 Visual, mobile-first Southwest Florida saltwater fishing field guide PWA:
 habitats, tide playbooks, 15 fishing locations with per-species tackle
-recipes, rig/knot school and safe-handling guidance. Works offline.
+recipes, rig/knot school, safe-handling guidance and photo species ID.
+Works offline.
 
 Live site: https://gitjdevenyns.github.io/GCF/
 
@@ -40,6 +41,30 @@ refresh keeps the last good snapshot on screen and labels it stale.
 The guide is complete and useful with **zero network**: all static content is
 bundled, and the Supabase SDK is loaded dynamically only when a live read
 actually happens.
+
+### Photo ID (`/id`)
+
+Take or upload a photo of a fish and get a species **estimate** back. The photo
+is downscaled on the device (`src/lib/image.ts`, 1024px long edge), posted to
+the `identify-fish` Edge Function, and never stored anywhere — not in Storage,
+not in a table, not alongside the result.
+
+The estimate is framed as an estimate everywhere it appears, which is a safety
+requirement rather than modesty: two of the six Handle With Care species look,
+to a casual eye, like fish people grab without thinking. So the model is allowed
+to answer "I can't tell", an unidentified animal is always flagged as
+potentially hazardous, a match deep-links to the guide's own researched page
+rather than to model-authored handling advice, and no number on the screen ever
+implies a calibrated probability.
+
+`supabase/functions/identify-fish/README.md` documents the model call
+(`claude-opus-5` with structured outputs), the measured cost — about **$0.02 per
+identification** — and the abuse controls, which matter because the site is
+public and the API bill is the owner's: a request-size cap plus three rate-limit
+windows (6/hour and 20/day per caller, 250/day globally, i.e. ~$5/day worst
+case) enforced in Postgres *before* the paid call is made. `ANTHROPIC_API_KEY`
+is a Supabase Function secret; CI greps `dist/` for it and fails the deploy on a
+hit.
 
 ## Develop
 

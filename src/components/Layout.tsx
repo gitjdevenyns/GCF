@@ -24,6 +24,11 @@ const DESKTOP_NAV = [
   { to: '/tides', label: 'Tides + Water', end: false },
   { to: '/water', label: 'Read Water', end: false },
   { to: '/fish', label: 'Fish + Gear', end: false },
+  // Photo ID lives in the desktop nav and on Home, deliberately not in the
+  // five-slot tab bar — the design boards fix that bar at five, and a feature
+  // that costs money per tap is not one to put under a permanently visible
+  // thumb. Fish + Gear is its natural neighbour.
+  { to: '/id', label: 'Photo ID', end: false },
   { to: '/rigs', label: 'Rigs + Knots', end: false },
   { to: '/care', label: 'Handle With Care', end: false },
 ];

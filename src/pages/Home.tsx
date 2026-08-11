@@ -327,6 +327,24 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Photo ID sits directly under the species rail: the reader has just
+          scrolled five fish they might have caught, and "none of these" is the
+          exact moment the feature is worth offering. Labelled as a guess here
+          too — the honesty rule starts at the entry point, not on the result. */}
+      <section className="sect" aria-labelledby="photoid">
+        <SectionTitle id="photoid">Not sure what you caught?</SectionTitle>
+        <div className="card card-pad">
+          <p className="mut" style={{ color: 'var(--t)' }}>
+            Take a photo of it and get a best guess at the species, plus a warning if it is one to
+            keep your hands off. It is an estimate from a machine, not an identification — a
+            starting point for you to confirm.
+          </p>
+          <Link className="btn btn-lime btn-block" to="/id" style={{ marginTop: 'var(--s3)' }}>
+            Identify a fish from a photo
+          </Link>
+        </div>
+      </section>
+
       <section className="sect" aria-labelledby="water">
         <SectionTitle id="water" to="/water" linkLabel="Read water">
           Learn the water

@@ -7,6 +7,7 @@ import Locations from './pages/Locations';
 import LocationDetail from './pages/LocationDetail';
 import FishList from './pages/FishList';
 import FishDetail from './pages/FishDetail';
+import IdentifyFish from './pages/IdentifyFish';
 import Water from './pages/Water';
 import Tides from './pages/Tides';
 import Rigs from './pages/Rigs';
@@ -35,6 +36,7 @@ export default function App() {
         />
         <Route path="/fish" element={<Page path="fish" element={<FishList />} />} />
         <Route path="/fish/:id" element={<Page path="fish-detail" element={<FishDetail />} />} />
+        <Route path="/id" element={<Page path="identify" element={<IdentifyFish />} />} />
         <Route path="/water" element={<Page path="water" element={<Water />} />} />
         <Route path="/tides" element={<Page path="tides" element={<Tides />} />} />
         <Route path="/rigs" element={<Page path="rigs" element={<Rigs />} />} />

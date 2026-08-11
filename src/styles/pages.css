@@ -212,6 +212,17 @@
 /* ---------- SECTION TITLE INSIDE A HERO-LESS PAGE ---------- */
 .sect>.lab+h1{margin-top:4px}
 
+/* ---------- PHOTO-ID FRAMING GUIDE ----------
+   A plate that holds a drawn outline instead of a photograph, shown before the
+   camera opens so the angler knows the shape to aim for. It reuses `.plate` for
+   the box and the caption chip, and swaps the empty-slot hatch for a plain
+   dashed frame — the hatch reads as "missing image", and this one is not
+   missing anything. The outline is drawn at full opacity in the muted ink so it
+   is unmistakably a guide and unmistakably visible in both themes. */
+.plate--guide{background-image:none;border:1px dashed var(--l2);color:var(--m)}
+.plate--guide>svg{position:absolute;inset:0;width:100%;height:100%;
+  padding:var(--s5) var(--s4) var(--s7)}
+
 @media (min-width:900px){
   .mods--3{grid-template-columns:repeat(3,1fr)}
   /* The ID plate and its mark list read side by side once there is room
