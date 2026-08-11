@@ -17,7 +17,9 @@ describe('data integrity', () => {
   it('preserves all migrated v6 content counts', () => {
     // 15 migrated v6 spots + 10 researched Tampa Bay / Sarasota spots.
     expect(LOCATIONS).toHaveLength(25);
-    expect(FISH).toHaveLength(5);
+    // 5 migrated v6 targets + 6 researched additions (sheepshead, ladyfish,
+    // black drum, pompano, Spanish mackerel, jack crevalle).
+    expect(FISH).toHaveLength(11);
     expect(HAZARDS).toHaveLength(6);
     expect(HABITATS).toHaveLength(5);
     expect(RIGS).toHaveLength(6);

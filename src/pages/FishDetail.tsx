@@ -16,7 +16,7 @@ import {
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 /**
- * Species page — one template for all five targets.
+ * Species page — one template for every target.
  *
  * Order is deliberate and matches design board 03: identification first, then
  * where it lives, then tackle, then handling. An angler who cannot name the
@@ -31,7 +31,8 @@ export default function FishDetail() {
       <div className="sect">
         <h1>Species not found</h1>
         <p className="mut" style={{ margin: 'var(--s3) 0 var(--s4)' }}>
-          There is no guide entry for “{id}”. The guide currently covers five target species.
+          There is no guide entry for “{id}”. Open the species list to see everything the guide
+          covers.
         </p>
         <p>
           <Link className="btn btn-blue" to="/fish">

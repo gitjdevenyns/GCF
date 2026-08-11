@@ -130,13 +130,30 @@ function playbook(structures: string[], bestWindow: string): TidePlaybook {
   };
 }
 
-/** Map a v6 target species label to a fish guide id (null = no guide entry yet). */
+/**
+ * Map a target species label to a fish guide id (null = no guide entry yet).
+ *
+ * The v6 labels are kept verbatim rather than rewritten, so the ambiguous ones
+ * are aliased instead: on this coast a spoon-caught "Mackerel" off a pier or a
+ * beach is a Spanish mackerel, and an inshore "Jack" is a jack crevalle. Both
+ * point at the species page that actually covers the fish. A label with no
+ * guide entry — kingfish — is deliberately left unmapped rather than pointed at
+ * a near-miss page.
+ */
 const SPECIES_IDS: Record<string, string> = {
   Snook: 'snook',
   Redfish: 'redfish',
   Trout: 'trout',
   Tarpon: 'tarpon',
   Snapper: 'snapper',
+  Sheepshead: 'sheepshead',
+  Ladyfish: 'ladyfish',
+  'Black drum': 'black-drum',
+  Pompano: 'pompano',
+  'Spanish mackerel': 'spanish-mackerel',
+  Mackerel: 'spanish-mackerel',
+  'Jack crevalle': 'jack-crevalle',
+  Jack: 'jack-crevalle',
 };
 
 /** Conservative mapping of v6 free-text rig strings to rig ids. */
@@ -147,6 +164,11 @@ const RIG_IDS: Record<string, string> = {
   'weedless paddletail': 'weedless-paddletail',
   weedless: 'weedless-paddletail',
   jig: 'jig-head',
+  'fish-finder': 'fish-finder',
+  // A pompano surf rig is a dropper-loop rig, not a fish-finder, and a
+  // sheepshead "bottom rig" is a short knocker-ish dropper — neither is one of
+  // the six documented schematics, so both stay unmapped rather than being
+  // pointed at a rig the angler would then tie wrong.
 };
 
 interface RawTarget {
@@ -234,6 +256,9 @@ const RAW: RawSpot[] = [
       { species: 'Redfish', rig: 'weedless paddletail', hook: '3/0–4/0', leader: '20–25 lb', weight: '1/16–1/8 oz', bait: 'shrimp/paddletail' },
       { species: 'Trout', rig: 'popping cork', hook: '1/0–2/0', leader: '15–20 lb', weight: 'light jig', bait: 'live shrimp' },
       { species: 'Snook', rig: 'free-line', hook: '2/0–4/0', leader: '30–40 lb', weight: 'none', bait: 'pilchard/pinfish' },
+      // Live shell on three sides of the point: black drum work the bar edges
+      // nose-down for the same shellfish the redfish are after.
+      { species: 'Black drum', rig: 'fish-finder', hook: '2/0–3/0 circle', leader: '25–30 lb', weight: '1/2 oz slider', bait: 'fresh dead shrimp/cut crab' },
     ],
   },
   {
@@ -269,6 +294,11 @@ const RAW: RawSpot[] = [
       { species: 'Snook', rig: 'live bait', hook: '3/0–5/0', leader: '40–60 lb', weight: '0–1 oz', bait: 'pinfish/pilchard' },
       { species: 'Snapper', rig: 'knocker', hook: '1/0–2/0', leader: '20–30 lb', weight: '1/4–1 oz', bait: 'shrimp/pilchard' },
       { species: 'Sheepshead', rig: 'bottom rig', hook: '1/0', leader: '20–30 lb', weight: '1/4–1 oz', bait: 'shrimp/crab' },
+      // Bridge lights over moving water is the classic ladyfish set-up, and
+      // this is the easiest fish to catch here for anyone still learning.
+      { species: 'Ladyfish', rig: 'jig', hook: '1/4 oz jig head', leader: '20 lb', weight: 'jig', bait: 'white paddletail/small jig' },
+      // Deep river holes beside the pilings — bait on the bottom, not swum past.
+      { species: 'Black drum', rig: 'fish-finder', hook: '3/0–5/0 circle', leader: '30–40 lb', weight: '1–3 oz slider', bait: 'cut blue crab/dead shrimp' },
     ],
   },
   {
@@ -286,6 +316,9 @@ const RAW: RawSpot[] = [
       { species: 'Snook', rig: 'free-line', hook: '2/0–3/0', leader: '30 lb', weight: 'none', bait: 'shrimp/pilchard' },
       { species: 'Snapper', rig: 'knocker', hook: '1/0', leader: '20–25 lb', weight: '1/4–1/2 oz', bait: 'shrimp' },
       { species: 'Jack', rig: 'casting lure', hook: 'single hook', leader: '25–30 lb', weight: 'lure', bait: 'spoon/topwater' },
+      // Seawall and dock pilings in the river carry barnacle and oyster growth,
+      // which is the whole reason sheepshead sit on them.
+      { species: 'Sheepshead', rig: 'bottom rig', hook: '1–1/0 short shank', leader: '20 lb fluoro', weight: '1/4–1/2 oz', bait: 'fiddler crab/live shrimp' },
     ],
   },
   {
@@ -303,6 +336,9 @@ const RAW: RawSpot[] = [
       { species: 'Snook', rig: 'live bait', hook: '3/0–5/0', leader: '40 lb', weight: 'light', bait: 'pilchard' },
       { species: 'Snapper', rig: 'knocker', hook: '1/0–2/0', leader: '20–30 lb', weight: '1/2 oz', bait: 'shrimp' },
       { species: 'Mackerel', rig: 'casting spoon', hook: 'single hook', leader: '30–40 lb bite leader', weight: '1/2–1 oz', bait: 'spoon' },
+      // A walk-on pier in current: the most reliable fish here for a first
+      // saltwater catch, and it will keep coming back for the same jig.
+      { species: 'Ladyfish', rig: 'jig', hook: '1/8–1/4 oz jig', leader: '20 lb', weight: 'jig', bait: 'white jig/small silver spoon' },
     ],
   },
   {
@@ -320,6 +356,11 @@ const RAW: RawSpot[] = [
       { species: 'Snook', rig: 'live bait drift', hook: '4/0–5/0', leader: '40–60 lb', weight: '1/2–2 oz', bait: 'pinfish' },
       { species: 'Tarpon', rig: 'live crab', hook: '5/0–8/0', leader: '60–80 lb', weight: 'drift dependent', bait: 'crab/threadfin' },
       { species: 'Snapper', rig: 'knocker', hook: '2/0', leader: '30 lb', weight: '1/2–1 oz', bait: 'pilchard' },
+      // Spring and autumn bait runs funnel straight through the pass mouth.
+      { species: 'Spanish mackerel', rig: 'casting spoon', hook: 'single hook', leader: '30–40 lb bite leader', weight: '1/2–1 oz spoon', bait: 'silver spoon/white jig' },
+      // Jacks push bait against the bridge fenders and the pass edge — heavier
+      // gear than the rest of this list, because they do not give up.
+      { species: 'Jack crevalle', rig: 'casting lure', hook: 'single inline hooks', leader: '40–50 lb', weight: 'lure', bait: 'topwater plug/1 oz jig' },
     ],
   },
   {
@@ -372,6 +413,10 @@ const RAW: RawSpot[] = [
       { species: 'Snook', rig: 'live bait', hook: '3/0–5/0', leader: '40–50 lb', weight: '0–1 oz', bait: 'pinfish' },
       { species: 'Snapper', rig: 'knocker', hook: '1/0–2/0', leader: '20–30 lb', weight: '1/4–1 oz', bait: 'shrimp' },
       { species: 'Trout', rig: 'jig', hook: '1/8–1/4 oz jig', leader: '15–20 lb', weight: 'jig', bait: 'paddletail' },
+      // Barnacled bridge pilings and the dock line either side of them.
+      { species: 'Sheepshead', rig: 'bottom rig', hook: '1/0 short shank', leader: '25 lb fluoro', weight: '1/2–1 oz', bait: 'fiddler crab/live shrimp' },
+      // The deeper scour beside the bridge holds drum on a moving tide.
+      { species: 'Black drum', rig: 'fish-finder', hook: '3/0–4/0 circle', leader: '30 lb', weight: '1–2 oz slider', bait: 'dead shrimp/cut crab' },
     ],
   },
   {
@@ -406,6 +451,10 @@ const RAW: RawSpot[] = [
       { species: 'Snook', rig: 'live bait', hook: '3/0–5/0', leader: '30–40 lb', weight: '0–1/2 oz', bait: 'pilchard' },
       { species: 'Redfish', rig: 'shrimp/weedless', hook: '1/0–3/0', leader: '20–30 lb', weight: 'light', bait: 'shrimp' },
       { species: 'Tarpon', rig: 'live bait', hook: '5/0–8/0', leader: '60–80 lb', weight: 'drift', bait: 'crab/threadfin' },
+      // Pass current plus a beach either side of it: ladyfish on the jig in the
+      // seam, pompano in the trough on the Gulf side.
+      { species: 'Ladyfish', rig: 'jig', hook: '1/4 oz jig', leader: '20 lb', weight: 'jig', bait: 'white jig/small silver spoon' },
+      { species: 'Pompano', rig: 'surf rig', hook: '#1–1/0 dropper loops', leader: '20 lb', weight: '2–3 oz pyramid', bait: 'sand flea/fresh shrimp' },
     ],
   },
   {
@@ -458,6 +507,8 @@ const RAW: RawSpot[] = [
       { species: 'Redfish', rig: 'weedless', hook: '3/0–4/0', leader: '20–30 lb', weight: 'light', bait: 'paddletail' },
       { species: 'Snook', rig: 'live bait', hook: '3/0–5/0', leader: '30–50 lb', weight: 'none', bait: 'pilchard' },
       { species: 'Trout', rig: 'popping cork', hook: '1/0–2/0', leader: '15–20 lb', weight: 'light', bait: 'shrimp' },
+      // Dock pilings through the sound are the winter sheepshead structure here.
+      { species: 'Sheepshead', rig: 'bottom rig', hook: '1–1/0 short shank', leader: '20 lb fluoro', weight: '1/4–1/2 oz', bait: 'fiddler crab/live shrimp' },
     ],
   },
   {
@@ -505,6 +556,9 @@ const RAW: RawSpot[] = [
       { species: 'Trout', rig: 'popping cork', hook: '1/0–2/0', leader: '15–20 lb', weight: 'light jig', bait: 'live shrimp' },
       { species: 'Snook', rig: 'weedless paddletail', hook: '3/0–4/0', leader: '30–40 lb', weight: '1/16–1/8 oz', bait: 'paddletail/pilchard' },
       { species: 'Sheepshead', rig: 'bottom rig', hook: '1/0 short shank', leader: '20 lb fluoro', weight: '1/4–1/2 oz', bait: 'live shrimp/fiddler crab' },
+      // The county's own description of this preserve is oyster bars off the
+      // pier — which is black drum ground as much as it is sheepshead ground.
+      { species: 'Black drum', rig: 'fish-finder', hook: '2/0–3/0 circle', leader: '25 lb', weight: '1/2–1 oz slider', bait: 'fresh dead shrimp/cut crab' },
     ],
     seasons: [
       'Dec–Mar sheepshead on the pier and bars',
@@ -552,6 +606,10 @@ const RAW: RawSpot[] = [
       { species: 'Sheepshead', rig: 'bottom rig', hook: '1/0 short shank', leader: '20 lb fluoro', weight: '1/4–1 oz', bait: 'live shrimp/fiddler crab' },
       { species: 'Snapper', rig: 'knocker', hook: '1/0–2/0', leader: '20–30 lb', weight: '1/4–1/2 oz', bait: 'live shrimp/pilchard' },
       { species: 'Jack', rig: 'casting lure', hook: 'single hook', leader: '30–40 lb', weight: 'lure', bait: 'spoon/topwater' },
+      // The pier's own seasons note already names mackerel on the bait pushes;
+      // the ladyfish are under the deck lights on the same bait, most nights.
+      { species: 'Spanish mackerel', rig: 'casting spoon', hook: 'single hook', leader: '30–40 lb bite leader', weight: 'lure', bait: 'silver spoon/white jig' },
+      { species: 'Ladyfish', rig: 'jig', hook: '1/4–3/8 oz jig', leader: '20 lb', weight: 'jig', bait: 'white jig worked through the light line' },
     ],
     seasons: [
       'Dec–Mar sheepshead on the pilings',
@@ -595,6 +653,10 @@ const RAW: RawSpot[] = [
       { species: 'Snook', rig: 'free-line', hook: '2/0–4/0', leader: '30–40 lb', weight: 'none', bait: 'pilchard/live shrimp' },
       { species: 'Pompano', rig: 'surf rig', hook: '1/0', leader: '15–20 lb', weight: '1–3 oz pyramid', bait: 'sand flea/shrimp' },
       { species: 'Spanish mackerel', rig: 'casting spoon', hook: 'single hook', leader: '30–40 lb bite leader', weight: 'lure', bait: 'silver spoon/white jig' },
+      // Everything that funnels out of Pass-a-Grille Channel passes the rocks:
+      // ladyfish on the seam for anyone learning, jacks on the bait pushes.
+      { species: 'Ladyfish', rig: 'jig', hook: '1/4 oz jig', leader: '20 lb', weight: 'jig', bait: 'white jig/small silver spoon' },
+      { species: 'Jack crevalle', rig: 'casting lure', hook: 'single inline hooks', leader: '40 lb', weight: 'lure', bait: 'topwater plug/heavy spoon' },
     ],
     seasons: [
       'Sep–Nov and Mar–May pompano along the trough',
@@ -636,6 +698,9 @@ const RAW: RawSpot[] = [
       { species: 'Spanish mackerel', rig: 'casting spoon', hook: 'single hook', leader: '30–40 lb bite leader', weight: 'lure', bait: 'silver spoon/white jig' },
       { species: 'Sheepshead', rig: 'bottom rig', hook: '1/0 short shank', leader: '20 lb fluoro', weight: '1/4–1 oz', bait: 'live shrimp/fiddler crab' },
       { species: 'Tarpon', rig: 'live bait under a float', hook: '5/0–8/0 circle', leader: '60–80 lb', weight: 'float only', bait: 'crab/threadfin/pinfish' },
+      // Bridge-scale drum sit on the bottom out of the worst of the current.
+      // Enough lead to hold, and a rod you can lift a heavy fish to the net with.
+      { species: 'Black drum', rig: 'fish-finder', hook: '4/0–5/0 circle', leader: '40 lb', weight: '3–6 oz slider', bait: 'cut blue crab/dead shrimp' },
     ],
     seasons: [
       'Jun–Sep tarpon through the bay mouth and mangrove snapper at night',
@@ -690,6 +755,9 @@ const RAW: RawSpot[] = [
       { species: 'Snook', rig: 'free-line', hook: '3/0–4/0', leader: '30–40 lb', weight: 'none', bait: 'pilchard/threadfin' },
       { species: 'Tarpon', rig: 'live crab', hook: '5/0–8/0 circle', leader: '60–80 lb', weight: 'drift dependent', bait: 'crab/threadfin' },
       { species: 'Snapper', rig: 'knocker', hook: '1/0–2/0', leader: '25–30 lb fluoro', weight: '1/2–1 oz', bait: 'live shrimp/pilchard' },
+      // The island's own seasons note already names autumn mackerel off the
+      // west side — this is the tackle for them.
+      { species: 'Spanish mackerel', rig: 'casting spoon', hook: 'single hook', leader: '40 lb bite leader', weight: 'lure', bait: 'silver spoon/live threadfin' },
     ],
     seasons: [
       'May–Jul tarpon along the channel edge',
@@ -740,6 +808,9 @@ const RAW: RawSpot[] = [
       { species: 'Kingfish', rig: 'live bait under a float', hook: 'stinger rig', leader: 'short wire bite trace', weight: 'float only', bait: 'live threadfin/blue runner' },
       { species: 'Snapper', rig: 'knocker', hook: '1/0–2/0', leader: '20–30 lb fluoro', weight: '1/2–1 oz', bait: 'live shrimp/pilchard' },
       { species: 'Sheepshead', rig: 'bottom rig', hook: '1/0 short shank', leader: '20 lb fluoro', weight: '1/4–1 oz', bait: 'live shrimp/fiddler crab' },
+      // The pier reaches out over the surf line on the Gulf side, so the
+      // beach's autumn pompano are in range of a jig off the rail.
+      { species: 'Pompano', rig: 'jig', hook: '1/4–3/8 oz pompano jig', leader: '20 lb fluoro', weight: 'jig', bait: 'pink or chartreuse pompano jig' },
     ],
     seasons: [
       'Apr–Jun and Oct–Nov kingfish and Spanish mackerel',
@@ -785,6 +856,9 @@ const RAW: RawSpot[] = [
       { species: 'Trout', rig: 'popping cork', hook: '1/0–2/0', leader: '15–20 lb', weight: 'light jig', bait: 'live shrimp' },
       { species: 'Redfish', rig: 'weedless paddletail', hook: '3/0–4/0', leader: '20–25 lb', weight: '1/16–1/8 oz', bait: 'paddletail/cut bait' },
       { species: 'Snook', rig: 'live bait', hook: '3/0–4/0', leader: '30–40 lb', weight: 'light', bait: 'pilchard/pinfish' },
+      // The pier's own seasons note names winter sheepshead; the pilings under
+      // it are what they are on.
+      { species: 'Sheepshead', rig: 'bottom rig', hook: '1/0 short shank', leader: '20 lb fluoro', weight: '1/4–1/2 oz', bait: 'live shrimp/fiddler crab' },
     ],
     seasons: [
       'Trout on the grass most of the year',
@@ -828,6 +902,10 @@ const RAW: RawSpot[] = [
       { species: 'Redfish', rig: 'weedless paddletail', hook: '3/0–4/0', leader: '20–25 lb', weight: '1/16–1/8 oz', bait: 'paddletail/cut bait' },
       { species: 'Trout', rig: 'popping cork', hook: '1/0–2/0', leader: '15–20 lb', weight: 'light jig', bait: 'live shrimp' },
       { species: 'Snook', rig: 'free-line', hook: '2/0–4/0', leader: '30–40 lb', weight: 'none', bait: 'pilchard' },
+      // The spot's own seasons note names autumn pompano and mackerel through
+      // the pass; both are jig-and-spoon fish from the bar edges on the fall.
+      { species: 'Pompano', rig: 'jig', hook: '1/4 oz pompano jig', leader: '20 lb', weight: 'jig', bait: 'pink pompano jig/sand flea' },
+      { species: 'Spanish mackerel', rig: 'casting spoon', hook: 'single hook', leader: '30–40 lb bite leader', weight: 'lure', bait: 'silver spoon' },
     ],
     seasons: [
       'Apr–Oct snook in and around the pass',
@@ -878,6 +956,10 @@ const RAW: RawSpot[] = [
       { species: 'Snook', rig: 'live bait', hook: '2/0–4/0', leader: '30–40 lb', weight: '0–1/2 oz', bait: 'pilchard/live shrimp' },
       { species: 'Snapper', rig: 'knocker', hook: '1/0–2/0', leader: '20–25 lb fluoro', weight: '1/4–1/2 oz', bait: 'live shrimp' },
       { species: 'Sheepshead', rig: 'bottom rig', hook: '1/0 short shank', leader: '20 lb fluoro', weight: '1/4–1/2 oz', bait: 'live shrimp/fiddler crab' },
+      // Shoreline access on a narrow, hard-running pass with lights on it: a
+      // first-fish spot after dark, and a jack spot when the bait gets pinned.
+      { species: 'Ladyfish', rig: 'jig', hook: '1/8–1/4 oz jig', leader: '20 lb', weight: 'jig', bait: 'white jig/live shrimp' },
+      { species: 'Jack crevalle', rig: 'casting lure', hook: 'single inline hooks', leader: '40–50 lb', weight: 'lure', bait: 'topwater plug/live pilchard' },
     ],
     seasons: [
       'Apr–Oct snook on the pass edges',
@@ -918,6 +1000,10 @@ const RAW: RawSpot[] = [
       { species: 'Snook', rig: 'free-line', hook: '2/0–4/0', leader: '30–40 lb', weight: 'none', bait: 'pilchard/live shrimp' },
       { species: 'Redfish', rig: 'weedless paddletail', hook: '3/0–4/0', leader: '20–25 lb', weight: '1/16–1/8 oz', bait: 'paddletail/cut bait' },
       { species: 'Trout', rig: 'popping cork', hook: '1/0–2/0', leader: '15–20 lb', weight: 'light jig', bait: 'live shrimp' },
+      // The spot's own seasons note names autumn pompano and mackerel off the
+      // pass beach: pompano in the trough, mackerel on the outside of it.
+      { species: 'Pompano', rig: 'surf rig', hook: '#1–1/0 dropper loops', leader: '20 lb', weight: '1–3 oz pyramid', bait: 'sand flea/fresh shrimp' },
+      { species: 'Spanish mackerel', rig: 'casting spoon', hook: 'single hook', leader: '30–40 lb bite leader', weight: 'lure', bait: 'silver spoon/white jig' },
     ],
     seasons: [
       'May–Sep snook along the pass and the beach cuts',

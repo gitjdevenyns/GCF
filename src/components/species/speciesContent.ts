@@ -260,8 +260,8 @@ export const SPECIES_CONTENT: Record<string, SpeciesContent> = {
       ),
       mark(
         4,
-        '86%',
-        '46%',
+        '89%',
+        '36%',
         'Deeply forked tail',
         'A big, deeply forked tail on a deep-bodied silver fish.',
         'supporting',
@@ -326,6 +326,317 @@ export const SPECIES_CONTENT: Record<string, SpeciesContent> = {
       {
         name: 'Cubera snapper',
         tell: 'Looks like an oversized mangrove snapper. Far heavier-bodied and rare inshore — if it is very large, do not assume.',
+      },
+    ],
+  },
+
+  /* Six species added after the original five. Same rules: every mark is a
+     visible feature published in the FWC and Florida Museum species profiles,
+     nothing here is or implies a regulation, and marks are placed for the
+     left-facing lateral photograph on each entry in src/data/fish.ts. */
+
+  sheepshead: {
+    tags: ['Structure feeder', 'Bites like a thief'],
+    lede:
+      'Sheepshead live on hard vertical structure and eat what is growing on it — barnacles, oysters, small crabs. They are not chasing your bait across open water; they are three inches off a piling, and if the bait is not there either, neither are they.',
+    idLede: 'The teeth end the argument. The bars get you there from a distance.',
+    marks: [
+      mark(
+        1,
+        '17%',
+        '58%',
+        'Human-like incisors at the front of the jaw',
+        'Broad flat front teeth, then molars and grinders behind them, all built to crush shell. Nothing else you will catch inshore has a mouth like this.',
+        'decisive',
+      ),
+      mark(
+        2,
+        '50%',
+        '44%',
+        'Five or six dark vertical bars',
+        'Bold black bars down a pale body — the reason for the "convict fish" nickname. Sharpest on young fish and can wash out on big ones.',
+        'decisive',
+      ),
+      mark(
+        3,
+        '66%',
+        '28%',
+        'Row of stout, sharp dorsal spines',
+        'Short, thick spines along the front of the dorsal fin that stand up when the fish flexes. Note them while identifying, because they are also what gets you.',
+        'supporting',
+      ),
+      mark(
+        4,
+        '26%',
+        '40%',
+        'Blunt snout, small horizontal mouth',
+        'The head runs down to a short, squared-off snout with a small mouth set level — a shell-picker, not a fish-chaser.',
+        'supporting',
+      ),
+    ],
+    confusables: [
+      {
+        name: 'Atlantic spadefish',
+        tell: 'Also barred, also around pilings. Spadefish are round as a plate with a long trailing dorsal lobe, and they have small brush-like teeth rather than incisors.',
+      },
+      {
+        name: 'Black drum (young)',
+        tell: 'Young black drum carry vertical bars too. Look under the chin: black drum have barbels there and no front teeth. Sheepshead have teeth and a clean chin.',
+      },
+    ],
+  },
+
+  ladyfish: {
+    tags: ['Best first fish', 'Handle fast, release fast'],
+    lede:
+      'If you have never caught a saltwater fish from shore, this is the one to go and get. Ladyfish hunt in packs in moving water — a lit bridge, a pass on the fall, a beach trough at dusk — and they hit a small jig hard, jump repeatedly, and are usually willing when nothing else is. Find bait spraying at the surface and cast into the edge of it.',
+    idLede: 'A slim silver rocket that jumps. Check two things and you are done.',
+    marks: [
+      mark(
+        1,
+        '55%',
+        '30%',
+        'One small dorsal fin, set well back, with no trailing filament',
+        'A single short dorsal about halfway down the back. If a whip-like ray trails off the back of it, you have a tarpon, not a ladyfish.',
+        'decisive',
+      ),
+      mark(
+        2,
+        '11%',
+        '42%',
+        'Small pointed head, large eye, mouth at the very tip',
+        'The mouth is terminal — it points straight forward, not up. Tarpon look up at you; ladyfish look at you.',
+        'decisive',
+      ),
+      mark(
+        3,
+        '38%',
+        '48%',
+        'Slender body in fine silver scales',
+        'Long and round-sectioned, in small bright scales. Tarpon scales are coin-sized plates; these you cannot count.',
+        'supporting',
+      ),
+      mark(
+        4,
+        '86%',
+        '38%',
+        'Deeply forked tail',
+        'A big, deeply forked tail on a thin body — the reason it goes airborne the moment it feels the hook.',
+        'supporting',
+      ),
+    ],
+    confusables: [
+      {
+        name: 'Juvenile tarpon',
+        tell: 'Same silver, same places, and both jump. Tarpon have the long trailing filament off the dorsal fin, an upturned lower jaw and huge plate-like scales.',
+      },
+      {
+        name: 'Bonefish',
+        tell: 'Also slim and silver, but the mouth sits underneath a blunt, over-hanging snout, and bonefish are on shallow sand, not in a bridge light.',
+      },
+    ],
+  },
+
+  'black-drum': {
+    tags: ['Bottom feeder', 'Shares redfish ground'],
+    lede:
+      'Black drum work the same edges redfish do — oyster bars, dock and bridge pilings, the deeper holes beside a pass — with their heads down, feeling for shellfish with the barbels under the chin. They are slower and less flashy than a redfish, and they want a bait sitting still on the bottom rather than one swimming past.',
+    idLede: 'Look under the chin first. That is the whole identification.',
+    marks: [
+      mark(
+        1,
+        '12%',
+        '60%',
+        'Barbels under the chin',
+        'A fringe of short whiskers under the lower jaw, used to find shellfish by touch. Redfish and sheepshead have nothing there. This alone settles it.',
+        'decisive',
+      ),
+      mark(
+        2,
+        '80%',
+        '52%',
+        'No black spot at the base of the tail',
+        'A clean tail wrist. A dark eye-spot there means red drum. Check it second, right after the chin.',
+        'decisive',
+      ),
+      mark(
+        3,
+        '35%',
+        '30%',
+        'High, arched grey-black back',
+        'The back humps up steeply behind the head — a taller, more hunched profile than a redfish of the same length.',
+        'supporting',
+      ),
+      mark(
+        4,
+        '55%',
+        '44%',
+        'Vertical bars on young fish',
+        'Four to six dark bars down the sides of a small drum. They fade with age, so their absence on a big fish means nothing.',
+        'supporting',
+      ),
+    ],
+    confusables: [
+      {
+        name: 'Redfish / red drum',
+        tell: 'Same shape, same oyster bar, same bait. Redfish have a black spot at the tail base and a clean chin; black drum have barbels and no spot.',
+      },
+      {
+        name: 'Sheepshead',
+        tell: 'Young black drum and sheepshead are both barred. Sheepshead have protruding incisors and no barbels; black drum have barbels and no visible teeth.',
+      },
+    ],
+  },
+
+  pompano: {
+    tags: ['Surf species', 'Light tackle'],
+    lede:
+      'Pompano are a beach fish. They run the trough between the sand and the first bar, nose-down over moving sand, digging out sand fleas as the wave sucks back. Fish the trough and the cuts through the bar — that band of water, not the flat sand beyond it, is where they feed.',
+    idLede: 'Small mouth, deep body, forked tail. Then check the fins.',
+    marks: [
+      mark(
+        1,
+        '11%',
+        '50%',
+        'Gently sloping forehead over a very small mouth',
+        'A short, blunt head running down to a small mouth with no visible teeth — built to root shellfish out of sand.',
+        'decisive',
+      ),
+      mark(
+        2,
+        '55%',
+        '22%',
+        'Dorsal fin starts ahead of the anal fin',
+        'This is what separates pompano from permit: on a pompano the dorsal fin begins in front of the anal fin rather than directly over it.',
+        'decisive',
+      ),
+      mark(
+        3,
+        '48%',
+        '58%',
+        'Yellow wash on the throat and belly',
+        'Silver flanks over a yellow-tinged underside, strongest on fish out of darker water. A good hint, never the deciding tell.',
+        'supporting',
+      ),
+      mark(
+        4,
+        '89%',
+        '40%',
+        'Deep compressed body, deeply forked tail',
+        'A flat, deep, pan-shaped body on a fish that swims hard for its size — which is why light tackle is more fun and heavy tackle is a waste.',
+        'supporting',
+      ),
+    ],
+    confusables: [
+      {
+        name: 'Permit',
+        tell: 'The same silhouette but grows far larger, and its dorsal fin sits directly over the anal fin instead of ahead of it.',
+      },
+      {
+        name: 'Lookdown / Atlantic moonfish',
+        tell: 'Also flat and silver in the surf, but with an almost vertical face and a very high forehead. No yellow underside.',
+      },
+    ],
+  },
+
+  'spanish-mackerel': {
+    tags: ['Fast, schooling', 'Teeth — use a tool'],
+    lede:
+      'Spanish mackerel come through in schools, high in the water, herding glass minnows and pilchards against a pass mouth, a pier front or a bar. When they show, it is a fast bite and a short window: something small, shiny and moving quickly, cast at the edge of the bait rather than into the middle of it.',
+    idLede: 'Two marks separate it from the king mackerel it grows up beside.',
+    marks: [
+      mark(
+        1,
+        '45%',
+        '46%',
+        'Round golden-yellow spots, no bars',
+        'Three or so rows of round brassy-gold spots scattered on a plain silver flank. King mackerel adults have no spots; juveniles have smaller, fainter ones.',
+        'decisive',
+      ),
+      mark(
+        2,
+        '27%',
+        '32%',
+        'Dark blotch on the front dorsal fin',
+        'A bluish-black patch on the first dorsal fin. King mackerel do not have it. This is the mark to check when the spots are ambiguous.',
+        'decisive',
+      ),
+      mark(
+        3,
+        '68%',
+        '52%',
+        'Lateral line slopes gently to the tail',
+        'The line runs down in a smooth curve. On a king mackerel it drops sharply below the second dorsal fin.',
+        'supporting',
+      ),
+      mark(
+        4,
+        '8%',
+        '54%',
+        'Single row of triangular teeth',
+        'Big flat triangular teeth in one row. You will see them before you touch them — and that is the point of noticing.',
+        'supporting',
+      ),
+    ],
+    confusables: [
+      {
+        name: 'King mackerel',
+        tell: 'No dark blotch on the front dorsal fin, and a lateral line that drops abruptly under the second dorsal. Small kings are the usual mix-up at a pier.',
+      },
+      {
+        name: 'Cero mackerel',
+        tell: 'Carries yellow-brown streaks and dashes along the flank as well as spots. Spanish mackerel have spots only.',
+      },
+    ],
+  },
+
+  'jack-crevalle': {
+    tags: ['Hits hard', 'Bycatch worth knowing'],
+    lede:
+      'Jacks travel and hunt as a pack, pushing bait against a pass edge, a bridge or a seawall, and they announce themselves — bait showering, a boil, then a bite that feels like the rod got hit by something much larger. You rarely go looking for them. You do want to recognise one before you reach for it.',
+    idLede: 'Two black spots. Check the gill cover, then the pectoral fin.',
+    marks: [
+      mark(
+        1,
+        '22%',
+        '38%',
+        'Black spot on the gill cover',
+        'A distinct dark blotch high on the rear edge of the gill cover. Blue runner, the usual look-alike, does not have the pair of spots.',
+        'decisive',
+      ),
+      mark(
+        2,
+        '31%',
+        '50%',
+        'Black spot at the base of the pectoral fin',
+        'A second oval black spot where the pectoral fin joins the body. Gill cover plus pectoral together settle it.',
+        'decisive',
+      ),
+      mark(
+        3,
+        '10%',
+        '28%',
+        'Steep, blunt forehead',
+        'The head rises almost vertically from the mouth — a deep, bluff-fronted profile no other inshore jack has quite so exaggerated.',
+        'supporting',
+      ),
+      mark(
+        4,
+        '76%',
+        '42%',
+        'Hard scutes along the tail wrist',
+        'A keel of hard bony plates running to the tail. This is the part that cuts, so identify it now and pick the fish up somewhere else.',
+        'supporting',
+      ),
+    ],
+    confusables: [
+      {
+        name: 'Blue runner',
+        tell: 'Slimmer, more streamlined, and lacks the crevalle jack pairing of a gill-cover spot with a pectoral-base spot.',
+      },
+      {
+        name: 'Horse-eye jack',
+        tell: 'Much bigger eye, a slimmer body and a yellow tail. It has no black spot at the base of the pectoral fin.',
       },
     ],
   },
