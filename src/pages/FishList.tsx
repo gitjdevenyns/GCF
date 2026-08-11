@@ -36,6 +36,25 @@ export default function FishList() {
         </p>
       </div>
 
+      {/* Same entry point as Home's "Not sure what you caught?" card, offered
+          here too since this is the other natural place someone lands while
+          trying to work out what they're holding. */}
+      <section className="sect" aria-labelledby="photoid">
+        <h2 className="vh" id="photoid">
+          Not sure what you caught?
+        </h2>
+        <div className="card card-pad">
+          <p className="mut" style={{ color: 'var(--t)' }}>
+            Not sure which of these you caught? Take a photo and get a best guess at the species,
+            plus a warning if it is one to keep your hands off. It is an estimate from a machine,
+            not an identification — a starting point for you to confirm.
+          </p>
+          <Link className="btn btn-lime btn-block" to="/id" style={{ marginTop: 'var(--s3)' }}>
+            Identify a fish from a photo
+          </Link>
+        </div>
+      </section>
+
       <section className="sect" aria-labelledby="species-h">
         <SectionTitle id="species-h">All {fish.length} species</SectionTitle>
         {/* stack+g4 gives the mobile rhythm; .cols-2 takes over as a grid at 900px. */}
