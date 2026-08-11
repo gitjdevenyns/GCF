@@ -6,12 +6,14 @@ import HeroImage from '../components/ui/HeroImage';
 import { ExternalRow, LinkRow } from '../components/ui/LinkRow';
 import { MediaCredit } from '../components/ui/MediaCredit';
 import {
+  baitIcon,
   habitatChips,
   habitatModuleFor,
   parseBaits,
   parseGear,
   speciesContent,
 } from '../components/species/speciesContent';
+import { BaitGlyph } from '../components/species/art';
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
@@ -263,7 +265,9 @@ export default function FishDetail() {
           <div className="baits">
             {baits.map((b) => (
               <div className="bait" key={`${b.kind}-${b.name}`}>
-                <div className="swatch" aria-hidden="true" />
+                <div className="swatch" aria-hidden="true">
+                  <BaitGlyph icon={baitIcon(b.name, b.kind)} />
+                </div>
                 <b>{cap(b.name)}</b>
                 <div className="when">
                   {b.kind === 'natural' ? 'Live or natural bait' : 'Artificial'}
