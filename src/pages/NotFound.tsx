@@ -7,7 +7,7 @@ const SECTIONS = [
   { to: '/locations', glyph: '⚑', title: 'Spots', note: 'Every fishing location in the guide' },
   { to: '/tides', glyph: '≈', title: 'Tides + water', note: 'How the stage changes a place' },
   { to: '/water', glyph: '≡', title: 'Read the water', note: 'What productive water looks like' },
-  { to: '/fish', glyph: '◗', title: 'Fish + gear', note: 'Five target species and their tackle' },
+  { to: '/fish', glyph: '◗', title: 'Fish + gear', note: 'Target species and their tackle' },
   { to: '/rigs', glyph: '⌁', title: 'Rigs + knots', note: 'Six rigs and the knots that hold them' },
   { to: '/care', glyph: '⚠', title: 'Handle with care', note: 'The animals that can hurt you' },
 ];

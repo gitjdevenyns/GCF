@@ -235,9 +235,9 @@ describe('resolving a match to a real in-app page', () => {
   it('links nothing rather than guessing', () => {
     // A wrong deep link is worse than none: it sends a reader to confident
     // handling instructions for an animal they are not holding.
-    // 'flounder' and 'ladyfish' are real Gulf fish the guide says nothing
+    // 'flounder' and 'grouper' are real Gulf fish the guide says nothing
     // about — exactly the case where the honest answer is no link at all.
-    for (const id of ['none', '', 'flounder', 'ladyfish', 'Snook', 'fish/snook', null, undefined]) {
+    for (const id of ['none', '', 'flounder', 'grouper', 'Snook', 'fish/snook', null, undefined]) {
       expect(resolveGuideMatch(id), String(id)).toBeNull();
     }
   });

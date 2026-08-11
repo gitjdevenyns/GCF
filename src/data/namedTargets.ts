@@ -4,20 +4,21 @@ import type { Location } from './types';
 /**
  * Species this guide **names** but does not **document**.
  *
- * Five of the eleven species that appear in the researched location data have
- * no species page: the guide lists them as targets at real spots, with a rig,
- * hook, leader, weight and bait for each spot, but there is no /fish/<id> page
- * behind them. That is a deliberate gap, not an oversight — a species page
- * carries identification marks, tackle, and release handling, and none of that
- * has been researched for these five. Writing it from general knowledge would
- * break the guide's own rule: never invent fishing content.
+ * Sheepshead, pompano, jack crevalle and Spanish mackerel used to live here —
+ * they now have real species pages in `fish.ts`, sourced the same way as the
+ * original five. Kingfish is the one label left: the guide's own safety notes
+ * distinguish it from Spanish mackerel at the same spots, but nobody has
+ * researched king mackerel tackle and handling for this coast yet. That is a
+ * deliberate gap, not an oversight — a species page carries identification
+ * marks, tackle, and release handling, and none of that exists for kingfish.
+ * Writing it from general knowledge would break the guide's own rule: never
+ * invent fishing content.
  *
- * They still matter to photo ID. A sheepshead is one of the most commonly
- * caught fish on every dock and bridge in this footprint, and an identifier
- * that can only answer with five species is wrong far more often than it needs
- * to be. So these are recognised and named — and the result says plainly that
- * there is no page for them yet, then sends the reader to the location that
- * *does* carry a researched recipe for that species.
+ * It still matters to photo ID. Someone who lands one needs an honest answer,
+ * not silence — so it is recognised and named, and the result says plainly
+ * that there is no page for it yet, then sends the reader to the location
+ * that *does* carry a researched recipe for it (as a Spanish mackerel
+ * target, since that is the only kingfish-adjacent tackle this guide has).
  *
  * Nothing here is new fishing content. `name` is the guide's own label,
  * verbatim. `labels` are the exact `species_label` strings already present in
@@ -42,38 +43,6 @@ export interface NamedTarget {
 }
 
 export const NAMED_TARGETS: NamedTarget[] = [
-  {
-    id: 'sheepshead',
-    name: 'Sheepshead',
-    labels: ['Sheepshead'],
-    scope:
-      'Sheepshead (Archosargus probatocephalus) — deep silver body with bold black vertical bars and human-like incisor teeth.',
-  },
-  {
-    id: 'pompano',
-    name: 'Pompano',
-    labels: ['Pompano'],
-    scope:
-      'Florida pompano (Trachinotus carolinus) — deep, flat, blunt-headed silver fish with a yellow belly and throat, and a deeply forked tail.',
-  },
-  {
-    id: 'jack',
-    name: 'Jack',
-    labels: ['Jack'],
-    scope:
-      'Jack crevalle and the other inshore jacks — deep blunt head, steep forehead, hard scutes along the tail base, black spot on the gill cover and pectoral fin.',
-  },
-  {
-    // The location data uses both labels for the same fish: "Mackerel" on a
-    // spoon behind a bite leader, at the same passes and beaches where it also
-    // says "Spanish mackerel". Where it means the larger fish it says
-    // "Kingfish", and one location's safety note names the two separately.
-    id: 'spanish-mackerel',
-    name: 'Spanish mackerel',
-    labels: ['Spanish mackerel', 'Mackerel'],
-    scope:
-      'Spanish mackerel (Scomberomorus maculatus) — slender silver body with scattered round yellow-bronze spots and no bars; smaller and shorter than a king mackerel.',
-  },
   {
     id: 'kingfish',
     name: 'Kingfish',

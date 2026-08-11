@@ -89,35 +89,29 @@ const GUIDE_SPECIES: Array<{ id: string; kind: "fish" | "hazard" | "named"; name
   { id: "trout", kind: "fish", name: "Spotted Seatrout" },
   { id: "tarpon", kind: "fish", name: "Tarpon" },
   { id: "snapper", kind: "fish", name: "Mangrove / Gray Snapper" },
+  { id: "sheepshead", kind: "fish", name: "Sheepshead" },
+  { id: "ladyfish", kind: "fish", name: "Ladyfish" },
+  { id: "black-drum", kind: "fish", name: "Black Drum" },
+  { id: "pompano", kind: "fish", name: "Florida Pompano" },
+  { id: "spanish-mackerel", kind: "fish", name: "Spanish Mackerel" },
+  { id: "jack-crevalle", kind: "fish", name: "Jack Crevalle" },
   { id: "catfish", kind: "hazard", name: "Hardhead / Gafftopsail Catfish" },
   { id: "stingray", kind: "hazard", name: "Southern / Atlantic Stingray" },
   { id: "lionfish", kind: "hazard", name: "Lionfish" },
   { id: "barracuda", kind: "hazard", name: "Great Barracuda" },
   { id: "sharks", kind: "hazard", name: "Sharks" },
   { id: "pufferfish", kind: "hazard", name: "Southern Puffer / Pufferfish" },
-  { id: "sheepshead", kind: "named", name: "Sheepshead" },
-  { id: "pompano", kind: "named", name: "Pompano" },
-  { id: "jack", kind: "named", name: "Jack" },
-  { id: "spanish-mackerel", kind: "named", name: "Spanish mackerel" },
   { id: "kingfish", kind: "named", name: "Kingfish" },
 ];
 
 /**
  * What each `named` id covers. Mirrors src/data/namedTargets.ts `scope`, and
- * exists because "Jack" and "Kingfish" are the guide's labels, not species-level
- * claims — the model needs to know which animal to map onto them, and the
- * Spanish mackerel / king mackerel pair in particular is a confusion worth
- * pre-empting rather than discovering in a result.
+ * exists because "Kingfish" is the guide's label, not a species-level claim —
+ * the model needs to know which animal to map onto it, and the Spanish
+ * mackerel / king mackerel pair in particular is a confusion worth pre-empting
+ * rather than discovering in a result.
  */
 const NAMED_SCOPE: Record<string, string> = {
-  sheepshead:
-    "Sheepshead (Archosargus probatocephalus) — deep silver body with bold black vertical bars and human-like incisor teeth.",
-  pompano:
-    "Florida pompano (Trachinotus carolinus) — deep, flat, blunt-headed silver fish with a yellow belly and throat, and a deeply forked tail.",
-  jack:
-    "Jack crevalle and the other inshore jacks — deep blunt head, steep forehead, hard scutes along the tail base, black spot on the gill cover and pectoral fin.",
-  "spanish-mackerel":
-    "Spanish mackerel (Scomberomorus maculatus) — slender silver body with scattered round yellow-bronze spots and no bars; smaller and shorter than a king mackerel.",
   kingfish:
     "King mackerel / kingfish (Scomberomorus cavalla) — long silver mackerel with a dipped lateral line and, on adults, no spots. This guide means the mackerel, not the whiting sometimes called a kingfish elsewhere.",
 };

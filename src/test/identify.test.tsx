@@ -206,15 +206,15 @@ describe('a confident identification', () => {
   });
 
   it('is honest when it knows the fish but has no page for it', async () => {
-    // Sheepshead is named as a target at six spots and documented at none. The
+    // Kingfish is named as a target at one spot and documented at none. The
     // result must say that, not dress a location link up as a species page.
     vi.mocked(identifyFish).mockResolvedValue({
       ok: true,
       result: {
         ...RESULT,
-        common_name: 'Sheepshead',
-        scientific_name: 'Archosargus probatocephalus',
-        guide_species_id: 'sheepshead',
+        common_name: 'Kingfish',
+        scientific_name: 'Scomberomorus cavalla',
+        guide_species_id: 'kingfish',
         is_potentially_hazardous: false,
         hazard_note: '',
         also_consider: [],
@@ -222,13 +222,13 @@ describe('a confident identification', () => {
     });
     const { container } = renderPage();
     pickPhoto(container);
-    await screen.findByText('Sheepshead');
+    await screen.findByText('Kingfish');
 
-    expect(screen.getByText(/no species page for sheepshead yet/i)).toBeInTheDocument();
-    expect(screen.getByText(/named as a target at 6 spots/i)).toBeInTheDocument();
+    expect(screen.getByText(/no species page for kingfish yet/i)).toBeInTheDocument();
+    expect(screen.getByText(/named as a target at 1 spot/i)).toBeInTheDocument();
     expect(screen.getByText('Named in this guide')).toBeInTheDocument();
 
-    const link = screen.getByRole('link', { name: /a spot that fishes for sheepshead/i });
+    const link = screen.getByRole('link', { name: /a spot that fishes for kingfish/i });
     expect(link.getAttribute('href')).toMatch(/^\/locations\//);
   });
 

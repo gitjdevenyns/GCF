@@ -30,8 +30,9 @@ export default function FishList() {
         <div className="lab lab-blue">Target species</div>
         <h1 style={{ margin: '4px 0 8px' }}>Know it, rig for it, put it back</h1>
         <p className="mut">
-          Five inshore targets for this coast. Every page opens on identification, then habitat, then
-          the tackle, then how to release it in shape to swim away.
+          The inshore targets for this coast, from the ones everybody comes for to the ones you will
+          actually catch first. Every page opens on identification, then habitat, then the tackle,
+          then how to release it in shape to swim away.
         </p>
       </div>
 

@@ -142,7 +142,7 @@ describe('every location page', () => {
   });
 });
 
-describe('all 5 species pages', () => {
+describe('every species page', () => {
   it.each(FISH.map((f) => [f.id, f.name] as const))('renders /fish/%s', (id, name) => {
     renderAt(`/fish/${id}`);
     expect(screen.getByRole('heading', { level: 1 }).textContent).toContain(name);
