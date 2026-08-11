@@ -7,6 +7,7 @@
  */
 import { useId } from 'react';
 import type { ReactElement } from 'react';
+import { stationClock } from '../../lib/conditions';
 import type { TideEvent, TidePhase } from '../../lib/conditions';
 import type { TideStage } from '../../data';
 
@@ -134,9 +135,11 @@ export function TideStageGlyph({ stage, prime }: { stage: TideStage; prime: bool
 /* ------------------------------------------------------------ tide curve */
 
 const W = 320;
-const H = 66;
 const TOP = 10;
-const BOTTOM = 54;
+const BOTTOM = 50;
+/** Baseline for the time-axis labels beneath the curve. */
+const AXIS_Y = 68;
+const H = 78;
 
 function cosineAt(y0: number, y1: number, u: number) {
   return y0 + (y1 - y0) * ((1 - Math.cos(Math.PI * u)) / 2);
@@ -159,7 +162,7 @@ export function TideCurve({
   const gradientId = useId();
 
   const pts = tides
-    .map((t) => ({ t: Date.parse(t.time), h: t.height_ft, type: t.type }))
+    .map((t) => ({ t: Date.parse(t.time), h: t.height_ft, type: t.type, raw: t.time }))
     .filter((p) => Number.isFinite(p.t) && Number.isFinite(p.h))
     .sort((a, b) => a.t - b.t);
 
@@ -196,6 +199,13 @@ export function TideCurve({
     marker = { x: x(now), y: cosineAt(y(a.h), y(b.h), u) };
   }
 
+  // One label per predicted event, so the axis reads "what time is this point"
+  // rather than an evenly-spaced grid unrelated to the data. Anchor the end
+  // labels inward so they never clip past the plate's edge.
+  const axisLabels = pts
+    .map((p, i) => ({ x: xy[i].x, clock: stationClock(p.raw) }))
+    .filter((l): l is { x: number; clock: string } => l.clock !== null);
+
   const label = phase
     ? `Predicted tide curve for the reference station; the tide is ${phase.stage} now.`
     : 'Predicted tide curve for the reference station.';
@@ -204,7 +214,7 @@ export function TideCurve({
     <svg
       viewBox={`0 0 ${W} ${H}`}
       preserveAspectRatio="none"
-      style={{ width: '100%', height: 62, marginTop: 10 }}
+      style={{ width: '100%', height: 78, marginTop: 10 }}
       role="img"
       aria-label={label}
     >
@@ -214,7 +224,7 @@ export function TideCurve({
           <stop offset="1" stopColor="#8dff00" stopOpacity="0" />
         </linearGradient>
       </defs>
-      <path d={`${d} L ${W} ${H} L 0 ${H} Z`} fill={`url(#${gradientId})`} />
+      <path d={`${d} L ${W} ${BOTTOM} L 0 ${BOTTOM} Z`} fill={`url(#${gradientId})`} />
       <path d={d} fill="none" stroke="var(--link)" strokeWidth="2" />
       {marker && (
         <>
@@ -222,7 +232,7 @@ export function TideCurve({
             x1={marker.x}
             y1="0"
             x2={marker.x}
-            y2={H}
+            y2={BOTTOM}
             stroke="var(--lime)"
             strokeWidth="1.5"
             strokeDasharray="3 3"
@@ -230,6 +240,29 @@ export function TideCurve({
           <circle cx={marker.x} cy={marker.y} r="5" fill="var(--lime)" />
         </>
       )}
+      <line x1="0" y1={BOTTOM} x2={W} y2={BOTTOM} stroke="var(--l)" strokeWidth="1" />
+      {axisLabels.map((l, i) => (
+        <g key={i}>
+          <line
+            x1={l.x}
+            y1={BOTTOM}
+            x2={l.x}
+            y2={BOTTOM + 4}
+            stroke="var(--m)"
+            strokeWidth="1"
+          />
+          <text
+            x={i === 0 ? Math.max(l.x, 2) : i === axisLabels.length - 1 ? Math.min(l.x, W - 2) : l.x}
+            y={AXIS_Y}
+            textAnchor={i === 0 ? 'start' : i === axisLabels.length - 1 ? 'end' : 'middle'}
+            fontFamily="var(--ff-mono)"
+            fontSize="9"
+            fill="var(--m)"
+          >
+            {l.clock}
+          </text>
+        </g>
+      ))}
     </svg>
   );
 }

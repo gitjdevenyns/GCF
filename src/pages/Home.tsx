@@ -3,7 +3,7 @@ import { getFishList, getHabitats, getHazards, getLocations } from '../lib/api';
 import { REGIONS } from '../data';
 import type { Location, TideStage } from '../data';
 import { useConditions } from '../lib/useConditions';
-import { compactSky, timeAgo } from '../lib/conditions';
+import { compactSky, stationClock, timeAgo } from '../lib/conditions';
 import type { ConditionsResult } from '../lib/conditions';
 import { Callout, ErrorState, FreshnessNote, Plate, SectionTitle, Skeleton } from '../components/ui';
 import LazyMap from '../components/LazyMap';
@@ -29,13 +29,6 @@ const STAGE_CHIP: Record<TideStage, string> = {
   high: 'High water',
   outgoing: 'Tide is falling',
 };
-
-function stationClock(iso: string): string | null {
-  const m = /T(\d{2}):(\d{2})/.exec(iso);
-  if (!m) return null;
-  const h = Number(m[1]);
-  return `${h % 12 === 0 ? 12 : h % 12}:${m[2]} ${h < 12 ? 'am' : 'pm'}`;
-}
 
 /**
  * The spot to send someone to right now.

@@ -120,6 +120,18 @@ export function compactSky(summary: string | null | undefined): string | null {
   return summary.split(/\s+/)[0];
 }
 
+/**
+ * Format an NWS/CO-OPS timestamp as a station-local clock reading, e.g.
+ * "6:42 am". Used anywhere a specific tide or forecast moment needs to read
+ * as a time a person can act on, not just a relative age.
+ */
+export function stationClock(iso: string): string | null {
+  const m = /T(\d{2}):(\d{2})/.exec(iso);
+  if (!m) return null;
+  const h = Number(m[1]);
+  return `${h % 12 === 0 ? 12 : h % 12}:${m[2]} ${h < 12 ? 'am' : 'pm'}`;
+}
+
 export function timeAgo(iso: string | null | undefined, now = Date.now()): string {
   if (!iso) return 'unknown';
   const then = Date.parse(iso);
