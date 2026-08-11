@@ -32,11 +32,7 @@ export function HazardCard({ hazard }: { hazard: Hazard }) {
           <div className="rl">How to know it</div>
           {/* A full identification plate rather than a thumbnail: these photos were
               chosen for the features they show, and 64px cannot carry that. */}
-          <Plate
-            media={hazard.image}
-            caption="identification photo"
-            className="plate-tall"
-          />
+          <Plate media={hazard.image} className="plate-tall" />
           <MediaCredit media={hazard.image} />
           {content ? (
             <div className="bd mt2">{content.identify}</div>

@@ -161,10 +161,22 @@ export function TideCurve({
 }) {
   const gradientId = useId();
 
-  const pts = tides
+  const allPts = tides
     .map((t) => ({ t: Date.parse(t.time), h: t.height_ft, type: t.type, raw: t.time }))
     .filter((p) => Number.isFinite(p.t) && Number.isFinite(p.h))
     .sort((a, b) => a.t - b.t);
+
+  // The station cache holds a 96-hour window (~16 hi/lo events) so the "now"
+  // marker always has data on both sides even right after a refresh. Plotting
+  // all of it crams the curve into several barely-legible cycles and stacks a
+  // dozen time labels on top of each other. A live glance card doesn't need
+  // four days — the one event before `now` for context, plus everything in
+  // the next 48 hours, is enough to read the current tide and plan the next
+  // one or two without the axis turning into a smear.
+  const FORECAST_MS = 48 * 60 * 60 * 1000;
+  const beforeIdx = allPts.reduce((acc, p, i) => (p.t <= now ? i : acc), -1);
+  const startIdx = Math.max(0, beforeIdx);
+  const pts = allPts.slice(startIdx).filter((p, i) => i === 0 || p.t <= now + FORECAST_MS);
 
   if (pts.length < 2) return null;
 

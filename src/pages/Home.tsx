@@ -310,7 +310,7 @@ export default function Home() {
         <div className="hscroll">
           {fish.map((f) => (
             <Link className="fishcard" to={`/fish/${f.id}`} key={f.id}>
-              <Plate media={f.images[0] ?? null} caption={`id · ${f.name.toLowerCase()}`} />
+              <Plate media={f.images[0] ?? null} />
               <div className="fc-b">
                 <h3>{f.name}</h3>
                 <p className="mut xs">{f.habitat}</p>

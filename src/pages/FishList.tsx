@@ -68,11 +68,7 @@ export default function FishList() {
             return (
               <article className="card speciescard" key={f.id}>
                 <Link to={`/fish/${f.id}`} className="speciescard-link">
-                  <Plate
-                    media={f.images[0] ?? null}
-                    caption="identification photo"
-                    className="plate-tall"
-                  />
+                  <Plate media={f.images[0] ?? null} className="plate-tall" />
                   <div className="card-pad">
                     <h3>{f.name}</h3>
                     {content && (
