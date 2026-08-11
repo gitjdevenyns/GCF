@@ -111,11 +111,7 @@ export default function FishDetail() {
         {/* From 900px the plate and its mark list sit side by side (design board 03). */}
         <div className="idsplit">
           <div>
-            <IdPlate
-              media={fish.images[0] ?? null}
-              caption="identification photo · lateral profile"
-              marks={content?.marks ?? []}
-            />
+            <IdPlate media={fish.images[0] ?? null} marks={content?.marks ?? []} />
             <p className="mono" style={{ color: 'var(--m)', marginTop: 8 }}>
               marks are placed against the photograph in this plate · re-check them whenever the
               photo is replaced

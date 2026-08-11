@@ -24,9 +24,13 @@ import type { IdMark } from '../ui';
  * The snook entry is ported from design board "03 Species - Common Snook",
  * which is the authored source for this screen.
  *
- * Mark placement: percentages inside the ID plate. Marks are constrained to the
- * top ~62% of the plate (the caption bar owns the bottom) and no two marks are
- * placed within a halo width of each other at the 390px mobile size.
+ * Mark placement: `left` / `top` are percentages of the PHOTOGRAPH, and they
+ * are the position of the anatomical feature itself — nothing else. They are no
+ * longer constrained to the top of the plate and they are not the position of
+ * the numbered label: the label is projected out into the plate's gutter by
+ * `idPlateGeometry.placeMarks`, which also keeps labels from colliding, and a
+ * leader line runs from the label back to this exact point. Move one of these
+ * numbers only to correct where the feature is on that photo.
  */
 
 export type MarkWeight = 'decisive' | 'supporting';
