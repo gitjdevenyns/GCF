@@ -292,35 +292,46 @@ export const SPECIES_CONTENT: Record<string, SpeciesContent> = {
     lede:
       'Mangrove snapper live tight to hard cover — root lines, dock pilings, bridge structure and rock. They rarely move far from it, so the cast has to land close, and the fish will try to take you straight back into it.',
     idLede: 'Check the teeth and the flank, in that order.',
+    // Placed against the FDA Regulatory Fish Encyclopedia plate in
+    // `src/data/fish.ts` — a left-facing specimen, head at the left edge, cut
+    // to exactly the 3:2 the photo box renders, so these percentages are the
+    // literal percentages of that file with no `object-fit` crop in between.
+    // Each one was read off the image itself, not estimated: mark 1 sits on the
+    // pair of long white canines at the front of the open upper jaw, mark 2 on
+    // bare flank directly under the front of the soft dorsal (exactly where a
+    // lane snapper carries its spot), mark 3 on the straight run of snout
+    // between the mouth and the eye, mark 4 in the rust-red anal fin.
+    // The previous numbers were calibrated against a school photo and pointed
+    // at open water and coral branches.
     marks: [
       mark(
         1,
-        '13%',
-        '38%',
+        '2.4%',
+        '56.8%',
         'Two prominent canine teeth in the upper jaw',
         'A pair of obvious fangs at the front of the top jaw, visible with the mouth barely open. Keep fingers clear and use pliers.',
         'decisive',
       ),
       mark(
         2,
-        '58%',
-        '46%',
+        '61%',
+        '47%',
         'No dark spot on the flank',
         'A clean side. A dark spot high on the flank below the soft dorsal means lane snapper, not mangrove.',
         'decisive',
       ),
       mark(
         3,
-        '26%',
-        '22%',
+        '6%',
+        '49.5%',
         'Pointed snout, straight sloping head',
         'The head runs down to the mouth in an almost straight line — a wedge rather than a curve.',
         'supporting',
       ),
       mark(
         4,
-        '86%',
-        '30%',
+        '71%',
+        '68%',
         'Reddish-orange fin margins',
         'Grey to brassy body with a reddish cast in the fins, strongest on fish holding over rock and colour-shifted on fish over pale sand.',
         'supporting',

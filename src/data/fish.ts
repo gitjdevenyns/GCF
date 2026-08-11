@@ -2,8 +2,11 @@ import type { Fish } from './types';
 
 /**
  * Migrated from v6 window.FISH (data.js) + window.HANDLING (supplement.js).
- * Image URLs are the original v6 hotlinks; provenance/local-asset migration
- * is tracked separately.
+ * Most image URLs are still the original v6 hotlinks, with no recorded licence;
+ * provenance/local-asset migration is tracked separately and has so far only
+ * reached the two identification photos that were actively wrong (tarpon,
+ * snapper). Anything here without a `source_url` and a `license` is unverified
+ * and should be treated as a bug waiting to be found, not as settled.
  */
 
 /**
@@ -199,8 +202,33 @@ export const FISH: Fish[] = [
     name: 'Mangrove / Gray Snapper',
     images: [
       {
-        url: 'https://www.floridamuseum.ufl.edu/wp-content/uploads/sites/66/2017/05/Lutjanus-griseus-01.jpg',
-        alt: 'Mangrove snapper identification photo',
+        // The v6 hotlink (Florida Museum, © Joe Marino, 380x260) was a school
+        // of six fish behind a sea rod, every one of them part-hidden by the
+        // coral: with four numbers on it there was no way to tell which fish —
+        // let alone which feature — any of them meant. The mouths were shut,
+        // the flanks overlapped, and it carried no usable licence.
+        //
+        // Replaced with the FDA Regulatory Fish Encyclopedia plate of a
+        // vouchered Lutjanus griseus. The RFE exists to let inspectors tell
+        // snapper species apart, so it is the rare photograph that shows the
+        // two things this page calls decisive: the mouth is open on the pair of
+        // upper-jaw canines, and the flank under the soft dorsal — where a lane
+        // snapper's spot would be — is bare and evenly lit.
+        //
+        // This one is a local asset rather than a hotlink because the RFE frame
+        // is a specimen on a light table: a colour-control chart across the top
+        // and a 10 cm scale bar bottom-right, with the fish covering about a
+        // third of it. Cropping to the fish is the whole point, and you cannot
+        // crop someone else's URL. Public domain, so the crop is unrestricted;
+        // `source_url` points at the uncropped original. Cut to exactly 3:2 —
+        // the aspect `.idphoto` renders — so `object-fit: cover` takes nothing
+        // more off and the mark percentages in `speciesContent.ts` are the
+        // literal percentages of this file.
+        url: `${import.meta.env.BASE_URL}assets/species/gray-snapper-fda-rfe.jpg`,
+        alt: 'Gray snapper in lateral profile facing left against a white ground: pointed snout on a straight sloping head, mouth open on two canine teeth at the front of the upper jaw, a clean unspotted flank, and rust-red margins on the dorsal and anal fins',
+        source_url: 'https://commons.wikimedia.org/wiki/File:Lutjanus_griseus_(RFEIMG-0129).jpg',
+        license:
+          'Public domain (U.S. FDA Regulatory Fish Encyclopedia, photograph by Warren E. Savary) — cropped',
       },
       {
         url: 'https://www.anglersbooking.com/blog/articles/tampa-bay-fishing/images/mangrove-snapper-group-mangrove-roots-florida.webp',

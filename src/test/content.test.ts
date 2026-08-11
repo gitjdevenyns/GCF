@@ -42,9 +42,21 @@ describe('media provenance and accessibility', () => {
     }
   });
 
-  it('only references images over https', () => {
+  /**
+   * The rule this encodes is "never load a plate over an insecure or
+   * ambiguous origin" — plain http:// downgrades the page, and a
+   * protocol-relative `//host/...` inherits whatever the page got.
+   *
+   * A remote https hotlink satisfies it. So does an asset we serve ourselves:
+   * `import.meta.env.BASE_URL` makes those absolute and same-origin, which is
+   * the *stronger* case, not an exception to it. The snapper plate is one —
+   * see the note in `src/data/fish.ts` for why it had to be a local crop.
+   */
+  it('never references an image over an insecure or ambiguous origin', () => {
+    const base = import.meta.env.BASE_URL;
     for (const { where, media } of allMedia()) {
-      expect(media.url, where).toMatch(/^https:\/\//);
+      const sameOrigin = media.url.startsWith(base) && !media.url.startsWith('//');
+      expect(sameOrigin || /^https:\/\//.test(media.url), `${where}: ${media.url}`).toBe(true);
     }
   });
 
