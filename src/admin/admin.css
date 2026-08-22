@@ -75,3 +75,38 @@
 .rv-actions{display:flex;gap:var(--s2);flex-wrap:wrap;margin-top:var(--s2)}
 .rv-origin{font-family:var(--ff-mono);font-size:var(--fs-chart);color:var(--m);margin:var(--s2) 0 0}
 .rv-publish{margin-top:var(--s5)}
+
+/* ---------- SHOP DIRECTORY + ADVERTISING ----------
+   Two editorial states carry a rail so the list scans without reading:
+   listed at all, and paying. Kept distinct on purpose — a shop can be one
+   without the other, and conflating them is how a directory becomes a pile
+   of adverts. */
+.rv-h2{font-family:var(--ff-display);font-size:var(--fs-h2);font-weight:800;margin:0 0 var(--s3)}
+.sh{border:1px solid var(--l);border-radius:var(--ra-md);background:var(--c);padding:var(--s3) var(--s4)}
+.sh--in{border-left:3px solid var(--link)}
+.sh--paid{border-left:3px solid var(--lime)}
+.sh-hd{display:flex;align-items:flex-start;gap:var(--s3);flex-wrap:wrap}
+.sh-inc{flex:none;padding-top:2px}
+.sh-name{flex:1 1 240px;min-width:0}
+.sh-name b{font-family:var(--ff-display);font-size:var(--fs-h3);font-weight:800;display:block}
+.sh-tags{display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start}
+.sh-facts{display:flex;gap:var(--s3);flex-wrap:wrap;margin-top:var(--s2);
+  font-family:var(--ff-mono);font-size:var(--fs-xs);color:var(--m)}
+/* Research caveats — "call before publish", "coordinate approximate". These
+   are the reason a shop is not simply ticked and forgotten. */
+.sh-note{margin:6px 0 0;padding-left:9px;border-left:2px solid var(--warn);
+  color:var(--m);font-size:var(--fs-xs);line-height:var(--lh-body);max-width:70ch}
+.sh-tier{display:flex;gap:var(--s2);flex-wrap:wrap;align-items:center;margin-top:var(--s3)}
+.sh-paid{margin-top:var(--s3);padding-top:var(--s3);border-top:1px solid var(--l);display:grid;gap:var(--s2)}
+.sh-form{display:grid;gap:var(--s2)}
+.fld{display:grid;gap:4px}
+.fld>span{font-family:var(--ff-mono);font-size:var(--fs-lab);letter-spacing:.06em;
+  text-transform:uppercase;color:var(--m)}
+.fld>span em{font-style:normal;text-transform:none;letter-spacing:0}
+.fld input,.fld textarea{width:100%;padding:7px 9px;border:1px solid var(--l2);
+  border-radius:var(--ra-sm);background:var(--c2);color:var(--t);
+  font-family:var(--ff-body);font-size:var(--fs-sm);line-height:var(--lh-body)}
+.sh-plc{border:1px solid var(--l);border-radius:var(--ra-sm);padding:var(--s2) var(--s3);
+  display:flex;gap:var(--s3);flex-wrap:wrap;align-items:center}
+.sh-plc legend{font-family:var(--ff-mono);font-size:var(--fs-lab);letter-spacing:.06em;
+  text-transform:uppercase;color:var(--m);padding:0 6px}

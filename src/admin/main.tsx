@@ -2,6 +2,8 @@ import { StrictMode, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import Console from './Console';
 import Review from './Review';
+import Shops from './Shops';
+import Ads from './Ads';
 import '../styles/tokens.css';
 import '../styles/base.css';
 import './admin.css';
@@ -15,7 +17,7 @@ import './admin.css';
  *
  * No router — two tabs is not a routing problem.
  */
-type Tab = 'review' | 'packaging';
+type Tab = 'review' | 'shops' | 'ads' | 'packaging';
 
 function Admin() {
   const [tab, setTab] = useState<Tab>('review');
@@ -33,6 +35,18 @@ function Admin() {
             Review queue
           </button>
           <button
+            type="button" className={`btn ${tab === 'shops' ? 'btn-lime' : 'btn-ghost'}`}
+            onClick={() => setTab('shops')}
+          >
+            Bait &amp; tackle
+          </button>
+          <button
+            type="button" className={`btn ${tab === 'ads' ? 'btn-lime' : 'btn-ghost'}`}
+            onClick={() => setTab('ads')}
+          >
+            Advertising
+          </button>
+          <button
             type="button" className={`btn ${tab === 'packaging' ? 'btn-lime' : 'btn-ghost'}`}
             onClick={() => setTab('packaging')}
           >
@@ -41,7 +55,12 @@ function Admin() {
         </nav>
       </header>
       <main className="app-main">
-        <div className="app-shell">{tab === 'review' ? <Review /> : <Console />}</div>
+        <div className="app-shell">
+          {tab === 'review' && <Review />}
+          {tab === 'shops' && <Shops />}
+          {tab === 'ads' && <Ads />}
+          {tab === 'packaging' && <Console />}
+        </div>
       </main>
     </div>
   );

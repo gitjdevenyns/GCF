@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { useEntitlements } from '../lib/useEntitlements';
-import { SPONSOR_LABEL } from '../lib/sponsorship';
+import { SPONSOR_LABEL } from '../lib/listings';
 
 /**
  * The only way an advertisement reaches the screen.
