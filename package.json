@@ -2,7 +2,7 @@
   "name": "gcf",
   "private": true,
   "version": "7.0.0",
-  "description": "Gulf Coast Fishing Guide — visual Southwest Florida saltwater field guide PWA",
+  "description": "Gulf Coast Fishing Guide \u2014 visual Southwest Florida saltwater field guide PWA",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "check:links": "vite-node scripts/check-links.mjs"
+    "check:links": "vite-node scripts/check-links.mjs",
+    "check:db-sync": "vite-node scripts/check-db-sync.mjs"
   },
   "dependencies": {
     "@fontsource-variable/bricolage-grotesque": "^5.3.0",

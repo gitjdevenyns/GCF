@@ -1,7 +1,7 @@
 # Gulf Coast Fishing Guide (GCF)
 
 Visual, mobile-first Southwest Florida saltwater fishing field guide PWA:
-habitats, tide playbooks, 15 fishing locations with per-species tackle
+habitats, tide playbooks, 25 fishing locations with per-species tackle
 recipes, rig/knot school, safe-handling guidance and photo species ID.
 Works offline.
 
@@ -57,12 +57,13 @@ potentially hazardous, a match deep-links to the guide's own researched content
 rather than to model-authored handling advice, and no number on the screen ever
 implies a calibrated probability.
 
-It recognises sixteen species in three tiers, matching how much the guide
-actually knows about each: the **5 documented target species**, the **6 Handle
-With Care species**, and **5 more the location data names as targets** —
-sheepshead, pompano, jack, Spanish mackerel and kingfish — which have no species
-page but do have a researched rig and bait at each spot that lists them
-(`src/data/namedTargets.ts`). A match in that third tier says plainly that there
+It recognises eighteen species in three tiers, matching how much the guide
+actually knows about each: the **11 documented species**, the **6 Handle With
+Care species**, and **1 more the location data names as a target** — kingfish —
+which has no species page but does have a researched rig and bait at each spot
+that lists it (`src/data/namedTargets.ts`). Sheepshead, pompano, jack crevalle
+and Spanish mackerel have since been promoted out of that third tier into full
+species pages. A match in that third tier says plainly that there
 is no page yet and links the location instead. Anything outside all three is
 named honestly with no link at all.
 
@@ -115,7 +116,7 @@ with a 200, renders as a blank slot for a reader and so counts as broken.
 
 ### Imagery for places
 
-None of the fifteen locations has a licensed photograph, and none is expected
+None of the twenty-five locations has a licensed photograph, and none is expected
 to: a verifiable, correctly-attributed photo of a minor local fishing spot is
 not sourceable, and a mislabelled one is worse than none. Screens that need to
 show a place render a **live Esri satellite map of its own coordinates**
@@ -150,7 +151,7 @@ present; the build does not require them.
 
 Last full verification of this build:
 
-- `npm run build` clean, no warnings; `npm test` 64 passing
+- `npm run build` clean, no warnings; `npm test` 243 passing
 - axe-core: no WCAG 2.1 A/AA violations across every route x light/dark x
   mobile/desktop
 - Service worker installs, 21 precache entries; Home, a location page, a
