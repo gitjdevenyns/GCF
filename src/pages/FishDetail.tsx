@@ -98,7 +98,7 @@ export default function FishDetail() {
 
       {content && (
         <div className="sect">
-          <p style={{ fontSize: 16, lineHeight: 1.5 }}>{content.lede}</p>
+          <p className="lede">{content.lede}</p>
         </div>
       )}
 

@@ -155,7 +155,7 @@ function Curve({ events, nowMs }: { events: TideEvent[]; nowMs: number }) {
             x={X(p.ms)}
             y={p.type === 'H' ? Y(p.height_ft) - 10 : Y(p.height_ft) + 18}
             textAnchor="middle"
-            fontFamily="Helvetica,Arial,sans-serif"
+            fontFamily="var(--ff-mono)"
             fontSize="9"
             fontWeight="800"
             style={{ fill: 'var(--m)' }}
@@ -178,7 +178,7 @@ function Curve({ events, nowMs }: { events: TideEvent[]; nowMs: number }) {
               x={nowX}
               y="10"
               textAnchor="middle"
-              fontFamily="Helvetica,Arial,sans-serif"
+              fontFamily="var(--ff-mono)"
               fontSize="9"
               fontWeight="800"
               letterSpacing=".1em"
@@ -276,7 +276,7 @@ export default function LiveTide({ location }: { location: Location }) {
 
             <div className="cond-grid">
               <div>
-                <span className="lab" style={{ fontSize: 9.5 }}>
+                <span className="lab lab-xs">
                   Wind
                 </span>
                 <b>
@@ -286,7 +286,7 @@ export default function LiveTide({ location }: { location: Location }) {
                 </b>
               </div>
               <div>
-                <span className="lab" style={{ fontSize: 9.5 }}>
+                <span className="lab lab-xs">
                   Air
                 </span>
                 <b>
@@ -296,7 +296,7 @@ export default function LiveTide({ location }: { location: Location }) {
                 </b>
               </div>
               <div>
-                <span className="lab" style={{ fontSize: 9.5 }}>
+                <span className="lab lab-xs">
                   Sky
                 </span>
                 <b title={weather?.summary ?? undefined}>
@@ -305,7 +305,7 @@ export default function LiveTide({ location }: { location: Location }) {
                 {weather?.summary && <span className="vh">{weather.summary}</span>}
               </div>
               <div>
-                <span className="lab" style={{ fontSize: 9.5 }}>
+                <span className="lab lab-xs">
                   Range
                 </span>
                 <b>

@@ -38,7 +38,7 @@ export default function Care() {
       </div>
 
       <div className="sect">
-        <p style={{ fontSize: 16, lineHeight: 1.5 }}>
+        <p className="lede">
           Nothing on this page is hunting you. Every animal here hurts anglers for exactly one
           reason — a hand went somewhere it did not need to go. Learn the {hazards.length} faces,
           keep your fingers out of the sharp end, and this is a non-event.

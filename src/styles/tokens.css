@@ -38,6 +38,11 @@
 
   --fs-d1:40px; --fs-d2:30px; --fs-h1:24px; --fs-h2:19px; --fs-h3:16px;
   --fs-body:15.5px; --fs-sm:13.5px; --fs-xs:12px; --fs-lab:11px;
+  /* Below --fs-lab the scale is for mono marginalia and chart labels only.
+     Two steps, not five: 8/9/9.5/10/10.5 were all in use, which is not a
+     scale, it is drift. --fs-micro is caption chrome (plate caps, credits,
+     freshness); --fs-chart is data labels drawn inside an SVG. */
+  --fs-micro:10px; --fs-chart:9px;
   --lh-tight:0.96; --lh-head:1.15; --lh-body:1.5;
 
   /* ---------- 3. SPACE / RADII / ELEVATION ---------- */

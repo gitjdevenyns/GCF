@@ -73,8 +73,8 @@ function CrossSection({ art, label }: { art: StageArt; label: string }) {
           x="300"
           y={art.y - 10}
           textAnchor="end"
-          fontFamily="Helvetica,Arial,sans-serif"
-          fontSize="8"
+          fontFamily="var(--ff-mono)"
+          fontSize="9"
           fontWeight="700"
           letterSpacing=".12em"
           fill="#9eb0c3"
@@ -188,7 +188,7 @@ export default function Tides() {
       </div>
 
       <section className="sect">
-        <p style={{ fontSize: 16, lineHeight: 1.5 }}>
+        <p className="lede">
           Tide is not a number on a chart. It is the thing that decides where every
           fish on a flat is standing, twice a day, on a schedule you can look up.
         </p>
@@ -268,8 +268,8 @@ export default function Tides() {
             />
             <path d="M12 152 H346" strokeWidth="1.5" style={{ stroke: 'var(--l2)' }} />
             <g
-              fontFamily="Helvetica,Arial,sans-serif"
-              fontSize="9.5"
+              fontFamily="var(--ff-mono)"
+              fontSize="9"
               fontWeight="800"
               letterSpacing=".1em"
               textAnchor="middle"
@@ -279,7 +279,7 @@ export default function Tides() {
               <text x="258" y="20">OUTGOING</text>
             </g>
             <g
-              fontFamily="Helvetica,Arial,sans-serif"
+              fontFamily="var(--ff-mono)"
               fontSize="10"
               fontWeight="800"
               letterSpacing=".08em"
@@ -343,7 +343,7 @@ export default function Tides() {
                 <div
                   style={{
                     fontFamily: 'var(--ff-mono)',
-                    fontSize: 10,
+                    fontSize: "var(--fs-micro)",
                     color: 'var(--m)',
                     letterSpacing: '.06em',
                     textTransform: 'uppercase',

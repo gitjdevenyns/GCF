@@ -74,7 +74,7 @@ export default function Layout() {
           </span>
           <span>
             <span className="name">Gulf Coast Fishing</span>
-            <span className="lab" style={{ fontSize: 10, display: 'block' }}>
+            <span className="lab lab-xs" style={{ display: 'block' }}>
               Tampa Bay → Boca Grande
             </span>
           </span>

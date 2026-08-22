@@ -6,7 +6,7 @@
 .lochero{position:relative;min-height:230px;display:flex;align-items:flex-end;
   background-image:repeating-linear-gradient(135deg,transparent 0 11px,rgba(255,255,255,.05) 11px 12px),
     linear-gradient(150deg,#031530,#0746a3 62%,#2d78e8);color:var(--n05)}
-.lochero .cap{position:absolute;top:10px;right:10px;font-family:var(--ff-mono);font-size:10px;
+.lochero .cap{position:absolute;top:10px;right:10px;font-family:var(--ff-mono);font-size:var(--fs-micro);
   color:#dceaff;background:rgba(3,21,48,.6);border:1px solid rgba(255,255,255,.22);border-radius:6px;padding:4px 7px}
 .lochero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 /* Still satellite backdrop (LocationDetail). It fills the band exactly like the
@@ -30,7 +30,7 @@
   list-style:none;padding:0}
 .zonelist li{display:flex;gap:10px;align-items:flex-start;font-size:var(--fs-sm);line-height:1.4}
 .zonelist .pin{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
-  background:var(--lime);color:var(--lime-ink);font-family:var(--ff-display);font-weight:800;font-size:12px}
+  background:var(--lime);color:var(--lime-ink);font-family:var(--ff-display);font-weight:800;font-size:var(--fs-xs)}
 
 /* tide timeline */
 .tideline{border:1px solid var(--l);border-radius:var(--ra-lg);overflow:hidden;background:var(--c)}
@@ -40,8 +40,8 @@
 .tidestage .glyph{flex:none;width:52px;border-radius:var(--ra-sm);overflow:hidden}
 .tideglyph{display:block;width:100%;height:auto}
 @media (min-width:900px){.tidestage .glyph{width:66px}}
-.tidestage h3{font-size:15px}
-.tidestage .k{font-family:var(--ff-mono);font-size:10px;color:var(--m);letter-spacing:.06em}
+.tidestage h3{font-size:var(--fs-h3)}
+.tidestage .k{font-family:var(--ff-mono);font-size:var(--fs-micro);color:var(--m);letter-spacing:.06em}
 
 /* species playbook */
 .play{border:1px solid var(--l);border-radius:var(--ra-lg);overflow:hidden;background:var(--c)}
@@ -53,7 +53,7 @@
   background-image:repeating-linear-gradient(135deg,transparent 0 7px,rgba(91,152,240,.18) 7px 8px)}
 .play-hd .av>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .play-b{padding:var(--s4)}
-.pri{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:800;letter-spacing:.08em;
+.pri{display:inline-flex;align-items:center;gap:5px;font-size:var(--fs-micro);font-weight:800;letter-spacing:.08em;
   text-transform:uppercase;color:var(--lime-text)}
 .pri i{width:6px;height:6px;border-radius:50%;background:var(--lime)}
 .pri.med i{background:var(--m)}
@@ -61,21 +61,21 @@
 .recipe{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--l);border:1px solid var(--l);
   border-radius:var(--ra-sm);overflow:hidden;margin:var(--s3) 0}
 .recipe div{background:var(--c);padding:8px 10px}
-.recipe span{display:block;font-size:9.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--m)}
+.recipe span{display:block;font-size:var(--fs-chart);font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--m)}
 .recipe b{font-size:var(--fs-sm);font-weight:700}
 .cast{display:flex;gap:9px;align-items:flex-start;padding:10px var(--s3);border-radius:var(--ra-sm);
   background:var(--c3);font-size:var(--fs-sm);margin-bottom:var(--s2)}
 .cast .pin{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
-  background:var(--lime);color:var(--lime-ink);font-family:var(--ff-display);font-weight:800;font-size:11px}
+  background:var(--lime);color:var(--lime-ink);font-family:var(--ff-display);font-weight:800;font-size:var(--fs-lab)}
 
 .linkrow{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);padding:12px var(--s4);
   border-top:1px solid var(--l);color:inherit;font-weight:inherit}
 .linkrow:first-child{border-top:0}
 .linkrow:hover{text-decoration:none;color:inherit;background:var(--c2)}
 .linkrow .pl{width:30px;height:30px;border-radius:9px;flex:none;display:grid;place-items:center;
-  background:var(--c2);color:var(--link);font-size:12px}
+  background:var(--c2);color:var(--link);font-size:var(--fs-xs)}
 
-.srcs{font-size:var(--fs-xs);color:var(--m);line-height:1.7}
+.srcs{font-size:var(--fs-xs);color:var(--m);line-height:var(--lh-body)}
 .srcs a{font-weight:600}
 
 /* misc */
@@ -97,7 +97,7 @@
    stages and the "what to do now" card reference zones by the same number. */
 .zonepin{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;
   background:var(--lime);color:var(--lime-ink);font-family:var(--ff-display);font-weight:800;
-  font-size:11px;vertical-align:-4px}
+  font-size:var(--fs-lab);vertical-align:-4px}
 .zonepins{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-top:8px;
   font-size:var(--fs-xs);color:var(--m)}
 

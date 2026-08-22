@@ -287,10 +287,10 @@ export default function StructureMap({ loc, zones }: { loc: Location; zones: Zon
                   x={x}
                   y={y + 5}
                   textAnchor="middle"
-                  fontSize="13"
+                  fontSize="12"
                   fontWeight="800"
                   fill={C.lime}
-                  fontFamily="Helvetica,Arial,sans-serif"
+                  fontFamily="var(--ff-mono)"
                 >
                   {z.n}
                 </text>
@@ -298,11 +298,11 @@ export default function StructureMap({ loc, zones }: { loc: Location; zones: Zon
                   x={lx}
                   y={ly}
                   textAnchor={anchor}
-                  fontSize="10.5"
+                  fontSize="10"
                   fontWeight="700"
                   letterSpacing=".06em"
                   fill="#edffd6"
-                  fontFamily="Helvetica,Arial,sans-serif"
+                  fontFamily="var(--ff-mono)"
                   paintOrder="stroke"
                   stroke={C.deep}
                   strokeWidth="3.6"

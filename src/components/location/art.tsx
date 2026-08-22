@@ -961,7 +961,7 @@ export function TideCurve({
               y={AXIS_Y}
               textAnchor={i === 0 ? 'start' : i === axisLabels.length - 1 ? 'end' : 'middle'}
               fontFamily="var(--ff-mono)"
-              fontSize="9.5"
+              fontSize="9"
               fill="var(--m)"
             >
               {l.type === 'H' ? 'H' : 'L'} {l.clock}

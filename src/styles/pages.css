@@ -39,7 +39,7 @@
    is the largest disc that still clears the plate edge on a 320px phone. */
 .idplate .mark{position:absolute;transform:translate(-50%,-50%);
   width:24px;height:24px;border-radius:50%;display:grid;place-items:center;
-  background:var(--lime);color:var(--lime-ink);font-family:var(--ff-display);font-weight:800;font-size:12.5px;
+  background:var(--lime);color:var(--lime-ink);font-family:var(--ff-display);font-weight:800;font-size:var(--fs-xs);
   box-shadow:0 0 0 1.5px rgba(3,21,48,.45)}
 
 /* ---------- BAIT / LURE CHOICES ---------- */
@@ -51,8 +51,8 @@
    the habitat glyphs follow — and the SVG letterboxes onto it. */
 .bait .swatch{width:100%;height:42px;border-radius:var(--ra-sm);background:var(--b900);overflow:hidden}
 .bait .swatch>svg{display:block;width:100%;height:100%}
-.bait b{font-family:var(--ff-display);font-size:14px;line-height:1.2}
-.bait .when{font-size:var(--fs-xs);color:var(--m);line-height:1.45}
+.bait b{font-family:var(--ff-display);font-size:var(--fs-sm);line-height:var(--lh-head)}
+.bait .when{font-size:var(--fs-xs);color:var(--m);line-height:var(--lh-body)}
 
 /* ---------- BIG TIDE CURVE ----------
    Note the child combinators: each key row is a flex row of exactly two items
@@ -62,7 +62,7 @@
 .wave svg{display:block;width:100%}
 .wave-key{display:flex;flex-direction:column;gap:7px;padding:var(--s3) var(--s4);
   border-top:1px solid var(--l);font-size:var(--fs-xs);color:var(--m)}
-.wave-key>span{display:flex;align-items:flex-start;gap:8px;line-height:1.45}
+.wave-key>span{display:flex;align-items:flex-start;gap:8px;line-height:var(--lh-body)}
 .wave-key>span>i{width:18px;height:4px;border-radius:2px;flex:none;margin-top:6px}
 
 /* ---------- FULL-WIDTH TIDE STAGE ---------- */
@@ -72,12 +72,12 @@
 .sb-hd{display:flex;align-items:center;gap:var(--s3);padding:var(--s3) var(--s4);background:var(--c2)}
 .stageblock.is-prime .sb-hd{background:linear-gradient(100deg,rgba(141,255,0,.14),transparent 72%)}
 .sb-hd .n{flex:none;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;
-  background:var(--c);border:1px solid var(--l);font-family:var(--ff-mono);font-size:12px;color:var(--m)}
-.sb-hd h3{font-size:17px}
+  background:var(--c);border:1px solid var(--l);font-family:var(--ff-mono);font-size:var(--fs-xs);color:var(--m)}
+.sb-hd h3{font-size:var(--fs-h2)}
 .sb-b{padding:var(--s4)}
 .sb-x{width:100%;display:block;border-radius:var(--ra-sm);overflow:hidden;margin-bottom:var(--s3)}
 .sb-do{display:flex;gap:10px;align-items:stretch;padding:10px var(--s3);border-radius:var(--ra-sm);
-  background:var(--c3);font-size:var(--fs-sm);margin-top:var(--s3);line-height:1.45}
+  background:var(--c3);font-size:var(--fs-sm);margin-top:var(--s3);line-height:var(--lh-body)}
 .sb-do>i{flex:none;width:4px;border-radius:2px;background:var(--accent)}
 .stageblock.is-prime .sb-do>i{background:var(--lime)}
 
@@ -87,8 +87,8 @@
   border-radius:var(--ra-md);background:var(--c)}
 .mod .ic2{flex:none;width:34px;height:34px;border-radius:11px;display:grid;place-items:center;
   background:var(--c2);color:var(--link)}
-.mod b{display:block;font-family:var(--ff-display);font-size:15px;margin-bottom:2px}
-.mod .t{font-size:var(--fs-sm);color:var(--m);line-height:1.45}
+.mod b{display:block;font-family:var(--ff-display);font-size:var(--fs-h3);margin-bottom:2px}
+.mod .t{font-size:var(--fs-sm);color:var(--m);line-height:var(--lh-body)}
 
 /* ---------- HAZARD CARDS ---------- */
 .haz{border:1px solid var(--l);border-radius:var(--ra-lg);background:var(--c);overflow:hidden}
@@ -98,14 +98,14 @@
   background-color:var(--c);border:1px dashed var(--l2);
   background-image:repeating-linear-gradient(135deg,transparent 0 7px,rgba(91,152,240,.18) 7px 8px)}
 .haz-hd .av>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.haz-hd h3{font-size:16px;margin:3px 0 5px}
+.haz-hd h3{font-size:var(--fs-h3);margin:3px 0 5px}
 .haz-b{padding:var(--s4)}
 .haz-b .blk+.blk{margin-top:var(--s3);padding-top:var(--s3);border-top:1px solid var(--l)}
-.haz-b .rl{font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+.haz-b .rl{font-size:var(--fs-micro);font-weight:800;letter-spacing:.09em;text-transform:uppercase;
   color:var(--m);margin-bottom:4px}
-.haz-b .bd{font-size:var(--fs-sm);line-height:1.45}
+.haz-b .bd{font-size:var(--fs-sm);line-height:var(--lh-body)}
 .hazkind{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 10px;border-radius:var(--ra-pill);
-  font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+  font-size:var(--fs-micro);font-weight:800;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
 .hazkind.spine{background:var(--warn-bg);color:var(--warn-text);border:1px solid var(--warn)}
 .hazkind.bite{background:var(--danger-bg);color:var(--danger-text);border:1px solid var(--danger)}
 .hazkind.toxin{background:var(--c3);color:var(--link);border:1px solid var(--link)}
@@ -113,17 +113,17 @@
 /* ---------- THE HABITS ---------- */
 .rule3{display:grid;grid-template-columns:1fr;gap:var(--s2)}
 .rule3>div{display:flex;gap:var(--s3);align-items:flex-start;padding:var(--s3);border-radius:var(--ra-md);
-  background:var(--c2);border:1px solid var(--l);font-size:var(--fs-sm);line-height:1.45}
+  background:var(--c2);border:1px solid var(--l);font-size:var(--fs-sm);line-height:var(--lh-body)}
 .rule3 .n{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
-  background:var(--lime);color:var(--lime-ink);font-family:var(--ff-display);font-weight:800;font-size:13px}
-.rule3 b{font-family:var(--ff-display);font-size:15px;display:block;margin-bottom:1px}
+  background:var(--lime);color:var(--lime-ink);font-family:var(--ff-display);font-weight:800;font-size:var(--fs-sm)}
+.rule3 b{font-family:var(--ff-display);font-size:var(--fs-h3);display:block;margin-bottom:1px}
 
 /* ---------- COMPARE ROW ---------- */
 .tell{display:flex;gap:var(--s3);align-items:flex-start;padding:11px 0;border-top:1px solid var(--l);
-  font-size:var(--fs-sm);line-height:1.45}
+  font-size:var(--fs-sm);line-height:var(--lh-body)}
 .tell:first-child{border-top:0}
 .tell .q{flex:none;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;
-  background:var(--c2);color:var(--m);font-family:var(--ff-mono);font-size:11px;font-weight:700}
+  background:var(--c2);color:var(--m);font-family:var(--ff-mono);font-size:var(--fs-lab);font-weight:700}
 
 @media (min-width:900px){
   .mods{grid-template-columns:1fr 1fr}
@@ -152,7 +152,7 @@
 /* ---------- IMAGE CREDIT ----------
    CC BY / CC BY-SA images legally require a visible credit. Small, quiet, and
    readable in both themes — --m is AA on every surface it sits on. */
-.credit{font-family:var(--ff-mono);font-size:10.5px;line-height:1.5;color:var(--m);
+.credit{font-family:var(--ff-mono);font-size:var(--fs-micro);line-height:var(--lh-body);color:var(--m);
   margin-top:6px;overflow-wrap:anywhere}
 .credit a{font-weight:600}
 
@@ -164,7 +164,7 @@
 /* ---------- ID MARK RANKING ----------
    Each mark says in words whether it settles the identification or only
    supports it, so a variable feature is never read as decisive. */
-.markweight{height:20px;padding:0 8px;font-size:10px;letter-spacing:.04em;
+.markweight{height:20px;padding:0 8px;font-size:var(--fs-micro);letter-spacing:.04em;
   text-transform:uppercase;vertical-align:1px}
 
 /* ---------- SPECIES INDEX CARD ---------- */
@@ -221,7 +221,7 @@
 .schematic{overflow-x:auto;-webkit-overflow-scrolling:touch;
   background:var(--c2);border:1px solid var(--l);border-radius:var(--ra-sm);
   padding:10px var(--s3);margin-bottom:var(--s3)}
-.schematic>.mono{display:block;white-space:nowrap;color:var(--t);font-size:12px;letter-spacing:.04em}
+.schematic>.mono{display:block;white-space:nowrap;color:var(--t);font-size:var(--fs-xs);letter-spacing:.04em}
 
 /* ---------- DO / DON'T HEADINGS ----------
    The ported rules style `h4`; these columns sit under an `h2`, so they use

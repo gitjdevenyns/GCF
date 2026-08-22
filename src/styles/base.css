@@ -93,7 +93,7 @@ img{height:auto}
 .plate--empty{background-image:repeating-linear-gradient(135deg,transparent 0 9px,rgba(93,152,240,.16) 9px 10px);
   border:1px dashed var(--l2)}
 .plate>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.plate>.plate-cap{position:relative;font-family:var(--ff-mono);font-size:10.5px;letter-spacing:.02em;color:var(--m);
+.plate>.plate-cap{position:relative;font-family:var(--ff-mono);font-size:var(--fs-micro);letter-spacing:.02em;color:var(--m);
   padding:6px 8px;margin:8px;border-radius:6px;background:var(--c);border:1px solid var(--l)}
 .plate-tall{min-height:200px}
 .plate-hero{min-height:240px;border-radius:0;border:0;
@@ -118,7 +118,7 @@ img{height:auto}
 .dd ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:7px;font-size:var(--fs-sm)}
 .dd li{display:flex;gap:8px;align-items:flex-start;line-height:1.4}
 .tick,.cross{flex:none;width:16px;height:16px;border-radius:5px;margin-top:2px;
-  display:grid;place-items:center;font-size:11px;font-weight:900;line-height:1}
+  display:grid;place-items:center;font-size:var(--fs-lab);font-weight:900;line-height:1}
 .tick{background:var(--lime);color:var(--lime-ink)}
 .cross{background:var(--danger);color:#fff}
 
@@ -128,16 +128,23 @@ img{height:auto}
 .tide-cell.is-prime{border-color:var(--lime);background:linear-gradient(180deg,rgba(141,255,0,.10),transparent)}
 .tide-cell .lab{margin-bottom:6px}
 
+/* Standfirst that opens a guide page. Existed as three identical inline style
+   objects saying {fontSize:16, lineHeight:1.5}; one class keeps them in step. */
+.lede{font-size:var(--fs-h3);line-height:var(--lh-body)}
+/* The label step for dense stat grids, where --fs-lab is too tall. Replaces a
+   scatter of inline fontSize:9.5 overrides on .lab. */
+.lab-xs{font-size:var(--fs-micro)}
+
 /* ---------- 16. NAV ---------- */
 .appbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
   gap:var(--s3);padding:10px var(--s4);background:var(--c);border-bottom:1px solid var(--l)}
 .mark{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;flex:none;
-  background:var(--accent);color:var(--lime);font-family:var(--ff-display);font-weight:800;font-size:16px}
+  background:var(--accent);color:var(--lime);font-family:var(--ff-display);font-weight:800;font-size:var(--fs-h3)}
 .mark svg{display:block;width:26px;height:26px}
 .tabbar{position:sticky;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);
   background:var(--c);border-top:1px solid var(--l);padding:6px 4px 10px}
 .tabbar a{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;min-height:var(--tap);
-  color:var(--m);font-size:10px;font-weight:700;text-decoration:none;letter-spacing:.02em}
+  color:var(--m);font-size:var(--fs-micro);font-weight:700;text-decoration:none;letter-spacing:.02em}
 .tabbar a:hover{text-decoration:none;color:var(--t)}
 .tabbar a.on{color:var(--t)}
 .tabbar .ic{width:22px;height:22px}

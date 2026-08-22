@@ -174,7 +174,7 @@ function ConditionsCard({
               <div className="cond-grid" data-cells={cells.length}>
                 {cells.map(([label, value, full]) => (
                   <div key={label}>
-                    <span className="lab" style={{ fontSize: 9.5 }}>
+                    <span className="lab lab-xs">
                       {label}
                     </span>
                     <b title={full}>{value}</b>
