@@ -55,8 +55,10 @@ function Item({ row, decide }: { row: ReviewRow; decide: ReturnType<typeof useRe
         <details open={open} onToggle={(e) => setOpen((e.target as HTMLDetailsElement).open)}>
           <summary>{row.sources.length} source{row.sources.length === 1 ? '' : 's'}</summary>
           <ul className="rv-src">
-            {row.sources.map((s) => (
-              <li key={s.url}>
+            {/* Keyed by position, not URL: research legitimately cites the
+                same page twice for two different claims on one item. */}
+            {row.sources.map((s, i) => (
+              <li key={`${s.url}-${i}`}>
                 <a href={s.url} target="_blank" rel="noreferrer">{s.publisher ?? s.url}</a>
                 <blockquote>{s.quote}</blockquote>
               </li>
