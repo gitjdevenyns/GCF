@@ -1,0 +1,6 @@
+{
+  "autonomous_posting": false,
+  "_comment": "Publishing requires BOTH autonomous_posting:true and an item marked status:approved. Leave this false until several batches have been reviewed by hand. Turning it on delegates a public voice; it is not a convenience setting.",
+  "platforms": {},
+  "_platforms_note": "No credentials are configured. Add per-platform config here when you are ready; agents must never create accounts or store secrets in this file — use environment variables."
+}
