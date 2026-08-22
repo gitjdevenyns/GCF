@@ -132,6 +132,84 @@ export function stationClock(iso: string): string | null {
   return `${h % 12 === 0 ? 12 : h % 12}:${m[2]} ${h < 12 ? 'am' : 'pm'}`;
 }
 
+/**
+ * How long until `iso`, as a short duration: "48 min", "2 hr 10 min".
+ *
+ * Returns null for a moment that has already passed, so a caller can never
+ * render "in -5 min" off a snapshot that aged past its own next event.
+ */
+export function countdown(iso: string | null | undefined, now = Date.now()): string | null {
+  if (!iso) return null;
+  const then = Date.parse(iso);
+  if (Number.isNaN(then)) return null;
+  const mins = Math.round((then - now) / 60000);
+  if (mins < 0) return null;
+  if (mins < 1) return 'any minute';
+  if (mins < 60) return `${mins} min`;
+  const hrs = Math.floor(mins / 60);
+  const rem = mins % 60;
+  return rem === 0 ? `${hrs} hr` : `${hrs} hr ${rem} min`;
+}
+
+/**
+ * States the current water level *relative to the turns that bracket it*.
+ *
+ * A tide curve on its own is a wave with no scale: it shows shape but not
+ * where you are in the swing, which is the one thing the card exists to tell
+ * you. "+1.4 ft" has the same problem — a number with no reference is not a
+ * reading. This composes the two into the sentence an angler actually wants:
+ * how far the water has moved off the last turn, and how far it has left to
+ * go before the next one.
+ *
+ * Pure and total, like everything else here: any gap in the data yields null
+ * rather than a half-sentence. Every value is a NOAA prediction, and the
+ * caller's surrounding copy must keep saying so.
+ */
+export function describeTidePosition(
+  tides: TideEvent[],
+  phase: TidePhase | null,
+  now = Date.now(),
+): string | null {
+  if (!phase || phase.height_ft === null) return null;
+
+  const dated = tides
+    .map((t) => ({ ...t, ms: Date.parse(t.time) }))
+    .filter((t) => Number.isFinite(t.ms))
+    .sort((a, b) => a.ms - b.ms);
+
+  let prev: (typeof dated)[number] | null = null;
+  let next: (typeof dated)[number] | null = null;
+  for (const e of dated) {
+    if (e.ms <= now) prev = e;
+    else {
+      next = e;
+      break;
+    }
+  }
+  if (!prev || !next) return null;
+
+  const ft = (n: number) => `${Math.abs(n).toFixed(1)} ft`;
+  const turn = (e: TideEvent) => (e.type === 'H' ? 'high' : 'low');
+  const at = (e: TideEvent) => stationClock(e.time);
+  const prevAt = at(prev);
+  const nextAt = at(next);
+  if (!prevAt || !nextAt) return null;
+
+  const swing = Math.abs(next.height_ft - prev.height_ft);
+
+  // Inside a slack window the water is not meaningfully moving, so the useful
+  // fact is which turn you are sitting on and how big the swing either side is.
+  if (phase.stage === 'high' || phase.stage === 'low') {
+    const where = phase.stage === 'high' ? 'top' : 'bottom';
+    return `Sitting at the ${where} of a ${ft(swing)} swing — ${turn(prev)} was ${prevAt}, ${turn(next)} is ${nextAt}.`;
+  }
+
+  const moved = phase.height_ft - prev.height_ft;
+  const left = next.height_ft - phase.height_ft;
+  const rising = phase.stage === 'incoming';
+  return `${ft(moved)} ${rising ? 'up' : 'down'} from the ${prevAt} ${turn(prev)}, ${ft(left)} ${rising ? 'below' : 'above'} the ${nextAt} ${turn(next)} — a ${ft(swing)} swing.`;
+}
+
 export function timeAgo(iso: string | null | undefined, now = Date.now()): string {
   if (!iso) return 'unknown';
   const then = Date.parse(iso);
