@@ -27,6 +27,19 @@ import { milesBetween } from './geo';
  * season is bad. Reasons must never let those two read the same.
  */
 
+/**
+ * One distance, formatted one way, used by every caller.
+ *
+ * "Right here" has to mean it: at a tenth of a mile you can see the water from
+ * where you are standing. The threshold used to be wide enough that two
+ * different spots half a mile apart both claimed it, which reads as broken.
+ */
+export function formatMiles(miles: number): string {
+  if (miles < 0.1) return 'right here';
+  if (miles < 10) return `${miles.toFixed(1)} mi`;
+  return `${Math.round(miles)} mi`;
+}
+
 export interface NearbySpot {
   location: Location;
   miles: number;
@@ -130,9 +143,7 @@ export function rankNearby(
     let score = W.distanceHalfLife / (W.distanceHalfLife + miles) * 100;
 
     reasons.push(
-      miles < 0.6
-        ? 'You are basically standing on it'
-        : `${miles < 10 ? miles.toFixed(1) : Math.round(miles)} miles away`,
+      miles < 0.1 ? 'You are standing on it' : `${formatMiles(miles)} away`,
     );
 
     const tideMatched = stage !== null && location.tide_playbook.prime_stages.includes(stage);

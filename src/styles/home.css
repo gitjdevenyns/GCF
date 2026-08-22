@@ -157,12 +157,18 @@
 /* Near you — the location-ranked spot list. Rows reuse the card surfaces the
    conditions card already establishes; only the reason list is new, and it is
    deliberately quiet so the spot name stays the thing you read first. */
+/* The invitation and the trailing note are prose, so they get a measure. On a
+   1120px shell they were running to ~1020px lines, which nothing reads. */
+.cond-body>p{max-width:68ch}
 .nearlist{list-style:none;margin:0;padding:0;display:grid;gap:var(--s2)}
 .nearrow{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--s3);
   padding:10px 12px;border:1px solid var(--l);border-radius:var(--ra-md);background:var(--c2);
   color:inherit;text-decoration:none}
 .nearrow:hover{border-color:var(--l2)}
 .nearrow b{font-family:var(--ff-display);font-size:15px;font-weight:800;letter-spacing:-.01em}
+.nearmain{min-width:0;display:grid;gap:3px}
+.neardist{display:flex;align-items:center;gap:6px;flex:none;color:var(--m);
+  font-size:var(--fs-xs);white-space:nowrap;padding-top:1px}
 .nearwhy{list-style:none;margin:0;padding:0;display:grid;gap:2px}
 .nearwhy li{position:relative;padding-left:11px;color:var(--m);font-size:var(--fs-xs);line-height:1.45}
 .nearwhy li::before{content:'';position:absolute;left:0;top:.55em;width:4px;height:4px;

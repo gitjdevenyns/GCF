@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import type { Location, TideStage } from '../data';
 import { useGeolocation } from '../lib/geo';
 import type { GeoResult } from '../lib/geo';
-import { rankNearby } from '../lib/nearby';
+import { formatMiles, rankNearby } from '../lib/nearby';
 import { Chevron } from './location/art';
 
 /**
@@ -113,22 +113,22 @@ export default function NearYou({ locations, geo, stage, stationName }: NearYouP
               {spots.map(({ location, miles, reasons }) => (
                 <li key={location.slug}>
                   <Link to={`/locations/${location.slug}`} className="nearrow">
-                    <div style={{ minWidth: 0 }}>
-                      <div className="row g2 wrap" style={{ marginBottom: 3 }}>
-                        <b>{location.name}</b>
-                        <span className="chip">
-                          {miles < 0.6
-                            ? 'right here'
-                            : `${miles < 10 ? miles.toFixed(1) : Math.round(miles)} mi`}
-                        </span>
-                      </div>
+                    <div className="nearmain">
+                      <b>{location.name}</b>
                       <ul className="nearwhy">
                         {reasons.slice(1).map((r) => (
                           <li key={r}>{r}</li>
                         ))}
                       </ul>
                     </div>
-                    <Chevron />
+                    {/* Distance holds its own column rather than riding beside
+                        the name: it is the one value that is comparable down
+                        the list, and a chip that reflows under a long spot
+                        name stops being scannable. */}
+                    <span className="neardist">
+                      <span className="mono">{formatMiles(miles)}</span>
+                      <Chevron />
+                    </span>
                   </Link>
                 </li>
               ))}

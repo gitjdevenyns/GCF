@@ -45,7 +45,12 @@ function useRouteFocus() {
       return;
     }
     window.scrollTo(0, 0);
-    main.current?.focus();
+    // preventScroll matters: <main> begins directly below a position:sticky
+    // appbar, so letting focus() scroll it into view parks it at the top of
+    // the viewport and hides the first ~59px of every page behind the bar —
+    // undoing the scrollTo above. Focus still moves, so the a11y behaviour
+    // this effect exists for is unchanged.
+    main.current?.focus({ preventScroll: true });
   }, [pathname]);
 
   return main;
