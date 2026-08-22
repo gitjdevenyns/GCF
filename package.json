@@ -11,7 +11,8 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "check:links": "vite-node scripts/check-links.mjs",
-    "check:db-sync": "vite-node scripts/check-db-sync.mjs"
+    "check:db-sync": "vite-node scripts/check-db-sync.mjs",
+    "review:export": "vite-node scripts/export-review.mjs"
   },
   "dependencies": {
     "@fontsource-variable/bricolage-grotesque": "^5.3.0",

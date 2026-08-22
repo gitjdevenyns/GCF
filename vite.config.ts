@@ -27,6 +27,15 @@ export default defineConfig({
   base: '/GCF/',
   build: {
     rollupOptions: {
+      // Two entries, deliberately. `index.html` is the guide readers install;
+      // `admin.html` is owner tooling. Keeping them separate means the admin
+      // console's code, its review queue and its Supabase auth never land in
+      // the bundle a reader downloads, and — see `globIgnores` below — never
+      // enter the service worker precache either.
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        admin: resolve(__dirname, 'admin.html'),
+      },
       output: {
         // The dynamically imported Supabase SDK otherwise lands in a 200 kB
         // chunk called `dist-<hash>.js`, named after a directory in its package
@@ -106,6 +115,13 @@ export default defineConfig({
           'assets/icon-512.png',
           'assets/icon-maskable.svg',
           'manifest.webmanifest',
+          // Owner tooling. Precaching it would push the admin console onto
+          // every reader's device and make it available offline, which is both
+          // wasted bytes and wrong: every action in there is a network write.
+          // `src/test/admin.bundle.test.ts` asserts this stays true.
+          'admin.html',
+          'assets/admin-*.js',
+          'assets/admin-*.css',
         ],
         // SPA offline fallback: any navigation not in the cache serves the
         // precached index.html (bundled data means the whole guide works offline).

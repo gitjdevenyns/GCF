@@ -253,29 +253,6 @@
   .idsplit .zonelist{margin-top:0}
 }
 
-/* ---------- OWNER CONSOLE (/admin) ----------
-   Not part of the reader's product, so it is deliberately plain: a dense
-   table beats a designed dashboard for a screen whose whole job is showing
-   thirteen rows of configuration at once. */
-.adm{padding:var(--s5) var(--s4) var(--s8)}
-.adm .scrollx{overflow-x:auto;border:1px solid var(--l);border-radius:var(--ra-md);background:var(--c)}
-.adm-table{border-collapse:collapse;width:100%;min-width:620px;font-size:var(--fs-sm)}
-.adm-table th,.adm-table td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--l);vertical-align:top}
-.adm-table thead th{font-family:var(--ff-mono);font-size:var(--fs-lab);letter-spacing:.08em;
-  text-transform:uppercase;color:var(--m);background:var(--c2);white-space:nowrap}
-.adm-table tbody tr:last-child td{border-bottom:0}
-.adm-table b{font-family:var(--ff-display);font-size:var(--fs-h3);font-weight:800}
-.adm-key{display:inline-block;margin-top:4px;font-family:var(--ff-mono);font-size:var(--fs-chart);
-  color:var(--m);background:var(--c2);border:1px solid var(--l);border-radius:4px;padding:1px 5px}
-/* Notes carry the reasoning behind a default — why a gate is a good idea, or
-   why gating it would be a mistake. Worth reading before flipping a switch. */
-.adm-note{margin-top:5px;padding-left:9px;border-left:2px solid var(--lime);
-  color:var(--m);font-size:var(--fs-xs);line-height:var(--lh-body);max-width:52ch}
-.adm-toggle{display:inline-flex;align-items:center;gap:6px;font-size:var(--fs-sm);cursor:pointer}
-.adm-limit{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.adm-num{width:76px;padding:5px 7px;border:1px solid var(--l2);border-radius:var(--ra-sm);
-  background:var(--c2);color:var(--t);font-family:var(--ff-mono);font-size:var(--fs-sm)}
-
 /* ---------- AD SLOT ----------
    The disclosure is part of the frame, not decoration on it: there is no
    render path through AdSlot that omits the tag. */

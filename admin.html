@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <!-- Owner tooling, not part of the guide. Kept out of the app bundle and
+         out of the service worker precache on purpose: readers who install the
+         PWA should never download it, and it has no business working offline —
+         every one of its writes needs the network anyway. -->
+    <meta name="robots" content="noindex,nofollow" />
+    <title>GCF — owner console</title>
+    <script>
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="admin-root"></div>
+    <script type="module" src="/src/admin/main.tsx"></script>
+  </body>
+</html>
