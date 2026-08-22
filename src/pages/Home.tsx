@@ -3,11 +3,24 @@ import { getFishList, getHabitats, getHazards, getLocations } from '../lib/api';
 import { REGIONS } from '../data';
 import type { Location, TideStage } from '../data';
 import { useConditions } from '../lib/useConditions';
-import { compactSky, stationClock, timeAgo } from '../lib/conditions';
+import {
+  compactSky,
+  countdown,
+  describeTidePosition,
+  stationClock,
+  timeAgo,
+} from '../lib/conditions';
 import type { ConditionsResult } from '../lib/conditions';
 import { Callout, ErrorState, FreshnessNote, Plate, SectionTitle, Skeleton } from '../components/ui';
 import LazyMap from '../components/LazyMap';
-import { Chevron, HabitatGlyph, HeroWave, TideCurve } from '../components/location/art';
+import {
+  Chevron,
+  HabitatGlyph,
+  HeroChart,
+  HeroWave,
+  TideCurve,
+  tideLevel,
+} from '../components/location/art';
 import { zonesFor } from '../components/location/zones';
 
 /**
@@ -50,15 +63,21 @@ function pickRecommendation(stage: TideStage | null, locations: Location[]): Loc
 /* ------------------------------------------------------------ conditions */
 
 function ConditionsCard({
-  reference,
+  spot,
   conditions,
 }: {
-  reference: Location;
+  /** The spot whose own station this card reports. Not a fixed reference. */
+  spot: Location;
   conditions: ConditionsResult;
 }) {
   const { status, data, freshness, error, refetch } = conditions;
   const phase = data?.phase ?? null;
   const weather = data?.weather ?? null;
+  // Where the water sits between the turns either side of it, and how long
+  // until the next one. Both are what make the curve below a reading rather
+  // than a decorative wave.
+  const position = data ? describeTidePosition(data.tides, phase) : null;
+  const nextIn = phase?.next ? countdown(phase.next.time) : null;
 
   const cells: Array<[string, string, string?]> = [];
   if (weather?.air_temp_f !== null && weather?.air_temp_f !== undefined)
@@ -79,7 +98,7 @@ function ConditionsCard({
       <div className="cond-hd">
         <span className="lab">Conditions now</span>
         <span className="mono" style={{ color: 'var(--m)' }}>
-          {data?.station_name ?? reference.tide_station.name}
+          {data?.station_name ?? spot.tide_station.name}
         </span>
       </div>
       <div className="cond-body">
@@ -114,8 +133,8 @@ function ConditionsCard({
           <p className="mut">
             Live tide and weather are not switched on in this build. The guide still works
             offline — read the stage you are on from{' '}
-            <a href={reference.tide_station.url} target="_blank" rel="noreferrer">
-              {reference.tide_station.name} ↗
+            <a href={spot.tide_station.url} target="_blank" rel="noreferrer">
+              {spot.tide_station.name} ↗
             </a>{' '}
             and match it to <Link to="/tides">the four stages</Link>.
           </p>
@@ -135,9 +154,16 @@ function ConditionsCard({
                 <span className="mut">
                   {phase.next.type === 'H' ? 'high' : 'low'} at{' '}
                   {stationClock(phase.next.time) ?? 'an unknown time'}
+                  {nextIn ? `, in ${nextIn}` : ''}
                 </span>
               )}
             </div>
+
+            {position && (
+              <p className="mut" style={{ marginTop: 6 }}>
+                {position}
+              </p>
+            )}
 
             {data && <TideCurve tides={data.tides} phase={phase} />}
 
@@ -158,7 +184,7 @@ function ConditionsCard({
             {!phase && !weather && (
               <p className="mut">
                 The snapshot for this station came back empty. Read the stage from{' '}
-                <a href={reference.tide_station.url} target="_blank" rel="noreferrer">
+                <a href={spot.tide_station.url} target="_blank" rel="noreferrer">
                   NOAA ↗
                 </a>
                 .
@@ -170,10 +196,11 @@ function ConditionsCard({
         {(status === 'ready' || (status === 'error' && data)) && (
           <div style={{ marginTop: 10 }}>
             <FreshnessNote state={freshness}>
-              {reference.region} reference station · updated {timeAgo(data?.refreshed_at)}
+              {spot.name} · updated {timeAgo(data?.refreshed_at)}
             </FreshnessNote>
             <p className="mut xs" style={{ marginTop: 4 }}>
-              Tide times shift along the coast — each spot page reads its own station.
+              This is the station for the spot above. Tide times shift along the coast,
+              so another spot reads a different one.
             </p>
           </div>
         )}
@@ -190,31 +217,71 @@ export default function Home() {
   const habitats = getHabitats();
   const hazards = getHazards();
 
+  // Two reads, and the order between them is the whole design.
+  //
+  // Something has to break the circle: a spot is chosen *by* a tide stage, so
+  // a stage has to come from somewhere before there is a spot to read one
+  // from. The reference station is that seed, and it only ever nominates.
   const reference = locations.find((l) => l.slug === REFERENCE_SLUG) ?? locations[0];
-  const conditions = useConditions(reference.slug);
+  const seed = useConditions(reference.slug);
+  const seedStage = seed.status === 'ready' ? (seed.data?.phase?.stage ?? null) : null;
+
+  const pick = pickRecommendation(seedStage, locations);
+  const pickZones = zonesFor(pick);
+
+  // Everything the page then *reports* comes from the picked spot's own
+  // station. Tide times shift along this coast by better than an hour between
+  // Tampa Bay and Boca Grande, so a card headed "conditions now" sitting under
+  // a card headed "go here now" has to be describing the same piece of water —
+  // otherwise the screen quietly contradicts itself.
+  const conditions = useConditions(pick.slug);
   const stage = conditions.status === 'ready' ? (conditions.data?.phase?.stage ?? null) : null;
 
-  const pick = pickRecommendation(stage, locations);
-  const pickZones = zonesFor(pick);
+  // Verified against the picked spot's OWN stage, never the seed's. The seed
+  // nominated this spot; if the water where you are being sent has already
+  // turned, the card must stop claiming the tide is prime there.
   const isPrime = stage ? pick.tide_playbook.prime_stages.includes(stage) : false;
+
+  // Drives the hero's live contour. Null whenever there is no snapshot, and
+  // the hero says so rather than drawing an unlabelled guess.
+  const level =
+    conditions.status === 'ready'
+      ? tideLevel(conditions.data?.tides, conditions.data?.phase ?? null)
+      : null;
 
   return (
     <>
+      {/* The hero is a chart, not a banner. Every hairline in it is a depth
+          contour through a generated bathymetry, and the one lime contour is
+          the water's edge at the tide the reference station is predicting
+          right now — so the picture moves through the day with the thing the
+          whole guide is about. It is labelled as a schematic, because it is
+          one: no location on this coast has been surveyed for this drawing.
+          With no live snapshot the plate still draws, at a mid tide, and the
+          caption says that instead of implying a reading. */}
       <section className="hero">
-        <div className="hero-sun" aria-hidden="true" />
+        <HeroChart level={level} />
+        <div className="hero-scrim" aria-hidden="true" />
         <HeroWave />
-        <div className="stack g3">
-          {stage && (
-            <span className="chip chip-lime" style={{ alignSelf: 'flex-start', position: 'relative' }}>
-              {STAGE_CHIP[stage]} · {reference.region} station
-            </span>
-          )}
+        <div className="hero-inner">
+          <p className="hero-live">
+            {stage ? (
+              <>
+                <span className="dot" aria-hidden="true" />
+                <span className="now">{STAGE_CHIP[stage]}</span>
+                <span className="at">{pick.region} station</span>
+              </>
+            ) : (
+              <span className="at">A Southwest Florida field guide</span>
+            )}
+          </p>
           <h1 className="rise">
-            Read the water
-            <br />
-            <em>before</em> you cast.
+            <span className="hl-a">Read the water</span>
+            <span className="hl-b">
+              <em>before</em> you cast.
+            </span>
           </h1>
-          <p>
+          <p className="hero-sub">
             {locations.length} shore, pier, kayak and boat spots from Tampa Bay down to Boca
             Grande Pass — with the structure, the tide and the rig spelled out.
           </p>
@@ -226,14 +293,14 @@ export default function Home() {
               Learn the water
             </Link>
           </div>
+          <p className="hero-key">
+            <span className="swatch" aria-hidden="true" />
+            Schematic depth contours.{' '}
+            {level === null
+              ? "The lime line is a mid-tide water's edge."
+              : "The lime line is the water's edge at this tide."}
+          </p>
         </div>
-      </section>
-
-      <section className="sect" aria-labelledby="conditions">
-        <h2 className="vh" id="conditions">
-          Conditions at the {reference.region} reference station
-        </h2>
-        <ConditionsCard reference={reference} conditions={conditions} />
       </section>
 
       <section className="sect" aria-labelledby="gohere">
@@ -299,6 +366,13 @@ export default function Home() {
             </Link>
           </div>
         </div>
+      </section>
+
+      <section className="sect" aria-labelledby="conditions">
+        <h2 className="vh" id="conditions">
+          Conditions now at {pick.name}
+        </h2>
+        <ConditionsCard spot={pick} conditions={conditions} />
       </section>
 
       <section aria-labelledby="species">

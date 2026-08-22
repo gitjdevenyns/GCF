@@ -2,7 +2,7 @@ import { NavLink, Link, Outlet, useLocation } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import { useTheme } from '../lib/theme';
 import { useOnline } from '../lib/network';
-import { IconHome, IconSpots, IconWater, IconFish, IconCare } from './ui/icons';
+import { IconCare, IconFish, IconHome, IconMark, IconSpots, IconWater } from './ui/icons';
 
 /**
  * Primary navigation. The design boards specify a five-slot tab bar
@@ -65,7 +65,7 @@ export default function Layout() {
       <header className="appbar">
         <Link to="/" className="appbar-brand">
           <span className="mark" aria-hidden="true">
-            GC
+            <IconMark />
           </span>
           <span>
             <span className="name">Gulf Coast Fishing</span>

@@ -16,6 +16,22 @@ const base = {
   focusable: false,
 };
 
+/**
+ * The app mark: three water lines with the middle one lime — the same reading
+ * the home hero is built on, that the water level is the thing that moves and
+ * the one line you care about is where it is right now. Decorative; the
+ * wordmark beside it carries the name.
+ */
+export function IconMark() {
+  return (
+    <svg viewBox="0 0 34 34" fill="none" strokeLinecap="round" strokeWidth="2.3" aria-hidden="true" focusable="false">
+      <path d="M5 10.5 C 11 7, 16 12.5, 22 9.5 C 26 7.6, 29 8.8, 30 10" stroke="#8fbaf7" opacity=".75" />
+      <path d="M5 17 C 11 13.5, 16 19, 22 16 C 26 14.1, 29 15.3, 30 16.5" stroke="#8dff00" />
+      <path d="M5 23.5 C 11 20, 16 25.5, 22 22.5 C 26 20.6, 29 21.8, 30 23" stroke="#c2dbfb" opacity=".55" />
+    </svg>
+  );
+}
+
 export function IconHome({ className = 'ic' }: IconProps) {
   return (
     <svg {...base} className={className}>

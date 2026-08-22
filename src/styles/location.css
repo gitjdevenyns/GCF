@@ -37,7 +37,9 @@
 .tidestage{display:flex;gap:var(--s3);padding:var(--s3) var(--s4);border-top:1px solid var(--l)}
 .tidestage:first-of-type{border-top:0}
 .tidestage.is-prime{background:linear-gradient(100deg,rgba(141,255,0,.10),transparent 65%)}
-.tidestage .glyph{flex:none;width:52px}
+.tidestage .glyph{flex:none;width:52px;border-radius:var(--ra-sm);overflow:hidden}
+.tideglyph{display:block;width:100%;height:auto}
+@media (min-width:900px){.tidestage .glyph{width:66px}}
 .tidestage h3{font-size:15px}
 .tidestage .k{font-family:var(--ff-mono);font-size:10px;color:var(--m);letter-spacing:.06em}
 

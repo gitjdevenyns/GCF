@@ -1,16 +1,74 @@
 /* Home-screen components. Ported from the design system (gcf-home.css).
    The design-surface-only .deskframe/.deskbar rules are not shipped. */
-.hero{position:relative;padding:var(--s6) var(--s4) var(--s7);overflow:hidden;
-  background:linear-gradient(165deg,#031530 0%,#052a63 46%,#0746a3 100%);color:var(--n05)}
-.hero-sun{position:absolute;right:-40px;top:-40px;width:190px;height:190px;border-radius:50%;
-  background:radial-gradient(circle,rgba(141,255,0,.28),rgba(141,255,0,0) 68%)}
-.hero-wave{position:absolute;left:0;right:0;bottom:-2px;height:54px;opacity:.5;width:100%}
-.hero h1{font-size:36px;font-weight:800;line-height:var(--lh-tight);letter-spacing:-.03em;position:relative}
-.hero em{font-style:normal;color:var(--g400)}
-.hero p{position:relative;color:#c5dcff;font-size:var(--fs-sm);max-width:32ch}
-.hero-cta{position:relative;display:flex;gap:var(--s2);flex-wrap:wrap}
-.hero .btn-ghost{border-color:rgba(255,255,255,.35);color:#fff}
-.hero .btn-ghost:hover{background:rgba(255,255,255,.12);color:#fff}
+.hero{position:relative;isolation:isolate;overflow:hidden;color:var(--n05);
+  padding:var(--s6) var(--s4) 150px;
+  background:linear-gradient(168deg,#031530 0%,#052a63 52%,#0746a3 100%)}
+/* The generated depth chart. Stretched to the band; strokes are drawn with
+   vector-effect:non-scaling-stroke so they stay hairlines at any size. */
+.hero-chart{position:absolute;inset:0;display:block;width:100%;height:100%}
+/* Sized to the type block, not to the plate: it is what guarantees the copy
+   never has to compete with a lime contour running behind it, and below it the
+   chart is left alone. */
+.hero-scrim{position:absolute;inset:0;background:linear-gradient(180deg,
+  rgba(3,21,48,.93) 0%,rgba(3,21,48,.90) 52%,rgba(3,21,48,.74) 66%,
+  rgba(3,21,48,.30) 78%,rgba(3,21,48,0) 88%)}
+/* The page colour cut into the bottom of the chart along a generated
+   shoreline: the hero is the water, the page is the ground you stand on. */
+.hero-wave{position:absolute;left:0;right:0;bottom:-1px;height:54px;width:100%;display:block}
+.hero-inner{position:relative;display:flex;flex-direction:column;gap:var(--s3);align-items:flex-start}
+
+.hero-live{display:flex;align-items:center;gap:8px;margin:0;flex-wrap:wrap;
+  font-family:var(--ff-mono);font-size:11px;font-weight:700;letter-spacing:.15em;text-transform:uppercase}
+.hero-live .dot{width:7px;height:7px;border-radius:50%;flex:none;background:var(--g400);
+  box-shadow:0 0 0 4px rgba(141,255,0,.16)}
+.hero-live .now{color:var(--g400)}
+.hero-live .at{color:#c5dcff}
+
+.hero h1{font-family:var(--ff-display);font-weight:800;line-height:.94;letter-spacing:-.035em;
+  font-size:clamp(34px,10.5vw,44px);margin:0}
+/* Two weights in one sentence: the ground is solid, the water over it is not.
+   The emphasis on "before" is carried by weight as well as colour. */
+.hero h1 span{display:block}
+.hero h1 .hl-a{color:#fff}
+.hero h1 .hl-b{font-weight:300;letter-spacing:-.02em;color:#c2dbfb}
+.hero em{font-style:normal;font-weight:800;color:var(--g400)}
+
+.hero-sub{margin:0;color:#c5dcff;font-size:var(--fs-body);line-height:1.5;max-width:36ch}
+.hero-cta{display:flex;gap:var(--s2);flex-wrap:wrap}
+/* The plate underneath moves with the tide, so the two elements with no fill
+   of their own carry a fixed one: contrast on this hero cannot be allowed to
+   depend on where a contour happens to be. */
+.hero .btn-ghost{border-color:rgba(255,255,255,.4);color:#fff;background:rgba(3,21,48,.6)}
+.hero .btn-ghost:hover{background:rgba(255,255,255,.16);color:#fff}
+
+/* Legend for the plate. The drawing is decorative, so this line is where the
+   drawing is explained — and where it is admitted to be a schematic. */
+.hero-key{display:inline-flex;align-items:center;gap:8px;margin:0;max-width:44ch;
+  font-family:var(--ff-mono);font-size:10.5px;line-height:1.45;letter-spacing:.02em;color:#c5dcff;
+  background:rgba(3,21,48,.9);border:1px solid rgba(255,255,255,.22);border-radius:8px;padding:5px 9px}
+.hero-key .swatch{width:16px;height:2px;flex:none;border-radius:2px;background:var(--g400)}
+
+@media (prefers-reduced-motion:no-preference){
+  /* Load: the waterline sweeps in from the west, once. */
+  .hero-wipe{transform-origin:0 0;animation:tidewipe 1.5s cubic-bezier(.22,1,.36,1) .25s both}
+  @keyframes tidewipe{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+  /* Ambient: it breathes. A little over one SVG unit, so ~3px on a desktop band. */
+  .hero-swell{animation:swell 15s ease-in-out infinite alternate}
+  @keyframes swell{from{transform:translateY(-1.3px)}to{transform:translateY(1.5px)}}
+}
+
+@media (min-width:900px){
+  /* Desktop is a different composition, not the same band stretched: the type
+     holds a column on the left, the scrim turns from a radial into a lateral
+     wipe, and the right of the plate is left as chart. */
+  .hero{padding:var(--s8) var(--s7) 112px;min-height:460px;display:grid;align-content:center}
+  .hero-inner{max-width:640px;gap:var(--s4)}
+  .hero h1{font-size:clamp(52px,6vw,68px);letter-spacing:-.04em}
+  .hero-scrim{background:linear-gradient(93deg,rgba(3,21,48,.95) 0%,rgba(3,21,48,.92) 40%,
+    rgba(3,21,48,.55) 62%,rgba(3,21,48,0) 88%)}
+  .hero-wave{height:84px}
+  .hero-sub{max-width:44ch}
+}
 
 .cond{background:var(--c);border:1px solid var(--l);border-radius:var(--ra-lg);overflow:hidden}
 .cond-hd{display:flex;align-items:center;justify-content:space-between;gap:var(--s2);
@@ -41,7 +99,12 @@
 .habcard{display:flex;gap:var(--s3);align-items:center;padding:var(--s3);border:1px solid var(--l);
   border-radius:var(--ra-md);background:var(--c);color:inherit;font-weight:inherit}
 .habcard:hover{text-decoration:none;color:inherit;border-color:var(--l2)}
-.habcard .dia{flex:none;width:74px;height:58px;border-radius:var(--ra-sm);overflow:hidden;background:var(--c2)}
+.habcard .dia{flex:none;width:74px;height:58px;border-radius:var(--ra-sm);overflow:hidden;
+  background:var(--c2);border:1px solid var(--l)}
+/* The glyph fills its slot rather than carrying fixed pixel dimensions, so the
+   cross-section can be drawn bigger where there is room for it. */
+.habglyph{display:block;width:100%;height:100%}
+@media (min-width:900px){.habcard .dia{width:104px;height:80px}}
 
 .zonerow{display:flex;align-items:center;justify-content:space-between;gap:var(--s3);
   padding:13px var(--s4);border-top:1px solid var(--l);color:inherit;font-weight:inherit}

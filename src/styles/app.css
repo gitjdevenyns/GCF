@@ -116,8 +116,8 @@ html[data-theme="dark"] .leaflet-tile{filter:brightness(.78) saturate(.86) contr
 
 /* ---------- DESKTOP CONTENT RHYTHM ---------- */
 @media (min-width:900px){
-  .hero{padding:var(--s8) var(--s7) var(--s9)}
-  .hero h1{font-size:52px}
+  /* The home hero's desktop composition lives in home.css with the rest of
+     the hero, so the two do not fight across a stylesheet boundary. */
   .lochero{min-height:300px}
   .lochero .inner{padding:var(--s7)}
   .hscroll{grid-auto-columns:220px;padding-left:var(--s7);padding-right:var(--s7)}
