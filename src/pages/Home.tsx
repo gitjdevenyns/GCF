@@ -13,6 +13,9 @@ import {
 import type { ConditionsResult } from '../lib/conditions';
 import { Callout, ErrorState, FreshnessNote, Plate, SectionTitle, Skeleton } from '../components/ui';
 import LazyMap from '../components/LazyMap';
+import NearYou from '../components/NearYou';
+import { useGeolocation } from '../lib/geo';
+import { rankNearby } from '../lib/nearby';
 import {
   Chevron,
   HabitatGlyph,
@@ -226,6 +229,27 @@ export default function Home() {
   const seed = useConditions(reference.slug);
   const seedStage = seed.status === 'ready' ? (seed.data?.phase?.stage ?? null) : null;
 
+  // Where you are, if you offered it. Never asked for automatically, and the
+  // coordinates stay on the device — see lib/geo.ts.
+  const geo = useGeolocation();
+
+  // Nearest spot by distance alone: pure arithmetic against bundled data, so
+  // it resolves offline and before any network read. Its station is then the
+  // one worth reading, because a tide stage from forty miles up the coast is
+  // not the tide you are standing in.
+  const nearest = geo.coords
+    ? (rankNearby(locations, geo.coords, { stage: null, limit: 1 })[0]?.location ?? null)
+    : null;
+  const nearbyConditions = useConditions(nearest?.slug ?? null);
+  const nearbyStage =
+    nearbyConditions.status === 'ready'
+      ? (nearbyConditions.data?.phase?.stage ?? null)
+      : null;
+  const nearbyStation =
+    nearbyStage !== null
+      ? (nearbyConditions.data?.station_name ?? nearest?.tide_station.name ?? null)
+      : null;
+
   const pick = pickRecommendation(seedStage, locations);
   const pickZones = zonesFor(pick);
 
@@ -301,6 +325,18 @@ export default function Home() {
               : "The lime line is the water's edge at this tide."}
           </p>
         </div>
+      </section>
+
+      <section className="sect" aria-labelledby="nearyou">
+        <h2 className="vh" id="nearyou">
+          Spots near you
+        </h2>
+        <NearYou
+          locations={locations}
+          geo={geo}
+          stage={nearbyStage}
+          stationName={nearbyStation}
+        />
       </section>
 
       <section className="sect" aria-labelledby="gohere">
