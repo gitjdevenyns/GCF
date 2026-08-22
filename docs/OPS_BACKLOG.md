@@ -82,7 +82,13 @@ now; worth doing before forecast payloads get bigger.
 `supabase/migrations/20260822120000_sponsorships.sql` is written and committed
 but **not applied**. Needs the owner (it touches the live project).
 
-## 10. Capture the browser setup as a project skill
+## 10. Decide the identify-fish model  ·  1 line + a test set  ·  owner's call
+
+See `docs/COST.md`. Sonnet 5 saves 40% per identification (60% while intro
+pricing runs) and is a one-line change. Needs a side-by-side run on known
+look-alike photos first — this is the feature's accuracy, not just its bill.
+
+## 11. Capture the browser setup as a project skill
 
 Playwright works here via `apt-get download` + `dpkg -x` into a local sysroot
 (no root needed) at `/home/johnd/.claude-browser/`. `/run-skill-generator`
