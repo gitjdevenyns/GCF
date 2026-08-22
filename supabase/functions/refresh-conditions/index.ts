@@ -117,6 +117,16 @@ Deno.serve(async (_req) => {
   // mostly mixed/diurnal stations where the first event of a calendar day can
   // fall as late as ~10:30 local. Beginning at midnight today would leave the
   // whole morning with no preceding event and no derivable phase.
+  // Hours of predictions to request, counting from `beginDate`. One of those
+  // days is yesterday (see above), so forward coverage is this minus ~24h.
+  //
+  // Was 96, which spent half the window on the past and left barely 40 hours
+  // ahead — not enough to answer "when should I go this weekend", which is the
+  // question the forecast exists for. CO-OPS serves astronomical predictions
+  // far further out than this at no extra cost, and hi/lo is only a handful of
+  // rows per day, so the payload stays trivial.
+  const TIDE_RANGE_HOURS = 192;
+
   const beginDate = stationDate(1);
 
   for (const stationId of stationIds) {
@@ -125,7 +135,7 @@ Deno.serve(async (_req) => {
     const url =
       "https://api.tidesandcurrents.noaa.gov/api/prod/datagetter" +
       `?product=predictions&application=${COOPS_APP}&station=${stationId}` +
-      `&begin_date=${beginDate}&range=96&datum=MLLW&time_zone=lst_ldt` +
+      `&begin_date=${beginDate}&range=${TIDE_RANGE_HOURS}&datum=MLLW&time_zone=lst_ldt` +
       "&units=english&interval=hilo&format=json";
     try {
       const payload = await fetchJson(url);

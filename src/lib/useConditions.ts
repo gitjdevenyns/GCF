@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { ConditionsResult, ConditionsSnapshot } from './conditions';
 import { freshnessOf } from './conditions';
-import { fetchConditions } from './api';
+import { clearConditionsCache, fetchConditions } from './api';
 import { isSupabaseConfigured } from './supabase';
 
 /**
@@ -50,7 +50,12 @@ export function useConditions(slug: string | null | undefined): ConditionsResult
     };
   }, [slug, nonce]);
 
-  const refetch = useCallback(() => setNonce((n) => n + 1), []);
+  // Drop the shared cache entry first, or a retry inside the TTL would hand
+  // back the very snapshot the user is retrying because of.
+  const refetch = useCallback(() => {
+    if (slug) clearConditionsCache(slug);
+    setNonce((n) => n + 1);
+  }, [slug]);
 
   const offline = typeof navigator !== 'undefined' && navigator.onLine === false;
   const freshness =

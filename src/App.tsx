@@ -12,6 +12,7 @@ import Water from './pages/Water';
 import Tides from './pages/Tides';
 import Rigs from './pages/Rigs';
 import Care from './pages/Care';
+import Admin from './pages/Admin';
 import NotFound from './pages/NotFound';
 
 /**
@@ -41,6 +42,9 @@ export default function App() {
         <Route path="/tides" element={<Page path="tides" element={<Tides />} />} />
         <Route path="/rigs" element={<Page path="rigs" element={<Rigs />} />} />
         <Route path="/care" element={<Page path="care" element={<Care />} />} />
+        {/* Not linked from navigation. RLS is what protects it: writes need a
+            row in public.admins, which only the service role can grant. */}
+        <Route path="/admin" element={<Page path="admin" element={<Admin />} />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
